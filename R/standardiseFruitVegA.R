@@ -13,6 +13,7 @@ standardiseFruitVegA <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'assorted raw vegetables') ~ 'assorted raw vegetables',
       str_detect(Ingredients, 'acorn squash') ~ 'winter squash acorn',
       str_detect(Ingredients, 'apple') & !str_detect(Ingredients, 'juice|vinegar|butter|pine|wasabi|sauce|syrup|muesli') ~ 'apple',
       str_detect(Ingredients, 'apple') & str_detect(Ingredients, 'sauce') ~ 'apple sauce',

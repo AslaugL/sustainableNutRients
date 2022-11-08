@@ -15,6 +15,8 @@ standardiseFruitVegP <- function(df){
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'parsley') & str_detect(Ingredients, 'root') ~ 'parsley root',
       str_detect(Ingredients, 'parsnip') ~ 'parsnip',
+      str_detect(Ingredients, 'passion') & str_detect(Ingredients, 'fruit') ~ 'passion fruit',
+      str_detect(Ingredients, 'pak') & str_detect(Ingredients, 'choi') ~ 'pak choi',
       str_detect(Ingredients, 'pea') & !str_detect(Ingredients, 'chick|broccoli|nut|sugar|asparagus|onion|pearl|horse|peach|dill|pear') ~ 'peas green',
       str_detect(Ingredients, 'peach') & str_detect(Ingredients, 'can') ~ 'peach canned',
       str_detect(Ingredients, 'peach') ~ 'peach',

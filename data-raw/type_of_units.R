@@ -8,7 +8,7 @@ type_of_units = c(
 
   'g', 'kg', 'ounce', 'pound',
 
-  'box', 'bunch', 'can', 'cm', 'hp',  'leaf', 'pot',
+  'box', 'bunch', 'can', 'cm', 'hp',  'leaf', 'pot', 'tube',
 
   'portion', 'pcs', 'slice', '\\bclove\\b',
   'pack', 'plate', 'twig', 'stalk'
@@ -18,3 +18,4 @@ type_of_units = c(
 
 #Save
 saveRDS(type_of_units, "./data-raw/type-of-units.Rds")
+

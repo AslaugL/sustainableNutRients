@@ -10,13 +10,13 @@
 #' @export
 standardiseHerbsnSpicesF <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'fajita') & str_detect(Ingredients, 'spice') ~ 'fajita spice mix',
+      str_detect(Ingredients, 'fajita') & str_detect(Ingredients, 'spice') ~ 'spice mix fajita',
       str_detect(Ingredients, 'fennel') & str_detect(Ingredients, 'seed') ~ 'fennel seed',
       str_detect(Ingredients, 'fenugreek leaf') & str_detect(Ingredients, 'dried') ~ 'fenugreek leaf dried',
       str_detect(Ingredients, 'fenugreek seed') ~ 'fenugreek seed',
-      
+
       TRUE ~ Ingredients_standardised))
 }

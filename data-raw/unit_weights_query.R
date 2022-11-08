@@ -1,7 +1,7 @@
 #Use store bought breads and rolls as default
 
 #Create query words to search through a recipe list to link it to unit_weights
-unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(g, unit_enhet, reference)) %>% unique() %>% #Only keep names, not units
+unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(grams_per_unit, unit_enhet, reference)) %>% unique() %>% #Only keep names, not units
   mutate(Ingredients = str_replace_all(Ingredients, ',', '')) %>%
 
   #First two words contain the most important information to identify the ingredients
@@ -41,6 +41,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(g, un
       Ingredients == 'fish soup base' ~ 'fish soup base',
       Ingredients == 'sausage turkey chicken' ~ 'sausage turkey chicken',
       Ingredients == 'ice cream' ~ 'ice cream',
+      Ingredients == 'chicken skewer satay' ~ 'chicken skewer',
       TRUE ~ first_word),
 
     second_word = case_when(
@@ -85,10 +86,14 @@ unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(g, un
       Ingredients == 'bean black canned' ~ 'canned',
       Ingredients == 'sausage turkey chicken' ~ '\\',
       Ingredients == 'ice cream' ~ '\\',
+      Ingredients == 'chicken skewer satay' ~ 'satay',
       TRUE ~ second_word
     )
   ) %>%
-  select(-Ingredients) %>% arrange(first_word, second_word)
+  #Set column order
+  select(first_word, second_word, database_ID, language) %>% arrange(first_word, second_word)
+
+
 
 #Save
 saveRDS(unit_weights_query, "./data-raw/unit_weights_query.Rds")

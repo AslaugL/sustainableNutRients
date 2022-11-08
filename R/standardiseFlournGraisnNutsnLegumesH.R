@@ -13,7 +13,7 @@ standardiseFlournGraisnNutsnLegumesH <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'hamburger') & str_detect(Ingredients, 'bread|bun') ~ 'hamburger bun',
+      str_detect(Ingredients, 'burger') & str_detect(Ingredients, 'bread|bun') ~ 'hamburger bun',
       str_detect(Ingredients, 'hazelnut') & !str_detect(Ingredients, 'oil') ~ 'hazelnut',
       str_detect(Ingredients, 'hemp') & str_detect(Ingredients, 'seed') ~ 'seed hemp',
 

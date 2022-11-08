@@ -14,6 +14,8 @@ standardiseFruitVegN <- function(df){
     #Standardise
     mutate(Ingredients_standardised = case_when(
 
+      str_detect(Ingredients, 'nectarine') ~ 'nectarine',
+
       TRUE ~ Ingredients_standardised
     ))
 }

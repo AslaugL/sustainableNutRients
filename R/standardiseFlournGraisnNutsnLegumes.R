@@ -15,6 +15,7 @@ standardiseFlournGraisnNutsnLegumes <- function(df) {
     standardiseFlournGraisnNutsnLegumesA() %>%
     standardiseFlournGraisnNutsnLegumesB() %>%
     standardiseFlournGraisnNutsnLegumesC() %>%
+    standardiseFlournGraisnNutsnLegumesE() %>%
     standardiseFlournGraisnNutsnLegumesF() %>%
     standardiseFlournGraisnNutsnLegumesH() %>%
     standardiseFlournGraisnNutsnLegumesL() %>%

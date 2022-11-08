@@ -27,7 +27,7 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'real goat cheese') ~ 'goat brown cheese',
     str_detect(Ingredients, 'cheddar') ~ 'cheese cheddar',
     str_detect(Ingredients, 'garlic cheese') ~ 'cheese garlic',
-    str_detect(Ingredients, 'gruyère|gruyere') ~ 'cheese gruyere',
+    str_detect(Ingredients, 'gruy+u00E8re|gruyere') ~ 'cheese gruyere',
     str_detect(Ingredients, 'chevre') ~ 'cheese goat chevre white',
     str_detect(Ingredients, 'goat') & str_detect(Ingredients, 'cheese') & !str_detect(Ingredients, 'hard') ~ 'cheese goat',
     str_detect(Ingredients, 'feta|fat cheese in cubes|semi-solid cheese in cubes') & str_detect(Ingredients, 'cheese') | str_detect(Ingredients, 'feta') & str_detect(Ingredients, 'crumbled') ~ 'cheese feta', #Fat cheese is a translation error from Norwegian
@@ -40,6 +40,7 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'port salut') ~ 'cheese port salut',
     str_detect(Ingredients, 'ricotta') ~ 'cheese ricotta salata',
     str_detect(Ingredients, 'romano') & str_detect(Ingredients, 'cheese') ~ 'cheese romano',
+    str_detect(Ingredients, 'roquefort') ~ 'cheese blue roquefort',
     str_detect(Ingredients, 'swiss') & str_detect(Ingredients, 'cheese') ~ 'cheese swiss',
     str_detect(Ingredients, 'provolone') & str_detect(Ingredients, 'cheese') ~ 'cheese provolone',
     str_detect(Ingredients, 'monterey jack|pepperjack') & str_detect(Ingredients, 'cheese') ~ 'cheese monterey jack',
@@ -47,7 +48,7 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'pecorino') & str_detect(Ingredients, 'cheese') ~ 'cheese pecorino',
     str_detect(Ingredients, 'emmentaler') & str_detect(Ingredients, 'cheese') ~ 'cheese emmentaler',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'goat') & str_detect(Ingredients, 'hard') ~ 'cheese hard goat',
-    str_detect(Ingredients, 'snøfrisk|snow fresh') ~ 'cheese cream goat snøfrisk',
+    str_detect(Ingredients, 'sn\u00f8frisk|snow fresh') ~ 'cheese cream goat sn\u00f8frisk',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'cream') | str_detect(Ingredients, 'kremgo') ~ 'cheese cream',
     (str_detect(Ingredients, 'cottage') & str_detect(Ingredients, 'skinny|low fat|lean|mager')) | str_detect(Ingredients, 'paneer cheese') ~ 'cheese cottage low fat', #Paneer is a cheese like low fat cc
     str_detect(Ingredients, 'cottage') & str_detect(Ingredients, 'cheese') ~ 'cheese cottage',
@@ -56,13 +57,13 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'cheese') & !str_detect(Ingredients, 'yogurt|yoghurt') ~ 'cheese semi-hard',
 
     str_detect(Ingredients, 'whip') & str_detect(Ingredients, 'it|stabilizer') ~ 'whip it stabilizer',
-    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'double') ~ 'cream double 48 %',
-    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'whip|heavy') | str_detect(Ingredients, 'whipped topping') ~ 'cream whipped 37 %',
+    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'double') ~ 'cream double 48 \u00f8',
+    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'whip|heavy') | str_detect(Ingredients, 'whipped topping') ~ 'cream whipped 37 \u00f8',
     str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'ice') & str_detect(Ingredients, 'vanilla') ~ 'ice cream vanilla',
-    str_detect(Ingredients, 'cream') & (str_detect(Ingredients, 'food') | !str_detect(Ingredients, 'cheese|sour|cracker|sauce|coconut|light|condensed|ice')) ~ 'cream household 18 %', #Standard
-    str_detect(Ingredients, 'crème fraîche 18 %') ~ 'crème fraîche 18 %',
-    str_detect(Ingredients, 'crème fraîche 10 %') ~ 'crème fraîche 10 %',
-    str_detect(Ingredients, 'crème fraîche|creme fraiche') ~ 'crème fraîche 35 %', #The original
+    str_detect(Ingredients, 'cream') & (str_detect(Ingredients, 'food') | !str_detect(Ingredients, 'cheese|sour|cracker|sauce|coconut|light|condensed|ice')) ~ 'cream household 18 \u0025', #Standard
+    str_detect(Ingredients, 'cr\u00E8me fra\u00EEche 18 \u0025') ~ 'cr\u00E8me fra\u00EEche 18 \u0025',
+    str_detect(Ingredients, 'cr\u00E8me fra\u00EEche 10 \u0025') ~ 'cr\u00E8me fra\u00EEche 10 \u0025',
+    str_detect(Ingredients, 'cr\u00E8me fra\u00EEche|creme fraiche') ~ 'cr\u00E8me fra\u00EEche 35 \u0025', #The original
 
     TRUE ~ Ingredients_standardised))
 }

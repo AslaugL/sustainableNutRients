@@ -14,7 +14,7 @@ standardiseFlournGraisnNutsnLegumesF <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'flax') & str_detect(Ingredients, 'meal') ~ 'flaxseed meal',
-      str_detect(Ingredients, 'flax') & str_detect(Ingredients, 'seed') ~ 'seed flax',
+      str_detect(Ingredients, 'flax|lin') & str_detect(Ingredients, 'seed') ~ 'seed flax',
 
       TRUE ~ Ingredients_standardised))
 }

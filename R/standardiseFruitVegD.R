@@ -13,6 +13,9 @@ standardiseFruitVegD <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+
+      str_detect(Ingredients, 'dates') ~ 'dates',
+
       TRUE ~ Ingredients_standardised
     ))
 }

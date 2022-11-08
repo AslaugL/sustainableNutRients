@@ -10,37 +10,35 @@
 #' @export
 standardiseOthers <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'agar') ~ 'agar',
       str_detect(Ingredients, 'agave') & str_detect(Ingredients, 'nectar') ~ 'agave nectar',
       str_detect(Ingredients, 'agave') & str_detect(Ingredients, 'syrup') ~ 'agave syrup',
+      str_detect(Ingredients, 'aioli') ~ 'aioli',
       str_detect(Ingredients, 'asafoetida powder') ~ 'asafoetida powder',
-      
+
       str_detect(Ingredients, 'baking powder') ~ 'baking powder',
       str_detect(Ingredients, 'baking soda|bicarbonate of soda') ~ 'baking soda',
+      str_detect(Ingredients, 'barbecue|bbq|barbeque') & str_detect(Ingredients, 'marinade') ~ 'barbecue marinade',
+      str_detect(Ingredients, 'barbecue|bbq|barbeque') & str_detect(Ingredients, 'rub') ~ 'barbecue rub',
+      str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'fund') ~ 'beef fund',
       str_detect(Ingredients, 'beer') & str_detect(Ingredients, 'dark|amber|christmas') ~ 'beer dark',
       str_detect(Ingredients, 'beer|ale') ~ 'beer',
       str_detect(Ingredients, 'beet') & str_detect(Ingredients, 'pickle') ~ 'beetroot pickled',
       Ingredients == 'black truffle or 2 tbsp s truffle oil' ~ 'black truffle',
       str_detect(Ingredients, 'brandy') ~ 'spirits 40 vol-% alcohol brandy',
       str_detect(Ingredients, 'brine') & !str_detect(Ingredients, 'shrimp') ~ 'water brine',
-      str_detect(Ingredients, 'bolognese') & str_detect(Ingredients, 'base') ~ 'bolognese base',
-      str_detect(Ingredients, 'bearnaise') & str_detect(Ingredients, 'base') ~ 'bearnaise base',
       str_detect(Ingredients, 'beverage') & str_detect(Ingredients, 'carbonated') & str_detect(Ingredients, 'lemon') & str_detect(Ingredients, 'lime') ~ 'carbonated beverage lemon-lime',
-      str_detect(Ingredients, 'browning') & str_detect(Ingredients, 'sauce') ~ 'sauce browning',
       str_detect(Ingredients, 'brown') & str_detect(Ingredients, 'gravy') & str_detect(Ingredients, 'mix') | str_detect(Ingredients, 'gravy') & str_detect(Ingredients, 'powder') ~ 'gravy brown mix',
-      
+
       str_detect(Ingredients, 'caper|hijack') ~ 'caper',
-      str_detect(Ingredients, 'caramel') & str_detect(Ingredients, 'sauce') ~ ' sauce caramel',
-      str_detect(Ingredients, 'caramel') ~ 'caramel',
-      (str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'powder|spice')) | str_detect(Ingredients, 'ground red pepper') ~ 'chili powder',
-      str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'sweet') ~ 'sweet chili sauce',
-      str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'sauce') ~ 'chili sauce',
+      str_detect(Ingredients, 'caramel') & !str_detect(Ingredients, 'sauce|yogurt|yoghurt|skyr') ~ 'caramel',
       str_detect(Ingredients, 'german') & str_detect(Ingredients, 'cake') & str_detect(Ingredients, 'mix') & str_detect(Ingredients, 'chocolate') ~ 'german chocolate cake mix',
       str_detect(Ingredients, 'instant chocolate pudding mix') ~ 'chocolate pudding mix',
-      str_detect(Ingredients, 'package brownie mix') ~ 'brownie mix',
+      str_detect(Ingredients, 'brownie') & str_detect(Ingredients, 'mix') ~ 'brownie mix',
+      str_detect(Ingredients, 'chili sin carne') ~ 'chili sin carne',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'milk') & !str_detect(Ingredients, 'candy') ~ 'chocolate milk',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'semi|dark') ~ 'chocolate semi-sweet',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'unsweetened') ~ 'chocolate unsweetened',
@@ -60,29 +58,30 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'condensed cream') & str_detect(Ingredients, 'mushroom') ~ 'condensed cream of mushroom soup',
       str_detect(Ingredients, 'condensed') & str_detect(Ingredients, 'tomato soup') ~ 'condensed tomato soup',
       str_detect(Ingredients, 'cooking') & str_detect(Ingredients, 'spray') ~ 'cooking spray',
-      str_detect(Ingredients, 'cream sauce') & str_detect(Ingredients, 'base') ~ 'cream sauce base',
       str_detect(Ingredients, 'crisps') ~ 'crisps',
       str_detect(Ingredients, 'custard') & str_detect(Ingredients, 'hot') ~ 'custard hot',
       str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'custard') ~ 'custard vanilla',
-      
+
       str_detect(Ingredients, 'dark rum') | Ingredients == 'rum' ~ 'spirits 40 vol-% alcohol dark rum',
       str_detect(Ingredients, 'dip mix') ~ 'dip mix',
-      
+
       str_detect(Ingredients, 'espresso') & str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'ground') ~ 'espresso bean coffee ground',
-      
-      str_detect(Ingredients, 'fish soup') & str_detect(Ingredients, 'base') ~ 'fish soup base',
-      
-      str_detect(Ingredients, 'gravy') & str_detect(Ingredients, 'beef') ~ 'beef gravy',
-      str_detect(Ingredients, 'gravy') ~ 'beef gravy', #Use as default
-      str_detect(Ingredients, 'guacamole') ~ 'guacamole',
-      
+
+      str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'base') ~ 'fish soup base',
+
+      str_detect(Ingredients, 'gelatin') & str_detect(Ingredients, 'sheet') ~ 'gelatin sheet',
+      str_detect(Ingredients, '\\bgelatin\\b') ~ 'gelatin',
+      str_detect(Ingredients, 'guacamole') & !str_detect(Ingredients, 'spice') ~ 'guacamole',
+
       str_detect(Ingredients, 'harissa') & str_detect(Ingredients, 'mild') ~ 'harissa mild',
-      str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'base') ~ 'hollandaise base',
+      str_detect(Ingredients, 'herb') & !str_detect(Ingredients, 'basil|thyme|parsley|rosemary|dill') ~ 'herbs',
       str_detect(Ingredients, 'honey') & !str_detect(Ingredients, 'mustard') ~ 'honey',
-      
+
+      str_detect(Ingredients, 'jam') ~ 'jam',
+
       str_detect(Ingredients, 'kirsch') ~ 'spirits 40 vol-% alcohol kirsch',
       str_detect(Ingredients, 'kombu') & str_detect(Ingredients, 'dashi') ~ 'dashi kombu dried kelp',
-      
+
       str_detect(Ingredients, 'madeira') ~ 'madeira fortified wine 15 vol-% alcohol',
       str_detect(Ingredients, 'marsala') ~ 'marsala fortified wine 20 vol-% alcohol',
       str_detect(Ingredients, 'marshmallow') & str_detect(Ingredients, 'cream') ~ 'marshmallow cream',
@@ -95,16 +94,16 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'mustard') & str_detect(Ingredients, 'dijon') ~ 'mustard dijon',
       str_detect(Ingredients, 'mustard') & str_detect(Ingredients, 'honey') ~ 'mustard honey',
       str_detect(Ingredients, 'mustard') & !str_detect(Ingredients, 'cheese') ~ 'mustard',
-      
+
+      str_detect(Ingredients, 'marzipan') ~ 'marzipan',
       str_detect(Ingredients, 'mayo') & str_detect(Ingredients, 'vegan') ~ 'mayonnaise vegan',
       str_detect(Ingredients, 'mayo') ~ 'mayonnaise',
-      
+
       str_detect(Ingredients, 'noodle') ~ 'rice noodle', #Default
-      str_detect(Ingredients, 'nori') & str_detect(Ingredients, 'flak|seaweed') ~ 'nori seaweed',
-      
+      str_detect(Ingredients, 'nori') & str_detect(Ingredients, 'flak|seaweed|sheet|sushi') ~ 'nori seaweed',
+
       str_detect(Ingredients, 'olive paste tapenade') ~ 'olive paste tapenade',
-      str_detect(Ingredients, 'dry onion soup mix') ~ 'onion soup mix',
-      
+
       str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'tomato') ~ 'paste tomato',
       str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'sichuan') & str_detect(Ingredients, 'bean') ~ 'chili bean paste sichuan',
       str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'chili') | str_detect(Ingredients, 'sambal|rose harissa') ~ 'paste chili',
@@ -122,47 +121,17 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'pepper|Pepper') & !str_detect(Ingredients, 'chili|white|sweet|cayenne|spice|bell|salad|sauce') & !str_detect(Ingredients, 'salt') ~ 'black pepper',
       str_detect(Ingredients, 'sweet green pickle relish') ~ 'sweet green pickle relish',
       str_detect(Ingredients, 'pickle') & !(str_detect(Ingredients, 'cucumber|ginger|sweet pepper|onion|beet')) | str_detect(Ingredients, 'gherkin') ~ 'cucumber pickled', #Standard
+      str_detect(Ingredients, 'pizza dressing') ~ 'pizza dressing',
       str_detect(Ingredients, 'pizza filling') ~ 'pizza filling',
-      
+
       str_detect(Ingredients, 'sake') ~ 'sake',
       str_detect(Ingredients, 'salt') & str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'oil') ~ 'salt and pepper and oil',
       str_detect(Ingredients, 'salt') & str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'butter') ~ 'salt and pepper and butter',
       str_detect(Ingredients, 'salt') & str_detect(Ingredients, 'pepper') ~ 'salt and pepper',
-      str_detect(Ingredients, 'salt') & !str_detect(Ingredients, 'peanut|lamb|pork|anchovy|soy|flesk|cashew') ~ 'salt',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'barbeque|barbecue') ~ 'sauce barbeque',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'bearnaise') ~ 'sauce bearnaise',
-      str_detect(Ingredients, 'bearnaise') ~ 'sauce bearnaise',
-      str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'hot pepper') ~ 'sauce hot pepper',
+      str_detect(Ingredients, 'salt') & !str_detect(Ingredients, 'peanut|lamb|pork|anchovy|soy|flesk|cashew|butter') ~ 'salt',
       str_detect(Ingredients, 'salsa') & str_detect(Ingredients, 'chunky') ~ 'salsa chunky',
       str_detect(Ingredients, 'salsa') & str_detect(Ingredients, 'tomato') ~ 'salsa tomato',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'cheese') ~ 'sauce cheese',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'sweet') ~ 'sauce sweet chili',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'hot') ~ 'sauce hot chili',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'sour') ~ 'sauce sour chili',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'salt') ~ 'sauce salt chili',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'mild') ~ 'sauce mild chili',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'garlic') ~ 'sauce chili garlic',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') ~ 'sauce chili',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'cream') ~ 'sauce cream',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'fish|fisk') ~ 'sauce fish',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'hoisin') ~ 'sauce hoisin',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'horseradish') ~ 'sauce horseradish',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'mint') ~ 'sauce mint',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'teriyaki') ~ 'sauce teriyaki',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'tomat') ~ 'sauce tomato',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'oyster') ~ 'sauce oyster',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'pad thai') ~ 'sauce pad thai',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'piri-piri') ~ 'sauce piri-piri',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'sweet') | str_detect(Ingredients, 'ketjap medja') ~ 'sauce sweet soy',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'soy') ~ 'sauce soy',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'taco') ~ 'sauce taco',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'tikka masala') ~ 'sauce tikka masala',
-      str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'white') ~ 'sauce white',
-      str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'cranberr') ~ 'sauce cranberry',
-      str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'worcestershire') ~ 'sauce worcestershire',
-      str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'pasta|spagetti|spaghetti') ~ 'sauce pasta',
-      str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'pizza') ~ 'sauce pizza',
-      str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'hot') ~ 'sauce hot',
+      str_detect(Ingredients, 'salsa') ~ 'salsa tomato', #Standard
       str_detect(Ingredients, 'sherry') & !str_detect(Ingredients, 'vinegar') ~ 'sherry fortified wine 15 vol-% alcohol',
       str_detect(Ingredients, 'shortening') & str_detect(Ingredients, 'vegetable') ~ 'shortening vegetable',
       str_detect(Ingredients, 'shortening') ~ 'shortening',
@@ -173,13 +142,37 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'syrup|sirup') & str_detect(Ingredients, 'maple') ~ 'syrup maple',
       str_detect(Ingredients, 'syrup') & str_detect(Ingredients, 'chocolate') ~ 'syrup chocolate',
       str_detect(Ingredients, 'syrup') ~ 'syrup',
-      
+
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'onion') & str_detect(Ingredients, 'mix|powder|instant') ~ 'soup onion instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'onion') ~ 'onion soup',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'spinach') & str_detect(Ingredients, 'mix|instant') ~ 'soup spinach instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'spinach') ~ 'soup spinach',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'tomato') & str_detect(Ingredients, 'mix|instant') & str_detect(Ingredients, 'mexican') ~ 'soup tomato mexican instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'tomato') & str_detect(Ingredients, 'mexican') ~ 'soup tomato mexican',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'tomato') & str_detect(Ingredients, 'mix|instant') ~ 'soup tomato instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'tomato') ~ 'soup tomato',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'cauliflower') & str_detect(Ingredients, 'mix|instant') ~ 'soup cauliflower instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'cauliflower') ~ 'soup cauliflower',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'thai') & str_detect(Ingredients, 'mix|instant') ~ 'soup thai instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'thai') ~ 'soup thai',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'beta') & str_detect(Ingredients, 'mix|instant') ~ 'soup beta instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'beta') ~ 'soup beta',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'mix|instant') ~ 'soup fish instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'fish') ~ 'soup fish',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'pea') & str_detect(Ingredients, 'mix|instant') ~ 'soup pea instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'pea') ~ 'pea cauliflower',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'mix|instant') ~ 'soup chicken instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'chicken') ~ 'soup chicken',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'carrot') & str_detect(Ingredients, 'mix|instant') ~ 'soup carrot instant',
+      str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'carrot') ~ 'soup carrot',
+
       str_detect(Ingredients, 'tabasco') ~ 'tabasco',
       str_detect(Ingredients, 'toenjang') ~ 'toenjang soybean paste',
       str_detect(Ingredients, 'tofu') ~ 'tofu',
       str_detect(Ingredients, 'toro jegergryte') ~ 'toro jegegryte',
       str_detect(Ingredients, 'toro moussaka') ~ 'toro moussaka',
-      
+      str_detect(Ingredients, 'tzatziki') ~ 'tzatziki',
+
       str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'extract') ~ 'vanilla extract',
       str_detect(Ingredients, 'vermouth') ~ 'vermouth fortified wine 15 vol-% alcohol',
       str_detect(Ingredients, 'vinegar') & str_detect(Ingredients, 'apple|cider') ~ 'vinegar apple cider',
@@ -193,7 +186,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'vinegar') & str_detect(Ingredients, 'clear|light|5%') ~ 'vinegar',
       str_detect(Ingredients, 'vinegar') ~ 'vinegar',
       str_detect(Ingredients, 'vodka') ~ 'spirits 40 vol-% alcohol vodka',
-      
+
       str_detect(Ingredients, 'water') & !str_detect(Ingredients, 'corn|beef|tuna|coffee|chili|cream|cress|chestnut|melon') ~ 'water',
       str_detect(Ingredients, 'water to the corn') ~ 'water',
       str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice') & str_detect(Ingredients, 'vegetable') ~ 'broth cube vegetable',
@@ -217,12 +210,12 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'wine') & str_detect(Ingredients, 'red|merlot') & !str_detect(Ingredients, 'vinegar') ~ 'wine red',
       str_detect(Ingredients, 'wine') & str_detect(Ingredients, 'port') ~ 'wine port fortified wine 20 vol-% alcohol',
       str_detect(Ingredients, 'mirin japanese sweet wine') ~ 'wine mirin',
-      
+
       str_detect(Ingredients, 'yeast') & str_detect(Ingredients, 'dry|dried') ~ 'yeast dry',
       str_detect(Ingredients, 'yeast') & str_detect(Ingredients, 'nutritional') ~ 'yeast nutritional',
       str_detect(Ingredients, 'yeast') ~ 'yeast',
       str_detect(Ingredients, 'yellow') & str_detect(Ingredients, 'cake') & str_detect(Ingredients, 'mix') ~ 'yellow cake mix',
-      
+
       TRUE ~ Ingredients_standardised))
 }
 

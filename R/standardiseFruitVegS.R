@@ -15,6 +15,7 @@ standardiseFruitVegS <- function(df){
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'salad') & str_detect(Ingredients, 'heart') ~ 'salad heart',
       str_detect(Ingredients, 'ruccula|rocket salad|rocket|arugula|ruccola|peppery salad') ~ 'salad rocket',
+      str_detect(Ingredients, 'iceberg') ~ 'salad iceberg lettuce',
       str_detect(Ingredients, 'lettuce') & !str_detect(Ingredients, 'lamb')  ~ 'salad lettuce',
       str_detect(Ingredients, 'salad') &str_detect(Ingredients, 'crispi') ~ 'salad crispi',
       str_detect(Ingredients, 'lollo rosso') ~ 'salad lollo rosso',

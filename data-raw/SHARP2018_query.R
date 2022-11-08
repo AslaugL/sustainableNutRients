@@ -170,8 +170,8 @@ SHARP2018_query <- readRDS("./data-raw/SHARP2018_query_prep.Rds") %>%
 
   filter(!first_word %in% c('juice', 'fresh')) %>% #These may otherwise cause issues when searching
   distinct(., first_word, second_word, .keep_all = TRUE) %>% #Remove duplicates. Due to splitting up rows with '/', certain ingredients occur multiple times
-  #Remove unnecessary column
-  select(-Ingredients) %>% arrange(first_word, second_word)
+  #Arrange columns
+  select(first_word, second_word, database_ID) %>% arrange(first_word, second_word)
 #Is the maize flour in SHARP the same as corn starch?
 
 #Save

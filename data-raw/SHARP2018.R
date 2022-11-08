@@ -324,13 +324,32 @@ SHARP <- SHARP %>%
   replace_na(list(FoodEx2 = 'Composite ingredient not in SHARP'))
 
 #Finalize for saving
-SHARP2018 <- SHARP %>% select(-Ingredients)
+SHARP2018 <- SHARP %>%
+  select(-c(Ingredients, L1, FoodEx2)) %>%
+  pivot_longer(.,
+               cols = -database_ID,
+               names_to = "environmental_impact_indicator",
+               values_to = "environmental_impact_per_100g") %>%
+  #Turn environmental impact from per kilo to per hekto
+  mutate(
+    environmental_impact_per_100g = environmental_impact_per_100g/10,
+    environmental_impact_indicator = environmental_impact_indicator %>%
+      str_replace("GHGE of 1 kg food as consumed_kg", "kg ") %>%
+      str_replace("Land use of 1 kg food as consumed_", ""))
 
 #Save
 saveRDS(SHARP2018, "./data-raw/SHARP2018.Rds")
+
+#Save foodgroup metainfo
+SHARPFoodgroups <- SHARP %>%
+  select(database_ID, L1) %>%
+  rename(foodgroup = L1)
+
+saveRDS(SHARP2018, "./data-raw/SHARP2018_foodgroups.Rds")
 
 #Save a dataframe to create query words from
 SHARP2018_query_prep <- SHARP %>%
   select(database_ID, Ingredients)
 
 saveRDS(SHARP2018_query_prep, "./data-raw/SHARP2018_query_prep.Rds")
+

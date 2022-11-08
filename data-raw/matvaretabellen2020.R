@@ -110,6 +110,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'halibut, atlantic, unspecified, raw' ~ 'halibut',
   food_item == 'herring, summer, raw' ~ 'herring',
   food_item == 'king prawns, raw' ~ 'prawn',
+  food_item == 'caviar, capelin roe' ~ 'caviar',
   food_item == 'crab, boiled' ~ 'crab',
   food_item == 'cod, split, salted and dried' ~ 'cod_clipfish',
   food_item == 'stockfish, dried fish' ~ 'cod_dried',
@@ -132,7 +133,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'tuna, in oil, canned' ~ 'tuna_in oil canned',
   food_item == 'halibut, atlantic' ~ 'halibut',
   food_item == 'mackerel fillet, in tomato sauce, 60 % mackerel, canned' ~ 'mackerel_tomato canned',
-  food_item == 'salmon, smoked' ~ 'salmon_smoked',
+  food_item == 'cusk, tusk, raw' ~ 'cusk_tusk',
 
   #Herbs and spices----
   food_item == 'anise seeds' ~ 'anise',
@@ -163,32 +164,45 @@ clean_nutrients <- raw_data %>%
   food_item == 'beetroot, norwegian, raw' ~ 'beetroot',
   food_item == 'blackcurrants, raw' ~ 'currant_black',
   food_item == 'brussel sprouts, norwegian, raw' ~ 'brussel_sprout',
+
   food_item == 'cabbage, white, raw' ~ 'cabbage', #Standard
   food_item == 'cabbage, pak-choi, bok choy, raw' ~ 'cabbage_bok choi',
   food_item == 'cabbage, red, raw' ~ 'cabbage_red',
   food_item == 'cabbage, chinese, norwegian, raw' ~ 'cabbage_chinese',
+
   food_item == 'cauliflower, norwegian, raw' ~ 'cauliflower',
   food_item == 'celariac root, norwegian, raw' ~ 'celariac_root',
   food_item == 'celery stalk or stem, norwegian, raw' ~ 'celery_stalk',
   food_item == 'chicory, raddichio, raw' ~ 'chicory_red',
   food_item == 'chicory, endive, raw' ~ 'chicory_white',
+
+  food_item == 'dates, dried' ~ 'dates_dried',
+
   food_item == 'pepper, chili, green, raw' ~ 'chili pepper_green',
   food_item == 'pepper, chili, red, raw' ~ 'chili pepper_red',
   food_item == 'jalapeño, raw' ~ 'chili pepper_jalapeno',
+
   food_item == 'aubergine, raw' ~ 'eggplant',
+
   food_item == 'horse-radish, raw' ~ 'horseradish',
+
   food_item == 'kiwi fruit, raw' ~ 'kiwi',
+
   food_item == 'kohlrabi, raw' ~ 'swede',
+
   food_item == 'baby corn, canned' ~ 'corn_baby',
   food_item == 'sweet corn, norwegian, raw' ~ 'corn_cob',
   food_item == 'cucumber, norwegian, raw' ~ 'cucumber',
   food_item == 'cucumber, pickled' ~ 'cucumber_pickled',
+
   food_item == 'figs, dried' ~ 'fig_dried',
+
   food_item == 'tomato purée' ~ 'tomato_puree',
   food_item == 'tomato, small, cherry, imported, raw' ~ 'cherry_tomato',
   food_item == 'beans, white, in tomato sauce, canned' ~ 'bean_tomato', #White beans
   food_item == 'tomatoes, sun-dried' ~ 'tomato_sun dried',
   food_item == 'tomato, canned' ~ 'tomato_canned',
+
   food_item == 'leek, norwegian, raw' ~ 'leek',
   food_item == 'lemon juice, bottled' ~ 'lemon_juice',
   food_item == 'lemon peel' ~ 'lemon_zest',
@@ -281,6 +295,7 @@ clean_nutrients <- raw_data %>%
   str_detect(food_item, 'bread, coarse') & str_detect(food_item, '50-75') & str_detect(food_item, 'industrially made') ~ 'bread_coarse',
   food_item == 'rolls, white, industrially made' ~ 'roll_white',
   food_item == 'tortilla, wheat flour' ~ 'tortilla',
+  food_item == 'pizza crust, no filling' ~ 'pizza_crust',
 
   #oils----
   food_item == 'oil, peanut' ~ 'peanut_oil',
@@ -335,11 +350,14 @@ clean_nutrients <- raw_data %>%
   food_item == 'quark, 1 % fat' ~ 'quark_1',
   food_item == 'quark, 7 % fat' ~ 'quark_7',
   food_item == 'milk, cultured, skimmed, skummet kulturmelk' ~ 'buttermilk', #Similar in nutrient content
-  food_item == 'yoghurt, whole milk, plain' ~ 'yoghurt',
+  food_item == 'yoghurt, whole milk, plain' ~ 'yoghurt plain',
   food_item == 'milk, condensed, sweetened' ~ 'milk evaporated',
   food_item == 'soy beverage, unsweetened' ~ 'milk_soy',
   food_item == 'oat beverage, with calcium and vitamins' ~ 'dairy imitate_oatmilk',
   food_item == 'ice cream, dairy' ~ 'ice cream',
+  food_item == 'cultured milk, with flavour, skyr' ~ 'skyr_flavored',
+  food_item == 'cultured milk, plain, skyr' ~ 'skyr',
+
 
   #Mushrooms----
   food_item == 'mushroom, chantherelle, raw' ~ 'mushroom_chanterelle',
@@ -713,14 +731,25 @@ nutrients_to_use <- nutrients_to_use %>%
     TRUE ~ database_ID
   )) %>%
   #Remove and rename some columns
-  select(-c(Foodgroup, Ingredients.x, Ingredients.y, from.x)) %>%
+  select(-c(Ingredients.x, Ingredients.y, from.x)) %>%
   rename(from = from.y)
 
-#Finalise
-matvaretabellen2020 <- nutrients_to_use %>% select(-food_item)
+#Turn long
+matvaretabellen2020 <- nutrients_to_use %>% select(-c(food_item, Foodgroup)) %>%
+  pivot_longer(.,
+               cols = -c(database_ID, from),
+               names_to = 'nutrient',
+               values_to = 'nutrient_content_per_hektogram')
 
 #Save matvaretabellen dataframe
 saveRDS(matvaretabellen2020, "./data-raw/matvaretabellen2020.Rds")
+
+#Save foodgroups info
+matvaretabellenFoodgroups <- nutrients_to_use %>%
+  select(database_ID, Foodgroup) %>%
+  rename(foodgroup = Foodgroup)
+
+saveRDS(matvaretabellenFoodgroups, "./data-raw/matvaretabellen2020_foodgroups.Rds")
 
 #Save database_ID and food_item columns to create a query dataframe
 matvaretabellen2020_query_prep <- clean_nutrients %>%

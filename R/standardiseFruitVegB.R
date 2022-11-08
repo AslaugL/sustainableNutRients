@@ -20,6 +20,7 @@ standardiseFruitVegB <- function(df){
       str_detect(Ingredients, 'curran') & str_detect(Ingredients, 'jam') ~ 'jam currant',
       str_detect(Ingredients, 'black curran') & !str_detect(Ingredients, 'juice') ~ 'black currant',
       str_detect(Ingredients, 'currant') & !str_detect(Ingredients, 'juice') ~ 'black currant', #Use as default
+      str_detect(Ingredients, 'blackberr') ~ 'blackberries',
       str_detect(Ingredients, 'blueberr') & str_detect(Ingredients, 'pie fill') ~ 'blueberries pie filling',
       str_detect(Ingredients, 'blueberr') & str_detect(Ingredients, 'jam') ~ 'jam blueberries',
       str_detect(Ingredients, 'blueberr') ~ 'blueberries',

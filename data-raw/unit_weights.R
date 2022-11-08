@@ -1,5 +1,4 @@
 #Script to create the database for unit and weights per food item
-library(dplyr)
 
 #Weight and portion size database
 #Empty list to fill with various variables
@@ -169,10 +168,13 @@ temp <- list(
   c('smoke-cured ham', 'dl', '113.9', 'FoodData Central', 'english'),
   c('cured ham', 'dl', '113.9', 'FoodData Central', 'english'),
   c('boiled ham', 'dl', '113.9', 'FoodData Central', 'english'),
+  c('chicken skewer satay', 'pcs', '50', 'Ytterøy kylling', 'english'),
 
-  #Bread
+  #Bread, pastries and cookies
   c('Naan bread', 'pcs', '130', 'Santa Maria', 'english'),
   c('crisp bread', 'pack', '520', 'WASA', 'english'),
+  c('biscuit oreo', 'pcs', '11', 'OREO original', 'english'),
+  c('biscuit oreo', 'pack', '154', 'OREO original', 'english'),
 
   #Vegetables/plant based
   c('Asparagus', 'bunch', '250', 'Meny', 'english'),
@@ -267,6 +269,7 @@ temp <- list(
   c('Tomato purée', 'pcs', '200', 'Petti, Kolonial', 'english'),
   c('tomato salsa', 'dl', '101.4', 'FoodData Central', 'english'),
   c('tomato salsa', 'glass', '240', 'Kolonial Supermat', 'english'),
+  c('tomato beef', 'pcs', '250', 'frukt.no', 'english'),
   c('Tomatoes, sun-dried', 'dl', '101.4', 'FoodData Central', 'english'), #In oil, a bit less without oil
   c('Beans, white, in tomato sauce, canned', 'box', '410', 'Eldorado', 'english'),
   c('cherry tomato', 'bunch', '250', 'Kolonial, cherrytomat', 'english'),
@@ -335,6 +338,8 @@ temp <- list(
   c('crab shell', 'pcs', '150', 'Meny, Lerøy seafood', 'english'),
   c('crab claw', 'portion', '500', 'Meny, portion sizes seafood', 'english'),
   c('crab claw', 'pcs', '400', 'Kolonial', 'english'),
+  c('fish burger', 'pcs', '125', 'Lofoten fiskeprodukter', 'english'),
+  c('fish cake', 'pcs', '65', 'Lofoten fiskeprodukter', 'english'),
   c('lobster', 'portion', '500', 'Meny, portion sizes seafood', 'english'),
   c('lobster', 'pcs', '300', 'Meny Atlantic star', 'english'),
   c('Mackerel fillet, in tomato sauce, canned', 'pcs', '170', 'Stabburet', 'english'),
@@ -362,8 +367,12 @@ temp <- list(
   c('butter spice', 'pack', '125', 'Tine Grillsmør', 'english'),
   c('soft-ripened cheese (brie, camembert etc)', 'pcs', '150', 'Kolonial', 'english'),
   c('soft-ripened cheese (brie, camembert etc)', 'dl', '95', 'FoodData Central', 'english'), #Mascarpone
+  c('yoghurt skyr', 'pcs', '160', 'Skyr', 'english'),
+  c('yoghurt', 'pcs', '500', 'Tine', 'english'),
 
   #Div
+  c('aioli', 'box', '202,4', 'Oda Mills Aioli', 'english'), #Calcuated by using the same density as mayo
+  c('caviar', 'tube', '245', 'Mills kaviar', 'english'),
   c('broth cube', 'pcs', '10', 'TORO klar kjøttbuljong', 'english'),
   c('tabasco', 'dl', '101.4', 'FoodData Central', 'english'),
   c('oyster sauce', 'dl', '304.3', 'FoodData Central', 'english'),
@@ -381,6 +390,7 @@ temp <- list(
   c('sauce white', 'pack', '38', 'Toro Hvit Saus', 'english'),
   c('sauce teriyaki', 'dl', '94.7', 'FoodData Central', 'english'),
   c('sauce hoisin', 'dl', '111.6', 'FoodData Central', 'english'),
+  c('sauce', 'hp', 'dl', '114.97', 'FoodData Central', 'english'),
   c('salsa', 'dl', '94.7', 'FoodData Central', 'english'),
   c('dip mix', 'pack', '22', 'Maarud', 'english'),
   c('tandoori spice', 'dl', '106.8', 'FoodData Central', 'english'),
@@ -566,7 +576,8 @@ various$not_needed <- unit_weights %>%
   filter(!Ingredients %in% c('crisp bread', 'flatbread, hard','smoke-cured ham', 'cured ham', 'spekeskinke', 'boiled ham', 'honning', 'sukker, brunt',
                              'sukker hvitt', 'anchovies, canned', 'anchovy fillets, canned', 'salmon, smoked, dry salted',
                              'mackerel fillet, in tomato sauce, canned', 'cod roe', 'tuna canned', 'ground meat, raw', 'bread, semi-coarse', 'bread, white',
-                             'cream cracker', 'salami', 'rice parboiled', 'caramels', 'marshmallows', 'ice cream', 'pancakes'))
+                             'cream cracker', 'salami', 'rice parboiled', 'caramels', 'marshmallows', 'ice cream', 'pancakes',
+                             'biscuit, with oats, digestive', 'biscuit, marie', 'biscuit, for childen'))
 
 #Remove the not needed ingredients
 unit_weights <- unit_weights %>%
@@ -590,6 +601,9 @@ unit_weights <- unit_weights %>%
            str_replace('linseeds, flax seeds', 'flax seed') %>%
            str_replace('sesame paste, tahini', 'tahini') %>%
            str_replace('parmesan', 'parmesan cheese') %>%
+           str_replace('biscuit, with oats, digestive', 'biscuit digestive') %>%
+           str_replace('biscuit, marie', 'biscuit marie') %>%
+           str_replace('biscuit, for childen', 'biscuit children') %>%
 
            #Change all plural forms to singular
            str_replace('anchovies', 'anchovy') %>%
@@ -635,6 +649,14 @@ unit_weights <- unit_weights %>%
 #Rename "g" column to be more understandable
 unit_weights <- unit_weights %>%
   rename(grams_per_unit = g)
+
+#Remove some duplicates and add all reference rows for each food into one row
+unit_weights <- unit_weights %>%
+  filter(!(str_detect(Ingredients, 'basil') & database_ID == 28)) %>%
+  rename(tmp = reference) %>%
+  group_by(Ingredients, unit_enhet, grams_per_unit, database_ID, language) %>%
+  summarise(reference = str_c(unique(tmp), collapse = ", ")) %>%
+  ungroup()
 
 #Save
 saveRDS(unit_weights, "./data-raw/unit_weights.Rds")

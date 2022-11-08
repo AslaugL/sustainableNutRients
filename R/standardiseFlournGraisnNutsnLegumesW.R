@@ -10,16 +10,22 @@
 #' @export
 standardiseFlournGraisnNutsnLegumesW <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'walnut') & !str_detect(Ingredients, 'oil') ~ 'walnut',
-      str_detect(Ingredients, 'spelt|farro') & str_detect(Ingredients, 'flour') | str_detect(Ingredients, 'farro') ~ 'wheat flour spelt',
-      str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'wholemeal') | str_detect(Ingredients, 'wheat') & str_detect(Ingredients, 'whole') & str_detect(Ingredients, 'flour') ~ 'wheat flour wholemeal',
+      str_detect(Ingredients, 'walnut') &
+        !str_detect(Ingredients, 'oil') ~ 'walnut',
+      str_detect(Ingredients, 'spelt|farro') & str_detect(Ingredients, 'flour') |
+        str_detect(Ingredients, 'farro') ~ 'wheat flour spelt',
+      str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'wholemeal') |
+        str_detect(Ingredients, 'wheat') & str_detect(Ingredients, 'whole') & str_detect(Ingredients, 'flour') ~ 'wheat flour wholemeal',
       str_detect(Ingredients, 'rye') & str_detect(Ingredients, 'flour') ~ 'wheat flour rye',
       str_detect(Ingredients, 'rye') & str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'whole') ~ 'wheat flour rye wholemeal',
-      str_detect(Ingredients, 'wheat flour|all-purpose flour|plain flour|flour|durum wheat|self-raising|bread') & !str_detect(Ingredients, 'whole|gram|tortilla|potato|corn|spelt') ~ 'wheat flour',
-      
+      str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'pizza|tipo-00|tipo 00') ~ 'wheat flour tipo 00',
+      (str_detect(Ingredients, 'wheat flour|all-purpose flour|plain flour|flour|durum wheat|self-raising') &
+        !str_detect(Ingredients, 'whole|gram|tortilla|potato|corn|spelt') & !str_detect(Ingredients, 'bread')) |
+        str_detect(Ingredients, 'breading flour') ~ 'wheat flour',
+
       TRUE ~ Ingredients_standardised))
 }
 

@@ -13,6 +13,12 @@ SHARP2018_query <- readRDS("./data-raw/SHARP2018_query.Rds")
 pcs <- readRDS("./data-raw/pcs.Rds")
 type_of_units <- readRDS("./data-raw/type-of-units.Rds")
 
+#Foodgroups from matvaretabellen and SHARP
+foodgroups <- list(
+  "matvaretabellen" = readRDS("./data-raw/matvaretabellen2020_foodgroups.Rds"),
+  "SHARP" = readRDS("./data-raw/SHARP2018_foodgroups.Rds")
+)
+
 #Save in sysdata
 usethis::use_data(unit_weights, unit_weights_query,
                   matvaretabellen2020, matvaretabellen2020_query,

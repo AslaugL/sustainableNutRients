@@ -10,30 +10,29 @@
 #' @export
 extractAmounts <- function(df){
 
-  #Units to look for in the Ingredients column
-  units = c('tsp', 'tbsp', 'l', 'dl', 'g', 'kg', 'hp', 'krm', 'tins', 'cm', 'leaf', 'can',
-              'stk', 'glass', 'cup', 'box', 'pinch', 'flaske', 'portion', 'slice', '\\bclove\\b',
-              'neve', 'ml', 'cl', 'bunch', 'pack', 'plate', 'drop', 'twig', 'pound', 'ounce', 'stalk',
-              'quart') %>%
-      #Add whitespace on both sides to only match a unit in a string
-      sapply(., function(x) {paste0('\\s', x, '\\s')})
-
   #Extract units and numbers in front of them to their own column
-  df %>% mutate(Amounts = case_when(
+  df %>% mutate(tmp = case_when(
 
     #Extract amounts with units
-    str_detect(Ingredients, paste0('(\\d+\\.\\d+|\\d+-\\d+|\\d+)', units, collapse = '|')) ~
-      str_extract(Ingredients, '((\\d+\\.\\d+|\\d+-\\d+|\\d+)\\s\\w+)'),
-    #Extract pure numbers
-    !str_detect(Ingredients, paste0('(\\d+\\.\\d+|\\d+-\\d+|\\d+)', units, collapse = '|')) &
-      str_detect(Ingredients, '^\\d+') ~ str_extract(Ingredients, '^[^\\s]+')),
+    str_detect(Ingredients, paste0('^(\\d+\\.\\d+|\\d+-\\d+|\\d+)', type_of_units, collapse = '|')) ~
+      str_extract(Ingredients, paste0('^(\\d+\\.\\d+|\\d+-\\d+|\\d+)', type_of_units, collapse = '|')),
+    #Extract pure numbers and add 'pcs' as default unit value
+    !str_detect(Ingredients, paste0('^(\\d+\\.\\d+|\\d+-\\d+|\\d+)', type_of_units, collapse = '|')) &
+      str_detect(Ingredients, '^\\d+') ~ paste0(str_extract(Ingredients, '^[^\\s]+'), ' pcs')),
 
     #Remove this information from Ingredients columns
     Ingredients = case_when(
-      str_detect(Ingredients, paste0('(\\d+\\.\\d+|\\d+-\\d+|\\d+)', units, collapse = '|')) ~
-        str_remove(Ingredients, '((\\d+\\.\\d+|\\d+-\\d+|\\d+)\\s\\w+)'),
-      !str_detect(Ingredients, paste0('(\\d+\\.\\d+|\\d+-\\d+|\\d+)', units, collapse = '|')) & str_detect(Ingredients, '^\\d+') ~
+      str_detect(Ingredients, paste0('^(\\d+\\.\\d+|\\d+-\\d+|\\d+)', type_of_units, collapse = '|')) ~
+        str_remove(Ingredients, paste0('^(\\d+\\.\\d+|\\d+-\\d+|\\d+)', type_of_units, collapse = '|')),
+      !str_detect(Ingredients, paste0('^(\\d+\\.\\d+|\\d+-\\d+|\\d+)', type_of_units, collapse = '|')) & str_detect(Ingredients, '^\\d+') ~
         str_remove_all(Ingredients, '^[^\\s]+'),
-      TRUE ~ Ingredients))
+      TRUE ~ Ingredients)) %>%
+
+    #Split into a column for amounts and one for units
+    mutate(tmp = str_trim(.data$tmp)) %>% #Remove whitespace
+    separate(.data$tmp, into = c("Amounts", "unit"), sep = " ") %>%
+    mutate(Amounts = as.numeric(Amounts)) %>%
+    #Trim
+    mutate(Ingredients = str_trim(Ingredients))
 
 }

@@ -10,7 +10,7 @@
 #' @export
 standardiseHerbsnSpices <- function(df) {
   df  %>%
-    
+
     #Standardise
     standardiseHerbsnSpicesA() %>%
     standardiseHerbsnSpicesB() %>%
@@ -22,9 +22,11 @@ standardiseHerbsnSpices <- function(df) {
     standardiseHerbsnSpicesL() %>%
     standardiseHerbsnSpicesM() %>%
     standardiseHerbsnSpicesN() %>%
+    standardiseHerbsnSpicesO() %>%
     standardiseHerbsnSpicesP() %>%
     standardiseHerbsnSpicesR() %>%
     standardiseHerbsnSpicesS() %>%
-    standardiseHerbsnSpicesT()
-    
+    standardiseHerbsnSpicesT() %>%
+    standardiseHerbsnSpicesV()
+
 }

@@ -10,7 +10,7 @@
 #' @export
 standardiseHerbsnSpicesG <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'garam') ~ 'garam masala',
@@ -22,7 +22,7 @@ standardiseHerbsnSpicesG <- function(df) {
       str_detect(Ingredients, 'ginger') & str_detect(Ingredients, 'syrup') ~ 'syrup ginger',
       str_detect(Ingredients, 'ginger') & !str_detect(Ingredients, 'bread') ~ 'dried ginger',
       str_detect(Ingredients, 'zedoari') ~ 'ginger zedoari', #In the same family
-      str_detect(Ingredients, 'guacamole spice') ~ 'guacamole spice mix',
-      
+      str_detect(Ingredients, 'guacamole') & str_detect(Ingredients, 'spice mix') ~ 'spice mix guacamole',
+
       TRUE ~ Ingredients_standardised))
 }

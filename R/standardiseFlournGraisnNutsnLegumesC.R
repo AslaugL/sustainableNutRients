@@ -13,10 +13,13 @@ standardiseFlournGraisnNutsnLegumesC <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      #Casews
+      #Cashews
       str_detect(Ingredients, 'cashew') & str_detect(Ingredients, 'salt') & str_detect(Ingredients, 'nut') ~ 'cashew nut salt',
       str_detect(Ingredients, 'cashew') & str_detect(Ingredients, 'roast|toast') ~ 'cashew nut roasted',
       str_detect(Ingredients, 'cashew') ~ 'cashew nut',
+
+      #Chia
+      str_detect(Ingredients, 'chia seed') ~ 'chia seed',
 
       #Chickpeas
       str_detect(Ingredients, 'pea') & str_detect(Ingredients, 'chick') &

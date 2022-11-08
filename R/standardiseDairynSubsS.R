@@ -13,11 +13,14 @@ standardiseDairynSubsS <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'sour cream') & str_detect(Ingredients, 'porridge') ~ 'sour cream porridge',
       str_detect(Ingredients, 'lightroom 10 %|light flow 10 %') | str_detect(Ingredients, 'sour') & str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'light') ~ 'sour cream 10 %',
-      str_detect(Ingredients, 'lightroom 18 %|light stream|light flow 18%|lightroom 18%|light flow 18 %|light rømme') |
+      str_detect(Ingredients, 'seatroom|seat cream|seat room') |
+        str_detect(Ingredients, 'sour') & str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'full fat|35') ~ 'sour cream 35 %',
+      str_detect(Ingredients, 'lightroom 18 %|light stream|light flow 18%|lightroom 18%|light flow 18 %|light r\u00f8mme') |
         (str_detect(Ingredients, 'sour cream|soured cream') & !str_detect(Ingredients, '%')) |
-        (str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'light') & !str_detect(Ingredients, 'alternativ')) ~ 'sour cream 18 %', #Standard
-      str_detect(Ingredients, 'seatroom|seat cream') | str_detect(Ingredients, 'sour') & str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'full fat') ~ 'sour cream 35 %',
+        (str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'light') & !str_detect(Ingredients, 'alternativ')) |
+        str_detect(Ingredients, 'sour') & str_detect(Ingredients, 'cream') ~ 'sour cream 18 %', #Standard
 
       TRUE ~ Ingredients_standardised))
 }
