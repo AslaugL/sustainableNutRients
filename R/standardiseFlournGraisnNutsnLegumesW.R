@@ -1,0 +1,25 @@
+#' Standardising ingredients names in a recipe, here flours, grains nuts and legumes starting with the letter "W".
+#' @title standardiseFlournGraisnNutsnLegumesW
+#'
+#' @description Support function for "standardiseFlournGraisnNutsnLegumes", standardise names of flours, grains nuts and legumes starting with "W".
+#'
+#' @param df A dataframe with an Ingredients column, listing each ingredient of the recipe in individual rows, and an Ingredients_standardised column.
+#'
+#' @return The dataframe with a column with flours, grains nuts and legumes starting with the letter "W" with standardised names.
+#'
+#' @export
+standardiseFlournGraisnNutsnLegumesW <- function(df) {
+  df  %>%
+    
+    #Standardise
+    mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'walnut') & !str_detect(Ingredients, 'oil') ~ 'walnut',
+      str_detect(Ingredients, 'spelt|farro') & str_detect(Ingredients, 'flour') | str_detect(Ingredients, 'farro') ~ 'wheat flour spelt',
+      str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'wholemeal') | str_detect(Ingredients, 'wheat') & str_detect(Ingredients, 'whole') & str_detect(Ingredients, 'flour') ~ 'wheat flour wholemeal',
+      str_detect(Ingredients, 'rye') & str_detect(Ingredients, 'flour') ~ 'wheat flour rye',
+      str_detect(Ingredients, 'rye') & str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'whole') ~ 'wheat flour rye wholemeal',
+      str_detect(Ingredients, 'wheat flour|all-purpose flour|plain flour|flour|durum wheat|self-raising|bread') & !str_detect(Ingredients, 'whole|gram|tortilla|potato|corn|spelt') ~ 'wheat flour',
+      
+      TRUE ~ Ingredients_standardised))
+}
+
