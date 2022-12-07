@@ -10,12 +10,12 @@
 #' @export
 standardiseHerbsnSpicesM <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'marjoram') & str_detect(Ingredients, 'twig|chopped') ~ 'marjoram fresh herbs',
-      str_detect(Ingredients, 'mint') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(Amounts, 'twig|bunch|leaf|neve|dl')) ~ 'mint fresh herbs',
+      str_detect(Ingredients, 'mint') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'mint fresh herbs',
       str_detect(Ingredients, 'mint') ~ 'mint dried', #Standard
-      
+
       TRUE ~ Ingredients_standardised))
 }

@@ -19,16 +19,17 @@ standardiseFlournGraisnNutsnLegumesP <- function(df) {
       #Pasta
       str_detect(Ingredients, 'pasta|paste|spagetti|spaghetti') & str_detect(Ingredients, 'whole') ~ 'pasta whole grain',
       str_detect(Ingredients, 'lasagna|lasagne') & str_detect(Ingredients, 'plate|sheet') ~ 'lasagna plate pasta',
+      str_detect(Ingredients, 'tortellini') ~ 'pasta filled',
       str_detect(Ingredients, 'pasta|spagetti|spaghetti|tagli|pens|macaroni') & !str_detect(Ingredients, 'lasagna') & str_detect(Ingredients, '\\bcooked') ~ 'pasta cooked',
       str_detect(Ingredients, 'pasta|spagetti|spaghetti|tagli|pens|macaroni|tortellini') & !str_detect(Ingredients, 'lasagna') & !str_detect(Ingredients, 'sauce') ~ 'pasta',
       str_detect(Ingredients, 'lasagna noodles') ~ 'pasta',
 
       #Pearl barley
-      str_detect(Ingredients, 'barley') ~ 'pearl barley',
+      str_detect(Ingredients, 'barley') & !str_detect(Ingredients, 'salad') ~ 'pearl barley',
 
       #Nuts and seeds
       str_detect(Ingredients, 'peanut') & str_detect(Ingredients, 'butter') ~ 'peanut butter',
-      str_detect(Ingredients, 'peanut') & str_detect(Ingredients, 'salt') ~ 'peanut salt',
+      str_detect(Ingredients, 'peanut') & str_detect(Ingredients, 'salt') & !str_detect(Ingredients, 'unsalted') ~ 'peanut salt',
       str_detect(Ingredients, 'peanut') & !str_detect(Ingredients, 'oil') ~ 'peanut',
       str_detect(Ingredients, 'pecans') ~ 'pecan',
       str_detect(Ingredients, 'pine') & str_detect(Ingredients, 'nut|seed|kernel') & !str_detect(Ingredients, 'apple') ~ 'pine nut',
@@ -39,6 +40,7 @@ standardiseFlournGraisnNutsnLegumesP <- function(df) {
       str_detect(Ingredients, 'phyllo dough') ~ 'phyllo dough',
       str_detect(Ingredients, 'pie dough') ~ 'pie dough',
       str_detect(Ingredients, 'pizza base') & str_detect (Ingredients, 'mini') ~ 'pizza base mini',
+      str_detect(Ingredients, 'pizza base') & str_detect (Ingredients, 'mix') ~ 'pizza base mix',
       str_detect(Ingredients, 'pizza base') ~ 'pizza base',
       str_detect(Ingredients, 'pizza') & str_detect(Ingredients, 'crust') & str_detect(Ingredients, 'italian') ~ 'pizza crust italian',
       str_detect(Ingredients, 'pizza') & str_detect(Ingredients, 'crust') ~ 'pizza crust',

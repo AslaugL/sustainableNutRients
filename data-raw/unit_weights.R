@@ -6,7 +6,7 @@ various <- list()
 
 #Load raw data from the Norwegian directorate of health
 raw_data <- readxl::read_xlsx(
-  system.file("extdata", "weights_measures_and_portion_sizes_for_foods_NorwegianDirectorateOfHealth_2015.xlsx", package = "nutRients"))
+  system.file("extdata", "weights_portion_sizes_foods_NorwegianDirectorateOfHealth_2015.xlsx", package = "nutRients"))
 
 #Reformat
 unit_weights <- raw_data %>% rename(
@@ -604,6 +604,10 @@ unit_weights <- unit_weights %>%
            str_replace('biscuit, with oats, digestive', 'biscuit digestive') %>%
            str_replace('biscuit, marie', 'biscuit marie') %>%
            str_replace('biscuit, for childen', 'biscuit children') %>%
+           str_replace('mashed potatoes', 'potato mash') %>%
+           str_replace('tortilla, hvetelefse, fin|tortilla, wheat flour', 'tortilla') %>% #Standard
+           str_replace('tortilla, hvetelefse, fullkorn', 'tortilla fullkorn') %>%
+           str_replace('tortilla, wheat flour, wholemeal', 'tortilla coarse') %>%
 
            #Change all plural forms to singular
            str_replace('anchovies', 'anchovy') %>%
@@ -627,7 +631,8 @@ unit_weights <- unit_weights %>%
            str_replace('caramels', 'caramel') %>%
            str_replace('marshmallows', 'marshmallow') %>%
            str_replace('pancakes', 'pancake') %>%
-           str_replace('oats', 'oat')
+           str_replace('oats', 'oat') %>%
+           str_replace("noodles", "noodle")
   ) %>%
   #Conditionals
   mutate(Ingredients = case_when(

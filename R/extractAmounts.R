@@ -1,7 +1,8 @@
 #' Extract amounts and units from the Ingredents column.
 #' @title extractAmounts
 #'
-#' @description Extract Amounts and units from the Ingredients column to their own columns.
+#' @description Extract Amounts and units from the Ingredients column to their own columns,
+#'  by recognizing the pattern <number> <unit> at the beginning of the string.
 #'
 #' @param df A dataframe with an Ingredients column.
 #'

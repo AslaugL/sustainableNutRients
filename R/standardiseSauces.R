@@ -16,15 +16,18 @@ standardiseSauces <- function(df) {
 
     #Bases/powders
     str_detect(Ingredients, 'bolognese') & str_detect(Ingredients, 'base|bag') ~ 'bolognese base',
+    str_detect(Ingredients, 'bolognese') & str_detect(Ingredients, 'mix|powder') ~ 'bolognese powder mix',
     str_detect(Ingredients, 'bearnaise|b\u00E9arnaise') & str_detect(Ingredients, 'base') ~ 'bearnaise base',
     str_detect(Ingredients, 'bearnaise|b\u00E9arnaise') & str_detect(Ingredients, 'mix') ~ 'bearnaise powder mix',
     str_detect(Ingredients, 'brown sauce') & str_detect(Ingredients, 'mix') ~ 'brown sauce powder mix',
     str_detect(Ingredients, 'browning') & str_detect(Ingredients, 'sauce') ~ 'sauce browning',
 
+    str_detect(Ingredients, 'carbonara') & str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'mix|powder') ~ 'carbonara powder mix',
     str_detect(Ingredients, 'cream sauce') & str_detect(Ingredients, 'base') ~ 'cream sauce base',
 
     str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'base') ~ 'hollandaise base',
-    str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'mix') ~ 'hollandaise powder mix',
+    str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'mix|powder') ~ 'hollandaise powder mix',
+    str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'sauce') ~ 'sauce hollandaise',
 
     #Sauces/gravy
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'barbeque|barbecue|bbq') ~ 'sauce barbeque',
@@ -55,7 +58,10 @@ standardiseSauces <- function(df) {
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'hot') ~ 'sauce hot',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, '\\bhp') ~ 'sauce hp',
 
+    str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'korma') ~ 'sauce korma',
+
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'mint') ~ 'sauce mint',
+
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'pad thai') ~ 'sauce pad thai',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'pasta|spagetti|spaghetti') ~ 'sauce pasta',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'piri-piri') ~ 'sauce piri-piri',
@@ -64,18 +70,24 @@ standardiseSauces <- function(df) {
       str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'pizza') ~ 'sauce pizza red', #Standard
     str_detect(Ingredients, 'ponzu') & str_detect(Ingredients, 'sauce') ~ 'sauce ponzu',
 
+    str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'ravigotte') ~ 'sauce ravigotte',
+
+    str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'sandefjord') ~ 'sauce sandefjord',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'sweet') |
-      str_detect(Ingredients, 'ketjap medja') ~ 'sauce sweet soy',
+      str_detect(Ingredients, 'ketjap medja|ketjap manis') ~ 'sauce sweet soy',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'soy') ~ 'sauce soy',
+    str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'sweet') & str_detect(Ingredients, 'sour') ~ 'sauce sweet and sour',
 
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'taco') ~ 'sauce taco',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'teriyaki') ~ 'sauce teriyaki',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'tikka masala') ~ 'sauce tikka masala',
-    str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'tomat') ~ 'sauce tomato',
+    str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'tomat') & !str_detect(Ingredients, 'stew') ~ 'sauce tomato',
 
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'oyster') ~ 'sauce oyster',
 
+    str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'white') & str_detect(Ingredients, 'powder|mix') ~ 'sauce white mix powder',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'white') ~ 'sauce white',
+    str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'wok') ~ 'sauce wok',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'worcestershire') ~ 'sauce worcestershire',
 
 

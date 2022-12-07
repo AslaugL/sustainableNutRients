@@ -20,6 +20,7 @@ standardiseFruitVegR <- function(df){
       str_detect(Ingredients, 'raspbe') ~ 'raspberries',
       str_detect(Ingredients, 'rhubarb') & str_detect(Ingredients, 'juice') ~ 'rhubarb juice',
       str_detect(Ingredients, 'rhubarb') ~ 'rhubarb',
+      str_detect(Ingredients, 'romanesque|romanesco') ~ 'broccoli romanesco',
 
       TRUE ~ Ingredients_standardised
     ))

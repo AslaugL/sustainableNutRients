@@ -13,6 +13,7 @@ standardiseSeafood <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+
       str_detect(Ingredients, 'anchovy fillet|sardines or anchovies') ~ 'anchovy fillet',
       str_detect(Ingredients, 'anchovies') ~ 'anchovy canned',
       str_detect(Ingredients, 'angler fish|anglerfish') ~ 'anglerfish',
@@ -25,6 +26,7 @@ standardiseSeafood <- function(df) {
       str_detect(Ingredients, 'cod') & str_detect(Ingredients, 'clip') | str_detect(Ingredients, 'clipfish') ~ 'cod clipfish',
       str_detect(Ingredients, 'cod') & str_detect(Ingredients, 'cooked') ~ 'cod cooked',
       str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'dried|dry') ~ 'cod dried',
+      str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'bread') ~ 'cod breaded',
       str_detect(Ingredients, 'fish fillet|firm white fish|different fillets of white fish|optional fish without skin and bone') & !str_detect(Ingredients, 'angler|cat|cod|pollock') ~ 'cod',
       str_detect(Ingredients, 'cod') ~ 'cod fillet',
       str_detect(Ingredients, 'crab') & str_detect(Ingredients, 'shell') ~ 'crab shell',
@@ -32,6 +34,8 @@ standardiseSeafood <- function(df) {
       str_detect(Ingredients, 'crab') ~ 'crab',
       str_detect(Ingredients, '\\btusk\\b|\\bcusk\\b|brosme') ~ 'cusk tusk white fish',
 
+      str_detect(Ingredients, 'fish ball') & str_detect(Ingredients, 'cab') ~ 'fish balls canned',
+      str_detect(Ingredients, 'fish ball') & str_detect(Ingredients, 'curry sauce') ~ 'fish balls curry sauce',
       str_detect(Ingredients, 'fish ball') ~ 'fish balls',
       str_detect(Ingredients, 'fish burger') & str_detect(Ingredients, 'white fish') ~ 'fish burger white fish',
       str_detect(Ingredients, 'fish burger') & str_detect(Ingredients, 'red fish|fatty fish') ~ 'fish burger fatty fish',
@@ -42,6 +46,9 @@ standardiseSeafood <- function(df) {
       str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'cake') ~ 'fish cakes',
       str_detect(Ingredients, 'fish, head, back bone') | Ingredients == 'fish cut' ~ 'fish scraps for broth',
       str_detect(Ingredients, 'fish stick') ~ 'fish sticks',
+      str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'gratin') ~ 'fish gratin',
+
+      str_detect(Ingredients, 'flounder') ~ 'flounder',
 
       str_detect(Ingredients, 'grouper') ~ 'grouper',
 
@@ -54,6 +61,7 @@ standardiseSeafood <- function(df) {
       str_detect(Ingredients, 'lobster') & !str_detect(Ingredients, 'shell') ~ 'lobster',
 
       str_detect(Ingredients, 'mackerel') & str_detect(Ingredients, 'tomato') ~ 'mackerel tomato canned',
+      str_detect(Ingredients, 'mackerel') & str_detect(Ingredients, 'smoked') ~ 'mackerel smoked',
       str_detect(Ingredients, 'mackerel') ~ 'mackerel',
       str_detect(Ingredients, 'mussels') & !str_detect(Ingredients, 'power') ~ 'mussels',
       str_detect(Ingredients, 'sand shell') ~ 'scallop', #Similar in nutrition value
@@ -66,8 +74,11 @@ standardiseSeafood <- function(df) {
 
       str_detect(Ingredients, 'redfish') ~ 'redfish',
       str_detect(Ingredients, 'rakfisk|fermented trout') ~ 'rakfisk trout fermented',
+      str_detect(Ingredients, 'roe') & str_detect(Ingredients, 'salmon') ~ 'roe salmon',
+      str_detect(Ingredients, '\\broe\\b') ~ 'roe',
 
-      str_detect(Ingredients, 'salmon') & str_detect(Ingredients, 'smoked') ~ 'salmon smoked',
+      str_detect(Ingredients, 'salmon') & str_detect(Ingredients, 'spread') ~ 'salmon spread',
+      str_detect(Ingredients, 'salmon') & str_detect(Ingredients, 'smoked') & !str_detect(Ingredients, 'spread') ~ 'salmon smoked',
       str_detect(Ingredients, 'salmon') & str_detect(Ingredients, 'roe') ~ 'salmon roe',
       str_detect(Ingredients, 'salmon') ~ 'salmon',
       str_detect(Ingredients, 'sandshell') ~ 'sandshell',
@@ -76,11 +87,12 @@ standardiseSeafood <- function(df) {
       str_detect(Ingredients, 'scampi') ~ 'scampi',
       str_detect(Ingredients, 'sea bass') ~ 'sea bass',
       str_detect(Ingredients, 'sea urchin') ~ 'sea urchin',
-      str_detect(Ingredients, 'shellfish') & !str_detect(Ingredients, 'borth|stock') ~ 'shellfish',
+      str_detect(Ingredients, 'shellfish') & !str_detect(Ingredients, 'broth|stock|salad') ~ 'shellfish',
       str_detect(Ingredients, 'shrimp') & str_detect(Ingredients, '\\bcooked') ~ 'shrimp cooked',
       str_detect(Ingredients, 'shrimp') & str_detect(Ingredients, 'lake') ~ 'shrimp in brine',
       str_detect(Ingredients, 'shrimp') & !str_detect(Ingredients, 'paste|salad|shellfish') ~ 'shrimp',
       str_detect(Ingredients, 'shrimp') & str_detect(Ingredients, 'salad') ~ 'shrimp salad',
+      str_detect(Ingredients, '\\bsole\\b') ~ 'sole',
       str_detect(Ingredients, 'squid') & !str_detect(Ingredients, 'honey') ~ 'squid',
 
       str_detect(Ingredients, 'trout') & str_detect(Ingredients, 'cured') ~ 'cured trout',

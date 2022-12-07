@@ -13,6 +13,6 @@
 
 fixFoodMappingError <- function(database, first_w, second_w = '\\') {
 
-  ID <- database %>% filter(first_word == first_w & second_word == second_w) %>% select(database_ID) %>% as.numeric()
+  ID <- database %>% filter(first_word == first_w & second_word == second_w) %>% select(database_ID) %>% unique() %>% as.numeric()
 
 }

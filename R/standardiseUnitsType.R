@@ -107,7 +107,7 @@
 
    #Split rows with 'salt and pepper and oil' and similar
    standardised <- standardised %>%
-      separate_rows(Ingredients, sep = ' and ') %>%
+      separate_rows(Ingredients, sep = '(?<=salt|pepper|oil) and ') %>%
       #Remove "slice" of pepper/salt, mistaken translation from Norwegian
       mutate(unit = case_when(
          !(Ingredients %in% c('salt', 'pepper') & unit == 'slice') ~ unit

@@ -29,34 +29,37 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'cherry tomato') & str_detect(Ingredients, 'can') ~ 'cherry tomato canned',
       str_detect(Ingredients, 'cherry tomato') ~ 'cherry tomato',
       str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'can|in syrup') & !str_detect(Ingredients, 'tomato') ~ 'cherries canned', #Name used in SHARP and Matvaretabellen
+      str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'compote') ~ 'cherries compote',
       str_detect(Ingredients, 'cherry|cherries') & !str_detect(Ingredients, 'tomato') ~ 'cherries', #Name used in SHARP and Matvaretabellen
       str_detect(Ingredients, 'chicory') & str_detect(Ingredients, 'white') ~ 'chicory white',
       str_detect(Ingredients, 'chicory') & str_detect(Ingredients, 'red') ~ 'chicory red',
       str_detect(Ingredients, 'chicory') ~ 'chicory',
+      str_detect(Ingredients, 'coleslaw') ~ 'coleslaw',
 
+      str_detect(Ingredients, 'jalap') & str_detect(Ingredients, 'pickle') ~ 'chili pepper jalapeno pickled',
       str_detect(Ingredients, 'jalap') ~ 'chili pepper jalapeno',
       str_detect(Ingredients, 'chili|chilli|chile') & str_detect(Ingredients, 'green') ~ 'chili pepper green',
 
       ((str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'chili|chilli')) | (str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'red|r\u00f8d'))) & !str_detect(Ingredients, 'powder') |
         str_detect(Ingredients, 'mild chili|mild chilli') & !str_detect(Ingredients, 'sauce') | str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'chop') |
-        str_detect(Ingredients, 'chili|chilli') & str_detect(Amounts, 'pcs') |
+        str_detect(Ingredients, 'chili|chilli') & str_detect(unit, 'pcs') |
         str_detect(Ingredients, 'red') & str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'hot') & str_detect(Ingredients, 'slice') |
         str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'seed') ~ 'chili pepper red',
       (str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'dried') & !str_detect(Ingredients, 'flake')) ~ 'chili pepper dried',
       str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'pickle') ~ 'chili pepper pickled',
 
-
       str_detect(Ingredients, 'clemen') ~ 'clementine',
+      str_detect(Ingredients, 'cloud') & str_detect(Ingredients, 'berr') ~ 'cloudberry',
       str_detect(Ingredients, 'coconut') & !str_detect(Ingredients, 'milk|cream|oil') ~ 'coconut',
-      str_detect(Ingredients, 'minima|baby corn') ~ 'corn baby',
-      str_detect(Ingredients, 'corn') & str_detect(Amounts, 'g') &
+      str_detect(Ingredients, 'minima|baby corn|mini corn') ~ 'corn baby',
+      str_detect(Ingredients, 'corn') & str_detect(unit, 'g') &
         str_detect(Ingredients, 'can') |
         str_detect(Ingredients, 'kernel') & str_detect(Ingredients, 'drained') |
-        str_detect(Ingredients, 'sweetcorn') & str_detect(Ingredients, 'canned') ~ 'sweet corn kernels canned',
-      str_detect(Ingredients, 'corn') & str_detect(Amounts, 'g') &
+        str_detect(Ingredients, 'sweetcorn|corn') & str_detect(Ingredients, 'canned') ~ 'sweet corn kernels canned',
+      str_detect(Ingredients, 'corn') & str_detect(unit, 'g|dl') &
         !str_detect(Ingredients, 'starch|tortilla|oil') | str_detect(Ingredients, 'corn kernel') ~ 'sweet corn kernels',
-      str_detect(Ingredients, 'corn') & str_detect(Amounts, 'pcs') &
-        !str_detect(Ingredients, 'pepper') ~ 'corn cob',
+      str_detect(Ingredients, 'corn') & str_detect(unit, 'pcs') &
+        !str_detect(Ingredients, 'pepper') | str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'cob') ~ 'corn cob',
       str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'jam') ~ 'cranberries jam',
       str_detect(Ingredients, 'cranberr') & !str_detect(Ingredients, 'sauce') ~ 'cranberries',
       str_detect(Ingredients, 'cucumber') & str_detect(Ingredients, 'snake') ~ 'cucumber snake',

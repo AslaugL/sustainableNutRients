@@ -18,14 +18,15 @@ standardiseDairynSubsM <- function(df) {
       str_detect(Ingredients, 'margarin') & str_detect(Ingredients, 'plant-based|plant based|vegan') ~ 'margarine plant based',
       str_detect(Ingredients, 'margarin') ~ 'margarine',
       #Milk and substitutes
-      str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'milk') ~ 'almond milk',
-      str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'milk') ~ 'dairy imitate oatmilk',
-      str_detect(Ingredients, 'milk|tinemelk') & !str_detect(Ingredients, 'whole|full-fat|coconut|butter|extra|almond|soy|evaporated|powder|condensed|chocolate') ~ 'milk 1 %', #Standard
+      str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'milk|drink') ~ 'almond milk',
+      str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'barista') ~ 'dairy imitate oatmilk full fat',
+      str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'milk|drink') ~ 'dairy imitate oatmilk',
+      str_detect(Ingredients, 'milk|tinemelk') & !str_detect(Ingredients, 'whole|full-fat|coconut|butter|extra|almond|soy|evaporated|powder|condensed|chocolate|cultured') ~ 'milk 1 %', #Standard
       str_detect(Ingredients, 'milk|melk') & str_detect(Ingredients, 'whole|full-fat') ~ 'whole milk 3.5 %',
       str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'extra light|skim milk') ~ 'milk 0.1 %',
       str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'evaporated|condensed') ~ 'milk evaporated',
       str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'powder') & str_detect(Ingredients, 'nonfat') ~ 'milk powder nonfat',
-      str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'coconut') ~ 'milk coconut',
+      str_detect(Ingredients, 'milk|drink') & str_detect(Ingredients, 'coconut') ~ 'milk coconut',
       str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'coconut') ~ 'milk coconut cream full fat',
 
 

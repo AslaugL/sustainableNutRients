@@ -13,8 +13,11 @@ standardiseFruitVegW <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'wakame') ~ 'wakame',
       str_detect(Ingredients, 'watermelon') ~ 'watermelon',
       str_detect(Ingredients, 'water chestnut') ~ 'water chestnut',
+      str_detect(Ingredients, 'wild') & str_detect(Ingredients, 'berr') ~ 'berries mixed wild',
+      str_detect(Ingredients, 'wok') & str_detect(Ingredients, 'mix') ~ 'wok vegetable mix',
 
       TRUE ~ Ingredients_standardised
     ))

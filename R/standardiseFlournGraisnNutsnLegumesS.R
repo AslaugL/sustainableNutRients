@@ -10,15 +10,16 @@
 #' @export
 standardiseFlournGraisnNutsnLegumesS <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'salt') & str_detect(Ingredients, 'stick') ~ 'salt stick',
       str_detect(Ingredients, 'sesame') & str_detect(Ingredients, 'seed') ~ 'sesame seed',
       str_detect(Ingredients, 'semolina') ~ 'wheat flour semolina',
       str_detect(Ingredients, 'shortcrust pastry') ~ 'shop-bought shortcrust pastry',
       str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'low fat|low-fat') ~ 'soy milk low fat',
       str_detect(Ingredients, 'sunflower') & str_detect(Ingredients, 'seed') & !str_detect(Ingredients, 'oil') ~ 'seed sunflower',
-      
+
       TRUE ~ Ingredients_standardised))
 }
 

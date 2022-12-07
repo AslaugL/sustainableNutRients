@@ -15,7 +15,7 @@ standardiseFlournGraisnNutsnLegumesL <- function(df) {
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'lentil') & str_detect(Ingredients, 'red') ~ 'lentil red',
       str_detect(Ingredients, 'lentil') & str_detect(Ingredients, 'green') ~ 'lentil green',
-      str_detect(Ingredients, 'lentil') & str_detect(Amounts, 'box|can') ~ 'lentil canned',
+      str_detect(Ingredients, 'lentil') & str_detect(unit, 'box|can') ~ 'lentil canned',
       str_detect(Ingredients, 'lentil') ~ 'lentil',
 
       TRUE ~ Ingredients_standardised))

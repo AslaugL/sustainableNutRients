@@ -16,7 +16,7 @@ standardiseHerbsnSpicesA <- function(df) {
       str_detect(Ingredients, 'adobo seasoning') ~ 'adobo seasoning',
       str_detect(Ingredients, 'allspice|all kinds') ~ 'allspice',
       str_detect(Ingredients, 'anise') &str_detect(Ingredients, 'extract') ~ 'anise extract',
-      str_detect(Ingredients, 'anis') & !str_detect(Ingredients, 'star') ~ 'anise ground',
+      str_detect(Ingredients, 'anis') & !str_detect(Ingredients, 'star|manis') ~ 'anise ground',
 
       TRUE ~ Ingredients_standardised))
 }

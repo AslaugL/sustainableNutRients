@@ -329,10 +329,10 @@ SHARP2018 <- SHARP %>%
   pivot_longer(.,
                cols = -database_ID,
                names_to = "environmental_impact_indicator",
-               values_to = "environmental_impact_per_100g") %>%
+               values_to = "environmental_impact_per_kilo") %>%
   #Turn environmental impact from per kilo to per hekto
   mutate(
-    environmental_impact_per_100g = environmental_impact_per_100g/10,
+    environmental_impact_per_hektogram = environmental_impact_per_kilo/10,
     environmental_impact_indicator = environmental_impact_indicator %>%
       str_replace("GHGE of 1 kg food as consumed_kg", "kg ") %>%
       str_replace("Land use of 1 kg food as consumed_", ""))

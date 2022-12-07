@@ -10,13 +10,15 @@
 #' @export
 standardiseFlournGraisnNutsnLegumesA <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'flour') ~ 'almond flour',
       str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'extract') ~ 'almond extract',
+      str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'salt') & !str_detect(Ingredients, 'potato') ~ 'almond salted',
       str_detect(Ingredients, 'almond') & !str_detect(Ingredients, 'potato') ~ 'almond',
-      str_detect(Ingredients, 'apple') & str_detect(Ingredients, 'cinnamon') & str_detect(Ingredients, 'muesli') ~ 'muesli apple-cinnamon',
-      
+      str_detect(Ingredients, 'apple') &
+        str_detect(Ingredients, 'cinnamon') & str_detect(Ingredients, 'muesli') ~ 'muesli apple-cinnamon',
+
       TRUE ~ Ingredients_standardised))
 }

@@ -10,17 +10,19 @@
 #' @export
 standardiseHerbsnSpicesS <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'saffron') ~ 'saffron',
-      str_detect(Ingredients, 'sage') & !str_detect(Ingredients, 'sau') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(Amounts, 'twig|bunch|leaf|neve|dl')) ~ 'sage fresh herbs',
+      str_detect(Ingredients, 'sage') & !str_detect(Ingredients, 'sau') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'sage fresh herbs',
       str_detect(Ingredients, 'sage') & !str_detect(Ingredients, 'sau') ~ 'sage dried', #Standard
-      str_detect(Ingredients, 'salvie') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(Amounts, 'twig|bunch|leaf|neve|dl')) ~ 'salvie fresh herbs',
+      str_detect(Ingredients, 'salvie') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'salvie fresh herbs',
       str_detect(Ingredients, 'salvie') ~ 'salvie dried', #Standard
       str_detect(Ingredients, 'sazon seasoning') ~ 'sazon seasoning',
+      str_detect(Ingredients, 'spice mix') & str_detect(Ingredients, 'meat') ~ 'spice mix meat',
+      str_detect(Ingredients, 'spice') & str_detect(Ingredients, 'provence') ~ 'spice mix provence',
       str_detect(Ingredients, 'star anis') ~ 'star anise',
       str_detect(Ingredients, 'summer savory') ~ 'summer savory fresh herbs',
-      
+
       TRUE ~ Ingredients_standardised))
 }

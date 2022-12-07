@@ -3,10 +3,10 @@
 #'
 #' @description Find foods within a reference database, to later calculate weight from volume units, nutrient content or environmental sustainability markers from weight units.
 #'
-#' @param df A dataframe with an Ingredients column to be checked against the reference database. To fix common errors, the df also needs a "unit" column.
+#' @param df A dataframe with an Ingredients column to be checked against the reference database, and a unit column. For best accuracy units should be standardised.
 #' @param database The reference database, either "volume_weight", "nutrients" or "sustainability".
 #' @param additional_entries Additional entries to the databases that foods can found in. Must be formatted same as the output from "createNewDatabaseEntry".
-#' @param fix_errors Fix known errors automatically? For fixes of volume/weight database, df must have a unit column.
+#' @param fix_errors Fix known errors automatically? Default TRUE.
 #'
 #' @return A dataframe with the ingredient name and the reference database_ID of the first hit in the database.
 #'
@@ -91,11 +91,24 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
   #Pull the reference database from nutRient internal data
   if(database == "volume_weight"){
 
+    #Separate out ingredients with weight in kilo already, unnecessary to look through them
+    if(length(unique(df$unit) > 1)) {
+
+      ingredients_to_check <- df %>% filter(unit != 'kg')
+
+    }else if(unique(df$unit) == "kg") {
+
+      stop("All the ingredients are in kilograms, no need to check against volume weight database.")
+
+    }
+
     #No additional entries for the database
     if(is.null(additional_entries)){
 
       #Database query words
-      reference <- unit_weights_query %>% filter(.data$language == 'english')
+      reference <- unit_weights_query %>%
+        filter(.data$language == 'english') %>%
+        select(-.data$language)
 
       #The database
       db <- unit_weights %>%
@@ -116,7 +129,10 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
       ) {
 
         #Database query words
-        reference <- unit_weights_query %>% filter(.data$language == 'english') %>% bind_rows(additional_entries$query_words)
+        reference <- unit_weights_query %>%
+          filter(.data$language == 'english') %>%
+          select(-.data$language) %>%
+          bind_rows(additional_entries$query_words) %>% unique()
 
         #The database
         db <- unit_weights %>%
@@ -126,18 +142,21 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                    str_replace('neve', 'handful') %>%
                    str_replace('brutto', 'pcs')) %>%
           select(-c(Ingredients, .data$language, reference)) %>%
-          bind_rows(additional_entries$db)
+          bind_rows(additional_entries$db) %>% unique()
 
-      } else {
-        stop("Have additional_entries been formatted correctly?")
+      } else if(isFALSE(is.list(additional_entries) &
+                       all.equal(names(additional_entries), c('db', 'query_words')) &
+                       all.equal(names(additional_entries$db), c('unit', 'grams_per_unit', 'database_ID')) &
+                       all.equal(names(additional_entries$query_words), c('first_word', 'second_word', 'database_ID')))
+      ){
+        stop("Have additional_entries been formatted correctly? Should be a list with two dataframes,
+             'db' with names 'unit', 'grams_per_unit' and 'database_ID',
+             and 'query_words' with names 'first_word', 'second_word' and 'database_ID",)
       }
 
 
 
     }
-
-    #Separate out ingredients with weight in kilo already
-    ingredients_to_check <- df %>% filter(unit != 'kg')
 
 
   } else if(database == "nutrients"){
@@ -299,11 +318,12 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients %in% c('onion seed', 'chia seeds') ~ fixFoodMappingError(database = reference, 'poppy', 'seed'), #Both are small seeds
           Ingredients == 'graham cracker' ~ fixFoodMappingError(database = reference, 'cracker', 'cream'),
           Ingredients == 'marjoram fresh herbs' ~ fixFoodMappingError(database = reference, 'oregano', 'fresh'),
-          Ingredients == 'harissa mild' ~ fixFoodMappingError(database = reference, 'chili', 'paste'),
+          Ingredients %in% c('harissa mild', "harissa") ~ fixFoodMappingError(database = reference, 'chili', 'paste'),
           Ingredients == 'spread speculaas' ~ fixFoodMappingError(database = reference, 'peanut', 'butter'),
           Ingredients == 'onion pickled' ~ fixFoodMappingError(database = reference, 'beetroot', 'pickled'),
           Ingredients == 'pizza sauce red' ~ fixFoodMappingError(database = reference, 'tomato', 'canned'),
-          Ingredients %in% c('bread sausage', 'bread polar') ~ fixFoodMappingError(database = reference, 'pita', 'bread'), #Similar
+          Ingredients %in% c('bread sausage', 'bread polar', "paratha bread") ~ fixFoodMappingError(database = reference, 'pita', 'bread'), #Similar
+          Ingredients == "margarine" ~ fixFoodMappingError(database = reference, 'butter'), #Similar
 
           TRUE ~ database_ID
         ))
@@ -313,7 +333,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         left_join(reference %>% filter(database_ID %in% temp$database_ID)) %>%
         mutate(database_reference = paste0(first_word, ' ', second_word)) %>%
         #Remove unnecessary columns
-        select(-c(.data$language, first_word, second_word, .data$loop)) %>% unique() %>%
+        select(-c(first_word, second_word, .data$loop)) %>% unique() %>%
         left_join(db,
                   by = c("database_ID", "unit")) %>%
         mutate(

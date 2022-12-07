@@ -19,7 +19,7 @@ standardiseOils <- function(df) {
       str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'oil') & str_detect(Ingredients, 'sichuan') ~ 'oil chili sichuan',
       str_detect(Ingredients, 'coconut oil') & str_detect(Ingredients, 'deep fry') ~ 'coconut oil for deep frying',
       str_detect(Ingredients, 'coconut oil') & str_detect(Ingredients, 'frying|browning|roasting|greasing|brushing') ~ 'coconut oil for cooking',
-      str_detect(Ingredients, 'coconut oil') ~ 'coconut oil',
+      str_detect(Ingredients, 'coconut oil|coconut fat') ~ 'coconut oil',
       str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'oil') & str_detect(Ingredients, 'deep fry') ~ 'oil corn for deep frying',
       str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'oil') ~ 'oil corn',
 
@@ -49,12 +49,12 @@ standardiseOils <- function(df) {
 
       str_detect(Ingredients, 'oil for deep frying') | Ingredients == 'frying oil' ~ 'vegetable oil for deep frying',
       Ingredients %in% c('oil for frying', 'oil for brushing', 'lubricating and brushing oil') ~ 'vegetable oil for cooking',
-      str_detect(Ingredients, 'vegetable oil|salad oil|oil, neutral|vegetabie oil') | Ingredients %in% c('oil', 'of oil', 'oil neutral')  ~ 'vegetable oil',
+      str_detect(Ingredients, 'vegetable oil|salad oil|oil, neutral|vegetabie oil') & !str_detect(Ingredients, 'tomato') | Ingredients %in% c('oil', 'of oil', 'oil neutral')  ~ 'vegetable oil',
 
       str_detect(Ingredients, 'mayo') & str_detect(Ingredients, 'vegan') ~ 'mayonnaise vegan',
       str_detect(Ingredients, 'mayo') ~ 'mayonnaise',
 
-      str_detect(Ingredients, "oil") & !str_detect(Ingredients, "boil") ~ "vegetable oil", #Standard
+      str_detect(Ingredients, "oil") & !str_detect(Ingredients, "boil|tomato") ~ "vegetable oil", #Standard
 
       TRUE ~ Ingredients_standardised))
 }

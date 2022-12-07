@@ -14,6 +14,7 @@ standardiseFruitVegM <- function(df){
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'mango') & !str_detect(Ingredients, 'chutney') ~ 'mango',
+      str_detect(Ingredients, 'melon') & str_detect(Ingredients, 'honeydew') ~ 'melon honeydew',
 
       TRUE ~ Ingredients_standardised
     ))

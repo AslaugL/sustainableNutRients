@@ -16,7 +16,8 @@ standardiseHerbsnSpicesG <- function(df) {
       str_detect(Ingredients, 'garam') ~ 'garam masala',
       str_detect(Ingredients, 'pav bhaji masala') ~ 'pav bhaji masala',
       Ingredients == 'italian seasoning' ~ 'italian seasoning',
-      str_detect(Ingredients, 'ginger') & (str_detect(Ingredients, 'fresh|grated|chopped') | str_detect(Amounts, 'cm')) ~ 'fresh herbs ginger',
+      str_detect(Ingredients, 'ginger') & (str_detect(Ingredients, 'fresh|grated|chopped') |
+                                             str_detect(unit, 'cm')) ~ 'fresh herbs ginger',
       str_detect(Ingredients, 'ginger') & str_detect(Ingredients, 'pickle') ~ 'ginger pickled',
       str_detect(Ingredients, 'ginger') & str_detect(Ingredients, 'paste') ~ 'paste ginger',
       str_detect(Ingredients, 'ginger') & str_detect(Ingredients, 'syrup') ~ 'syrup ginger',

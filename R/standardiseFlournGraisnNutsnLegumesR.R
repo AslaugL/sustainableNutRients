@@ -10,22 +10,24 @@
 #' @export
 standardiseFlournGraisnNutsnLegumesR <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'rice') & str_detect(Ingredients, '\\bcooked') ~ 'rice cooked',
+      str_detect(Ingredients, 'rice') & str_detect(Ingredients, '\\bcooked|boiled') & !str_detect(Ingredients, 'par|pre') ~ 'rice cooked',
       str_detect(Ingredients, 'rice|ris') & str_detect(Ingredients, 'basmati') ~ 'rice basmati',
       str_detect(Ingredients, 'rice|ris') & str_detect(Ingredients, 'risotto|arbori|paella') | str_detect(Ingredients, 'vialone nano') ~ 'rice risotto',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'jasmin') ~ 'rice jasmin',
-      str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'parboiled|pre boiled') ~ 'rice parboiled',
+      str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'parboiled|pre boiled|boil in bag|boil-in-bag') ~ 'rice parboiled',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, '\\bcooked') & str_detect(Ingredients, 'wild') ~ 'rice wild cooked',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'wild') ~ 'rice wild',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, '\\bcooked') ~ 'rice cooked',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'whole|brown') ~ 'rice brown long grain',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'sushi') ~ 'rice sushi',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'noodle') ~ 'rice noodle',
-      str_detect(Ingredients, 'rice') & !str_detect(Ingredients, 'beef|potato|vinegar|wine') ~ 'rice white long grain',
-      
+      str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'porridge') ~ 'rice porridge',
+      str_detect(Ingredients, 'porridge') ~ 'porridge',
+      str_detect(Ingredients, 'rice') & !str_detect(Ingredients, 'beef|potato|vinegar|wine|barley|broccoli|cauliflower|liquo') ~ 'rice white long grain',
+
       TRUE ~ Ingredients_standardised))
 }
 

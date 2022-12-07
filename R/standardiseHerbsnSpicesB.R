@@ -14,7 +14,7 @@ standardiseHerbsnSpicesB <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'basil') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') |
-                                            str_detect(Amounts, 'twig|bunch|leaf|neve|dl')) ~ 'basil fresh herbs',
+                                            str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'basil fresh herbs',
       str_detect(Ingredients, 'thaibasil') ~ 'basil fresh herbs',
       str_detect(Ingredients, 'basil') & !str_detect(Ingredients, 'pesto') ~ 'basil dried', #Standard
       str_detect(Ingredients, 'bay leaf') ~ 'bay leaf',

@@ -10,11 +10,14 @@
 #' @export
 standardiseFlournGraisnNutsnLegumesN <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'nacho|tortilla chip') ~ 'nacho',
-      
+      str_detect(Ingredients, 'taco') & str_detect(Ingredients, 'shell') ~ 'taco shell',
+
+      str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'mix') ~ 'nuts mixed',
+
       TRUE ~ Ingredients_standardised))
 }
 

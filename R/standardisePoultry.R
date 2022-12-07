@@ -16,24 +16,24 @@ standardisePoultry <- function(df) {
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'breast|fillet|filet') &
         str_detect(Ingredients, 'without|skinless|no skin') &
-        str_detect(Ingredients, 'cooked') & !str_detect(Amounts, 'pcs') ~ 'chicken breast without skin cooked',
+        str_detect(Ingredients, 'cooked') & !str_detect(unit, 'pcs') ~ 'chicken breast without skin cooked',
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'breast|fillet|filet') &
         str_detect(Ingredients, 'without|skinless|no skin') ~ 'chicken breast without skin',
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'breast|fillet|filet') &
-        str_detect(Ingredients, 'cooked') & !str_detect(Amounts, 'pcs') ~ 'chicken breast cooked',
+        str_detect(Ingredients, 'cooked') & !str_detect(unit, 'pcs') ~ 'chicken breast cooked',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'breast|fillet|filet') & !str_detect(Ingredients, 'thigh') ~ 'chicken breast',
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'thigh|leg') &
         str_detect(Ingredients, 'without|skinless|no skin') ~ 'chicken thigh without skin',
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'thigh|leg') &
-        str_detect(Ingredients, 'grilled|cooked') & !str_detect(Amounts, 'pcs') ~ 'chicken thigh cooked',
+        str_detect(Ingredients, 'grilled|cooked') & !str_detect(unit, 'pcs') ~ 'chicken thigh cooked',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'thigh|leg') ~ 'chicken thigh',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'wing') & str_detect(Ingredients, 'grilled') ~ 'chicken wing cooked',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'wing') ~ 'chicken wing',
-      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'grilled|cooked') & !str_detect(Amounts, 'pcs') ~ 'chicken whole cooked',
+      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'grilled|cooked') & !str_detect(unit, 'pcs') ~ 'chicken whole cooked',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'drum|club') ~ 'chicken drumstick',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'skewer') & str_detect(Ingredients, 'satay') ~ 'chicken skewer satay',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'soup') ~ 'chicken soup',
@@ -43,11 +43,11 @@ standardisePoultry <- function(df) {
       str_detect(Ingredients, 'duck') & str_detect(Ingredients, 'breast') ~ 'duck breast',
       str_detect(Ingredients, 'duck') & str_detect(Ingredients, 'leg') ~ 'duck leg',
 
-      str_detect(Ingredients, 'egg') & str_detect(Ingredients, 'boil|hard cook|hard-cook|hard boiled') & !str_detect(Amounts, 'pcs') ~ 'egg boiled',
+      str_detect(Ingredients, 'egg') & str_detect(Ingredients, 'boil|hard cook|hard-cook|hard boiled') & !str_detect(unit, 'pcs') ~ 'egg boiled',
       str_detect(Ingredients, 'egg') & str_detect(Ingredients, 'noodle') ~ 'egg noodle',
       str_detect(Ingredients, 'egg') & str_detect(Ingredients, 'white') ~ 'egg white',
       str_detect(Ingredients, 'egg') & str_detect(Ingredients, 'yolk') ~ 'egg yolk',
-      str_detect(Ingredients, 'egg') & !str_detect(Ingredients, 'plant') ~ 'egg',
+      str_detect(Ingredients, 'egg') & !str_detect(Ingredients, 'plant|noodle') ~ 'egg',
 
       str_detect(Ingredients, 'grouse') ~ 'hen breast fillet grouse',
 

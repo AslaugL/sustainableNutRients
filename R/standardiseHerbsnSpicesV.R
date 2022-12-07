@@ -14,6 +14,11 @@ standardiseHerbsnSpicesV <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'pod') ~ 'vanilla pod',
+      str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'bean') ~ 'paste vanilla bean',
+      str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'extract') ~ 'vanilla extract',
+      str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'essence') ~ 'vanilla essence',
+      str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'powder') ~ 'vanilla powder',
+      str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'seed') ~ 'vanilla seeds',
 
       TRUE ~ Ingredients_standardised))
 }

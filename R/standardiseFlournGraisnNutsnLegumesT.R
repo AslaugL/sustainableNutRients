@@ -14,6 +14,7 @@ standardiseFlournGraisnNutsnLegumesT <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'tahini') ~ 'tahini',
+      str_detect(Ingredients, 'tart') & str_detect(Ingredients, 'shell') ~ 'tart shell',
       str_detect(Ingredients, 'tortilla') & str_detect(Ingredients, 'whole|coarse') ~ 'tortilla coarse',
       str_detect(Ingredients, 'tortilla') & str_detect(Ingredients, 'corn') ~ 'tortilla corn',
       str_detect(Ingredients, 'tortilla|wraps') & !str_detect(Ingredients, 'pita|chip') ~ 'tortilla',

@@ -14,7 +14,7 @@ standardiseFruitVegT <- function(df){
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'tamarind juice') ~ 'tamarind juice',
-      str_detect(Ingredients, 'tomat') & (str_detect(Amounts, 'can|box|hp') | str_detect(Ingredients, 'can|box|drain')) & !str_detect(Ingredients, 'water|mackerel|beans|sauce|soup') ~ 'tomato canned',
+      str_detect(Ingredients, 'tomat') & (str_detect(unit, 'can|box|hp') | str_detect(Ingredients, 'can|box|drain')) & !str_detect(Ingredients, 'water|mackerel|beans|sauce|soup') ~ 'tomato canned',
       str_detect(Ingredients, 'tomat') & str_detect(Ingredients, 'beef') ~ 'tomato beef',
       str_detect(Ingredients, 'tomat') & !str_detect(Ingredients, 'canned|alsa|sauce|ketchup|canned|cherry|can|box|pur\u00E9e|puree|paste|mackerel|tube|vegetable|sun|beans|bunch') ~ 'tomato',
       str_detect(Ingredients, 'tomat') & str_detect(Ingredients, 'pur') ~ 'tomato puree',

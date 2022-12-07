@@ -13,7 +13,7 @@ standardiseDairynSubsK <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'kefir') ~ 'kefir',
+      str_detect(Ingredients, 'kefir|cultured milk') ~ 'kefir',
 
       TRUE ~ Ingredients_standardised))
 }

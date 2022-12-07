@@ -15,7 +15,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(grams
   mutate(
     first_word = case_when(
       Ingredients == 'white or yellow hard to semi-hard cheese' ~ 'hard to semi-hard cheese',
-      str_detect(Ingredients, 'gg noodle') ~ 'egg noodles',
+      Ingredients == 'egg noodle cooked' ~ 'egg noodle',
       Ingredients == 'horse-radish' ~ 'horseradish',
       Ingredients == 'lasagne sheets uncooked' ~ 'lasagna',
       Ingredients == 'pork neck chops' ~ 'neck',
@@ -87,6 +87,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(grams
       Ingredients == 'sausage turkey chicken' ~ '\\',
       Ingredients == 'ice cream' ~ '\\',
       Ingredients == 'chicken skewer satay' ~ 'satay',
+      Ingredients == 'egg noodle cooked' ~ 'cooked',
       TRUE ~ second_word
     )
   ) %>%
