@@ -42,6 +42,8 @@ unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(grams
       Ingredients == 'sausage turkey chicken' ~ 'sausage turkey chicken',
       Ingredients == 'ice cream' ~ 'ice cream',
       Ingredients == 'chicken skewer satay' ~ 'chicken skewer',
+      Ingredients == 'tomato sun dried' ~ "tomato",
+      Ingredients == 'tomato sun dried in oil' ~ "tomato",
       TRUE ~ first_word),
 
     second_word = case_when(
@@ -88,6 +90,8 @@ unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(grams
       Ingredients == 'ice cream' ~ '\\',
       Ingredients == 'chicken skewer satay' ~ 'satay',
       Ingredients == 'egg noodle cooked' ~ 'cooked',
+      Ingredients == 'tomato sun dried' ~ "sun dried",
+      Ingredients == 'tomato sun dried in oil' ~ "sun dried in oil",
       TRUE ~ second_word
     )
   ) %>%

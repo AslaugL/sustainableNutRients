@@ -608,6 +608,8 @@ unit_weights <- unit_weights %>%
            str_replace('tortilla, hvetelefse, fin|tortilla, wheat flour', 'tortilla') %>% #Standard
            str_replace('tortilla, hvetelefse, fullkorn', 'tortilla fullkorn') %>%
            str_replace('tortilla, wheat flour, wholemeal', 'tortilla coarse') %>%
+           str_replace('tomatoes, sun-dried, in oil', 'tomato sun dried in oil') %>%
+           str_replace('tomatoes, sun-dried', 'tomato sun dried') %>%
 
            #Change all plural forms to singular
            str_replace('anchovies', 'anchovy') %>%
