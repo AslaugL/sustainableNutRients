@@ -19,8 +19,8 @@ calculateEnvironmentalImpactOfFoodlist <- function(df, calculate_sustainability 
 
     df %>%
       mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
-      select(all_of(identifier), Ingredients, nutrient, environmental_impact) %>%
-      group_by(across(all_of(identifier)), nutrient) %>%
+      select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact) %>%
+      group_by(across(all_of(identifier)), environmental_impact_indicator) %>%
       summarise(environmental_impact = sum(environmental_impact, na.rm = TRUE)) %>%
       ungroup() %>%
       rename(Ingredients = all_of(identifier))
@@ -29,8 +29,8 @@ calculateEnvironmentalImpactOfFoodlist <- function(df, calculate_sustainability 
 
     df %>%
       mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
-      select(all_of(identifier), Ingredients, nutrient, environmental_impact, Amounts) %>%
-      group_by(across(all_of(identifier)), nutrient) %>%
+      select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact, Amounts) %>%
+      group_by(across(all_of(identifier)), environmental_impact_indicator) %>%
       summarise(environmental_impact = sum(environmental_impact, na.rm = TRUE),
                 total_recipe_weight = sum(Amounts, na.rm = TRUE)) %>%
       ungroup() %>%
@@ -42,8 +42,8 @@ calculateEnvironmentalImpactOfFoodlist <- function(df, calculate_sustainability 
 
     df %>%
       mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
-      select(all_of(identifier), Ingredients, nutrient, environmental_impact, Amounts, number_of_portions) %>%
-      group_by(across(all_of(identifier)), nutrient, number_of_portions) %>%
+      select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact, Amounts, number_of_portions) %>%
+      group_by(across(all_of(identifier)), environmental_impact_indicator, number_of_portions) %>%
       summarise(environmental_impact = sum(environmental_impact, na.rm = TRUE)) %>%
       ungroup() %>%
       mutate(environmental_impact_per_portion = environmental_impact/number_of_portions) %>%
