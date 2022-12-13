@@ -1,12 +1,13 @@
-Package: nutRients
+Package: sustainableNutRients
 Type: Package
-Title: Map foods to food composition and environmental impact databases
+Title: Map foods to Matvaretabellen food composition and SHARP ID environmental impact databases
 Version: 0.1.0
 Author: Aslaug Angelsen
 Maintainer: Aslaug Angelsen <aslaug.angelsen@gmail.com>
 Description: Standardise food names in recipes or food diaries and map them to
-    the Norwegian food composition datatable and the environmental impact database
-    SHARP Indicator Database to calculate nutrient content and environmental impact.
+    the Norwegian food composition datatable Matvaretabellen and the environmental
+    impact database SHARP Indicator Database to calculate nutrient content and
+    environmental impact.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
