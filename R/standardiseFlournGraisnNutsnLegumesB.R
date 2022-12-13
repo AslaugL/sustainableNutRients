@@ -83,6 +83,7 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'bulgur|bulgar') ~ 'bulgur wheat',
       str_detect(Ingredients, 'bao|steam') & str_detect(Ingredients, 'bun') ~ 'bao bun',
       str_detect(Ingredients, 'focaccia') ~ 'bread white foccacia',
+      str_detect(Ingredients, 'paratha') & str_detect(Ingredients, 'bread') ~ 'bread paratha',
 
       #Other
       str_detect(Ingredients, 'brazil') & str_detect(Ingredients, 'nut') ~ 'nut brazil',
