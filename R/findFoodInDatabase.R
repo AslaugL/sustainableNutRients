@@ -322,7 +322,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'spread speculaas' ~ fixFoodMappingError(database = reference, 'peanut', 'butter'),
           Ingredients == 'onion pickled' ~ fixFoodMappingError(database = reference, 'beetroot', 'pickled'),
           Ingredients == 'pizza sauce red' ~ fixFoodMappingError(database = reference, 'tomato', 'canned'),
-          Ingredients %in% c('bread sausage', 'bread polar', "paratha bread") ~ fixFoodMappingError(database = reference, 'pita', 'bread'), #Similar
+          Ingredients %in% c('bread sausage', 'bread polar', "bread paratha") ~ fixFoodMappingError(database = reference, 'pita', 'bread'), #Similar
           Ingredients == "margarine" ~ fixFoodMappingError(database = reference, 'butter'), #Similar
 
           TRUE ~ database_ID
@@ -644,13 +644,18 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         ))
 
       #Add the new reference words
+      #Add the new reference words
       results <- temp %>%
-        left_join(reference) %>%
+        left_join(reference, by = 'database_ID') %>%
         mutate(database_reference = paste0(first_word, ' ', second_word)) %>%
         #Remove unnecessary columns
-        select(-c(first_word, second_word, .data$loop)) %>% unique()
+        select(-c(first_word, second_word, .data$loop)) %>% unique() %>%
+        left_join(db,
+                  by = "database_ID") %>%
+        mutate(database_reference = str_replace(database_reference, "NA NA", "Not in database"))
 
-    } else {
+
+  } else {
       stop("Sorry, there are no added fixes for the reference used.")
     }
 
