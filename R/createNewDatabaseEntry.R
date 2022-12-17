@@ -3,7 +3,6 @@
 #'
 #' @description Create new database entries to map foods to when using findFoodInDatabase.
 #'
-#' @param database Database to create new entries for. Either "volume_weight", "nutrients" or "sustainability.
 #' @param df
 #' \itemize{
 #'  \item{For volume_weight, a dataframe three columns: either "Ingredients" or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"}
@@ -15,6 +14,7 @@
 #'   in the recipes or food list, a "environmental_impact_indicator" column with the name of the environmental impact
 #'   indicator, same as in SHARP indicators database, and "environmental_impact_per_100g" of the food.}
 #' }
+#' @param database Database to create new entries for. Either "volume_weight", "nutrients" or "sustainability.
 #'
 #' @return The nutrient content of each individual variable in the "identifier" column, either by total weight of all ingredients,
 #' per 100 grams or per portion.
@@ -62,10 +62,10 @@ createNewDatabaseEntry <- function(df, database) {
         'db' = df %>%
           select(unit, grams_per_unit, database_ID),
 
-        'query_words' = nutRients:::unit_weights_query %>%
-          filter(language == "english") %>%
+        'query_words' = unit_weights_query %>%
+          filter(.data$language == "english") %>%
           filter(database_ID %in% df$database_ID) %>%
-          select(-language)
+          select(-.data$language)
 
         )
 
