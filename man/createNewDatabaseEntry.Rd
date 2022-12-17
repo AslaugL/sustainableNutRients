@@ -4,21 +4,21 @@
 \alias{createNewDatabaseEntry}
 \title{createNewDatabaseEntry}
 \usage{
-createNewDatabaseEntry(database, df)
+createNewDatabaseEntry(df, database)
 }
 \arguments{
-\item{database}{Database to create new entries for. Either "volume_weight", "nutrients" or "sustainability.}
-
 \item{df}{\itemize{
- \item{For volume_weight, a dataframe three columns "Ingredients", "unit" and "grams_per_unit"}
- \item{For "nutrients", the output from calculateNutrientContentOfFoodlist with option "per 100 g" selected or a three column dataframe with
- an "Ingredients" column with food name, same as what can be found in the recipes or food list, a "nutrient" column with nutrient
- names similar to what is found in Matvaretabellen and "nutrient_content_per_100g" of the food.}
- \item{For "sustainability" the output from calculateEnvironmentalImpactOfFoodlist with option "per 100 g"
- selected, or a three column dataframe with an "Ingredients" column with food name, same as what can be found
-  in the recipes or food list, a "environmental_impact_indicator" column with the name of the environmental impact
-  indicator, same as in SHARP indicators database, and "environmental_impact_per_100g" of the food.}
+\item{For volume_weight, a dataframe three columns: either "Ingredients" or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"}
+\item{For "nutrients", the output from calculateNutrientContentOfFoodlist with option "per 100 g" selected or a three column dataframe with
+an "Ingredients" column with food name, same as what can be found in the recipes or food list, a "nutrient" column with nutrient
+names similar to what is found in Matvaretabellen and "nutrient_content_per_100g" of the food.}
+\item{For "sustainability" the output from calculateEnvironmentalImpactOfFoodlist with option "per 100 g"
+selected, or a three column dataframe with an "Ingredients" column with food name, same as what can be found
+in the recipes or food list, a "environmental_impact_indicator" column with the name of the environmental impact
+indicator, same as in SHARP indicators database, and "environmental_impact_per_100g" of the food.}
 }}
+
+\item{database}{Database to create new entries for. Either "volume_weight", "nutrients" or "sustainability.}
 }
 \value{
 The nutrient content of each individual variable in the "identifier" column, either by total weight of all ingredients,
