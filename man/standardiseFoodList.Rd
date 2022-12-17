@@ -11,7 +11,7 @@ standardiseFoodList(df)
 }
 \value{
 A dataframe with the amounts and standardised units of foods in their own column, a new Ingredients column with standardised
- names and an Original_ingredients column with the original ingredient names.
+names and an Original_ingredients column with the original ingredient names.
 }
 \description{
 Standardises the names of foods and their units.

@@ -99,3 +99,22 @@
 #' @format A character vector with 33 different unit names.
 "type_of_units"
 
+#' 100 recipes scraped from the Norwegian online supermarket Oda.
+#'
+#' A list of two dataframes, one containing recipes and one containing
+#' recipe metadata such as number of portions and how the recipe
+#' was categorised by Oda.
+#'
+#' @format A list with two items
+#' * Recipes. A tibble with 935 rows and three columns, containing 100 recipes in total.
+#'   - recipe_name. Individual recipe names.
+#'   - Ingredients. Column with ingredient names and their amounts.
+#'   - ingredient_is_part_of Metadata from Oda showing which part of the recipe the ingredient is from.
+#' * meta. A tibble with 654 rows and five columns, containing metadata for the recipes.
+#'   - recipe_name. Individual recipe names.
+#'   - number_of_portions. Number of portions in the recipe.
+#'   - likes. Number of likes the recipe has received.
+#'   - categories. Categories of the recipe from Oda.
+#'
+#' @source \url{https://oda.com/no/recipes}
+"recipes_oda"

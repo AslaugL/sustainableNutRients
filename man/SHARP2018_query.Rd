@@ -7,9 +7,9 @@
 \format{
 A dataframe with 578 rows and three variables.
 \describe{
-  \item{first_word}{Generic ingredient name to identify ingredients}
-  \item{second_word}{A specifier to go with the generic word, f.ex. type of bean or cut of meat}
-  \item{database_ID}{A unique ID used to map query words to SHARP2018}
+\item{first_word}{Generic ingredient name to identify ingredients}
+\item{second_word}{A specifier to go with the generic word, f.ex. type of bean or cut of meat}
+\item{database_ID}{A unique ID used to map query words to SHARP2018}
 }
 }
 \usage{

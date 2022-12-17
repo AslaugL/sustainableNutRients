@@ -7,10 +7,10 @@
 \format{
 A dataframe with 989 rows and four variables.
 \describe{
-  \item{database_ID}{A unique ID for the ingredient to link it to unit_weight database}
-  \item{language}{The language used for the ingredient and unit names}
-  \item{first_word}{Generic ingredient name to identify ingredients}
-  \item{second_word}{A specifier to go with the generic word, f.ex. type of bean or cut of meat}
+\item{database_ID}{A unique ID for the ingredient to link it to unit_weight database}
+\item{language}{The language used for the ingredient and unit names}
+\item{first_word}{Generic ingredient name to identify ingredients}
+\item{second_word}{A specifier to go with the generic word, f.ex. type of bean or cut of meat}
 }
 }
 \usage{

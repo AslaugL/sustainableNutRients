@@ -7,12 +7,12 @@
 \format{
 A data frame with 2016 rows and six variables.
 \describe{
-  \item{Ingredients}{Ingredient name}
-  \item{unit_enhet}{The unit of the ingredient}
-  \item{grams_per_unit}{The weight of the unit of the ingredient in grams}
-  \item{reference}{The reference from where the weight per unit comes from}
-  \item{database_ID}{A unique identifier for the ingredient}
-  \item{language}{The language used for the ingredient and unit names}
+\item{Ingredients}{Ingredient name}
+\item{unit_enhet}{The unit of the ingredient}
+\item{grams_per_unit}{The weight of the unit of the ingredient in grams}
+\item{reference}{The reference from where the weight per unit comes from}
+\item{database_ID}{A unique identifier for the ingredient}
+\item{language}{The language used for the ingredient and unit names}
 }
 }
 \source{
@@ -23,9 +23,9 @@ unit_weights
 }
 \description{
 A dataset containing the unit weights of multiple units
- for more than 500 different items of food. The main source
- for this dataset is the 2015 "Weights, measures and portion sizes for foods"
- database from the Norwegian Directorate of Health, the University of Oslo
- and the Norwegian Food Safety Authority.
+for more than 500 different items of food. The main source
+for this dataset is the 2015 "Weights, measures and portion sizes for foods"
+database from the Norwegian Directorate of Health, the University of Oslo
+and the Norwegian Food Safety Authority.
 }
 \keyword{datasets}

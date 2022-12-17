@@ -13,8 +13,9 @@ extractAmounts(df)
 The dataframe with amounts and units extracted into their own columns.
 }
 \description{
-Extract Amounts and units from the Ingredients column to their own columns.
+Extract Amounts and units from the Ingredients column to their own columns,
+by recognizing the pattern "number" "unit" at the beginning of the string.
 }
 \details{
-Extract amounts and units from the Ingredents column.
+Extract amounts and units from the Ingredients column.
 }

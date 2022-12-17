@@ -7,11 +7,11 @@
 \format{
 A dataframe with 600 rows and five variables.
 \describe{
-  \item{FoodEx2}{A FoodEx2 unique identifier for the food}
-  \item{L1}{The food group the food contains}
-  \item{GHGE of 1 kg food as consumed_kgCO2eq}{Greenhouse gas emissions of 1 kg food as consumed, in kilo CO2 equivalents}
-  \item{Land use of 1 kg food as consumed_m2/yr}{Land used to produce 1 kg of food as consumed, in m2/year}
-  \item{database_ID}{A unique ID for the food used for internal functions}
+\item{FoodEx2}{A FoodEx2 unique identifier for the food}
+\item{L1}{The food group the food contains}
+\item{GHGE of 1 kg food as consumed_kgCO2eq}{Greenhouse gas emissions of 1 kg food as consumed, in kilo CO2 equivalents}
+\item{Land use of 1 kg food as consumed_m2/yr}{Land used to produce 1 kg of food as consumed, in m2/year}
+\item{database_ID}{A unique ID for the food used for internal functions}
 }
 }
 \source{

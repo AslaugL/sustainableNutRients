@@ -7,13 +7,13 @@
 findFoodInDatabase(df, database, additional_entries = NULL, fix_errors = TRUE)
 }
 \arguments{
-\item{df}{A dataframe with an Ingredients column to be checked against the reference database. To fix common errors, the df also needs a "unit" column.}
+\item{df}{A dataframe with an Ingredients column to be checked against the reference database, and a unit column. For best accuracy units should be standardised.}
 
 \item{database}{The reference database, either "volume_weight", "nutrients" or "sustainability".}
 
 \item{additional_entries}{Additional entries to the databases that foods can found in. Must be formatted same as the output from "createNewDatabaseEntry".}
 
-\item{fix_errors}{Fix known errors automatically? For fixes of volume/weight database, df must have a unit column. Default TRUE.}
+\item{fix_errors}{Fix known errors automatically? Default TRUE.}
 }
 \value{
 A dataframe with the ingredient name and the reference database_ID of the first hit in the database.
