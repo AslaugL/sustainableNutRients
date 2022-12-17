@@ -19,6 +19,14 @@ foodgroups <- list(
   "SHARP" = readRDS("./data-raw/SHARP2018_foodgroups.Rds")
 )
 
+#Save for export
+usethis::use_data(unit_weights, unit_weights_query,
+                  matvaretabellen2020, matvaretabellen2020_query,
+                  SHARP2018, SHARP2018_query,
+                  pcs, type_of_units,
+                  overwrite = TRUE,
+                  internal = FALSE)
+
 #Save in sysdata
 usethis::use_data(unit_weights, unit_weights_query,
                   matvaretabellen2020, matvaretabellen2020_query,
