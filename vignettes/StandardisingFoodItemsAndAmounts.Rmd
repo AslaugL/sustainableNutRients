@@ -1,0 +1,22 @@
+---
+title: "Standardising food items and amounts"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Standardising food items and amounts}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sustainableNutRients)
+```
+
+```{r read-data}
+```
