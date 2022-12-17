@@ -3,7 +3,7 @@
 \docType{data}
 \name{SHARP2018}
 \alias{SHARP2018}
-\title{The environmental impact database SHARP Identificator Database}
+\title{The environmental impact database SHARP Inicators Database}
 \format{
 A dataframe with 600 rows and five variables.
 \describe{

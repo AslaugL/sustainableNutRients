@@ -21,6 +21,12 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/StandardisingFoodItemsAndAmounts.html">Standardising food items and amounts</a>
+  </div>
+</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -48,7 +54,7 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>df</dt>
-<dd><p>A dataframe with an Ingredients column to be checked against the reference database. To fix common errors, the df also needs a "unit" column.</p></dd>
+<dd><p>A dataframe with an Ingredients column to be checked against the reference database, and a unit column. For best accuracy units should be standardised.</p></dd>
 
 
 <dt>database</dt>
@@ -60,7 +66,7 @@
 
 
 <dt>fix_errors</dt>
-<dd><p>Fix known errors automatically? For fixes of volume/weight database, df must have a unit column. Default TRUE.</p></dd>
+<dd><p>Fix known errors automatically? Default TRUE.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -59,7 +59,7 @@
 #' }
 "matvaretabellen2020_query"
 
-#' The environmental impact database SHARP Identificator Database
+#' The environmental impact database SHARP Inicators Database
 #'
 #' A dataset containing 600 unique foods and their environmental impact in
 #' greenhouse gas emission and land use.
