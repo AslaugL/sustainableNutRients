@@ -38,8 +38,8 @@ standardisePoultry <- function(df) {
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'skewer') & str_detect(Ingredients, 'satay') ~ 'chicken skewer satay',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'soup') ~ 'chicken soup',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'sweet') & str_detect(Ingredients, 'sour') ~ 'chicken sweet and sour',
+      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'mince|ground') ~ 'chicken minced meat',
       str_detect(Ingredients, 'chicken') & !str_detect(Ingredients, 'power|condensed|broth|stock|sauce|salad|spice mix|soup') ~ 'chicken whole',
-
       str_detect(Ingredients, 'duck') & str_detect(Ingredients, 'breast') ~ 'duck breast',
       str_detect(Ingredients, 'duck') & str_detect(Ingredients, 'leg') ~ 'duck leg',
 
