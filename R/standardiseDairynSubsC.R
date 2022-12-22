@@ -58,7 +58,7 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'parmesan') ~ 'parmesan cheese',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'soft') ~ 'cheese soft',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'spread') ~ 'cheese spread',
-    str_detect(Ingredients, 'cheese') & !str_detect(Ingredients, 'yogurt|yoghurt|cracker') ~ 'cheese semi-hard',
+    str_detect(Ingredients, 'cheese') & !str_detect(Ingredients, 'yogurt|yoghurt|cracker|mac|bacon') ~ 'cheese semi-hard',
 
     str_detect(Ingredients, 'whip') & str_detect(Ingredients, 'it|stabilizer') ~ 'whip it stabilizer',
     str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'double') ~ 'cream double 48 \u0025',
