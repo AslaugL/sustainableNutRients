@@ -14,9 +14,34 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+# Load libraries
+```{r setup, message = FALSE}
 library(sustainableNutRients)
+library(tidyverse)
 ```
 
+# Read in some data
+sustainableRecipes has a dataset with 100 recipes scraped from Oda that can be used to check out the different functions. For more info, read the documentation for the dataset with ?recipes_oda.
 ```{r read-data}
+# Read the data
+data("recipes_oda")
+
+# What it looks like. The "ingredient_is_part_of" column show which part of the recipe the ingredient comes from
+# such as marinade, sauce, side or main.
+head(recipes_oda$recipes %>% select(-ingredient_is_part_of))
+```
+
+# Standardise food names and units before mapping to nutrient and sustainability databases
+Before food items can be mapped to the databases, food names and units must be standardised. This is done by using the function standardiseFoodList.
+```{r standardise-recipes}
+# Run standardiseFoodList() function.
+standardised_recipes <- recipes_oda$recipes %>%
+  standardiseFoodList()
+```
+While the funtion recognizes many different food items, it is advisable to do a quick check of the standardisations and fix potential errors. The function checkFoodStandardisation provides a list of the original ingredient names next to their standardised names.
+```{r check-standardisation}
+# Check food standardisation
+standardisation_check <- checkFoodStandardisation(standardised_recipes)
+
+head(standardisation_check)
 ```
