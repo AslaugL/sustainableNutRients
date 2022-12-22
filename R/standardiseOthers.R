@@ -110,6 +110,9 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'kirsch') ~ 'spirits 40 vol-% alcohol kirsch',
       str_detect(Ingredients, 'kombu') & str_detect(Ingredients, 'dashi') ~ 'dashi kombu dried kelp',
 
+      str_detect(Ingredients, 'liquorice') & str_detect(Ingredients, 'powder') ~ 'liquorice powder',
+      str_detect(Ingredients, 'liquorice') ~ 'liquorice',
+
       str_detect(Ingredients, 'madeira') ~ 'madeira fortified wine 15 vol-% alcohol',
       str_detect(Ingredients, 'marmelade|marmalade') & str_detect(Ingredients, 'blueberr') ~ 'marmelade blueberry',
       str_detect(Ingredients, 'marmelade|marmalade') & str_detect(Ingredients, 'fig') ~ 'marmelade fig',
