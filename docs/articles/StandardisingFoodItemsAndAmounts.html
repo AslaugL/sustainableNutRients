@@ -70,9 +70,68 @@
 
     
     
+<div class="section level2">
+<h2 id="load-libraries">Load libraries<a class="anchor" aria-label="anchor" href="#load-libraries"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">sustainableNutRients</span><span class="op">)</span></span></code></pre></div>
-  </main>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">sustainableNutRients</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="read-in-some-data">Read in some data<a class="anchor" aria-label="anchor" href="#read-in-some-data"></a>
+</h2>
+<p>sustainableRecipes has a dataset with 100 recipes scraped from Oda
+that can be used to check out the different functions. For more info,
+read the documentation for the dataset with ?recipes_oda.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Read the data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"recipes_oda"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># What it looks like. The "ingredient_is_part_of" column show which part of the recipe the ingredient comes from</span></span>
+<span><span class="co"># such as marinade, sauce, side or main.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">recipes_oda</span><span class="op">$</span><span class="va">recipes</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">ingredient_is_part_of</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
+<span><span class="co">#&gt;   recipe_name                     Ingredients                       </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Rask pizza med spekeskinke_4    2 pcs pizza crust, Italian        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Rask pizza med spekeskinke_4    400 g pizza sauce, red            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Rask pizza med spekeskinke_4    250 g grated cheese, more cheeses </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Rask pizza med spekeskinke_4    120 g cured ham, slices           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Rask salmaburger med coleslaw_5 4 pcs salma, burger               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Rask salmaburger med coleslaw_5 4 pcs round-the-clock burger bread</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="standardise-food-names-and-units-before-mapping-to-nutrient-and-sustainability-databases">Standardise food names and units before mapping to nutrient and
+sustainability databases<a class="anchor" aria-label="anchor" href="#standardise-food-names-and-units-before-mapping-to-nutrient-and-sustainability-databases"></a>
+</h2>
+<p>Before food items can be mapped to the databases, food names and
+units must be standardised. This is done by using the function
+standardiseFoodList.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Run standardiseFoodList() function.</span></span>
+<span><span class="va">standardised_recipes</span> <span class="op">&lt;-</span> <span class="va">recipes_oda</span><span class="op">$</span><span class="va">recipes</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/standardiseFoodList.html">standardiseFoodList</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>While the funtion recognizes many different food items, it is
+advisable to do a quick check of the standardisations and fix potential
+errors. The function checkFoodStandardisation provides a list of the
+original ingredient names next to their standardised names.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Check food standardisation</span></span>
+<span><span class="va">standardisation_check</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/checkFoodStandardisation.html">checkFoodStandardisation</a></span><span class="op">(</span><span class="va">standardised_recipes</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">standardisation_check</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
+<span><span class="co">#&gt;   Original_ingredients         Ingredients        </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> pizza crust italian          pizza crust italian</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pizza sauce red              sauce pizza red    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> grated cheese more cheeses   cheese semi-hard   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> cured ham slice              ham cured          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> salma burger                 pure salmon burger </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> round-the-clock burger bread hamburger bread</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
