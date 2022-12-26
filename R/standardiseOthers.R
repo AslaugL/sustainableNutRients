@@ -28,10 +28,13 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'beer|ale') & !str_detect(Ingredients, 'jerusalen|artichoke|kale') ~ 'beer',
       str_detect(Ingredients, 'beet') & str_detect(Ingredients, 'pickle') ~ 'beetroot pickled',
       Ingredients == 'black truffle or 2 tbsp s truffle oil' ~ 'black truffle',
+      str_detect(Ingredients, "blackstrap") & str_detect(Ingredients, "molass") ~ "molasses blackstrap",
+      str_detect(Ingredients, 'molass') ~ "molasses blackstrap",
       str_detect(Ingredients, 'brandy') ~ 'spirits 40 vol-% alcohol brandy',
       str_detect(Ingredients, 'brine') & !str_detect(Ingredients, 'shrimp|prawn') ~ 'water brine',
       str_detect(Ingredients, 'beverage') & str_detect(Ingredients, 'carbonated') & str_detect(Ingredients, 'lemon') & str_detect(Ingredients, 'lime') ~ 'carbonated beverage lemon-lime',
       str_detect(Ingredients, 'brown') & str_detect(Ingredients, 'gravy') & str_detect(Ingredients, 'mix') | str_detect(Ingredients, 'gravy') & str_detect(Ingredients, 'powder') ~ 'gravy brown mix',
+
 
       str_detect(Ingredients, 'candy mix') ~ 'candy mixed',
       str_detect(Ingredients, 'candy') & str_detect(Ingredients, 'jell') ~ 'candy jelly',
@@ -99,7 +102,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'harissa') & str_detect(Ingredients, 'mild') ~ 'harissa mild',
       str_detect(Ingredients, 'harissa') ~ 'harissa',
       str_detect(Ingredients, 'herb') & !str_detect(Ingredients, 'basil|thyme|parsley|rosemary|dill') ~ 'herbs',
-      str_detect(Ingredients, 'honey') & !str_detect(Ingredients, 'mustard|melon|dew') ~ 'honey',
+      str_detect(Ingredients, 'honey') & !str_detect(Ingredients, 'mustard|melon|dew|apple') ~ 'honey',
       str_detect(Ingredients, 'hummus') ~ 'hummus',
 
       str_detect(Ingredients, 'ice cube') ~ 'ice cube',
