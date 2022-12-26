@@ -3,6 +3,7 @@
 export("%>%")
 export(calculateCitrusJuiceZest)
 export(calculateEnvironmentalImpactOfFoodlist)
+export(calculateMeanAmounts)
 export(calculateNutrientContentOfFoodlist)
 export(calculateWeightOfIngredients)
 export(checkFoodStandardisation)
