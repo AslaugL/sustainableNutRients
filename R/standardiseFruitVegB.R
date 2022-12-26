@@ -17,6 +17,7 @@ standardiseFruitVegB <- function(df){
       str_detect(Ingredients, 'beet|better') & str_detect(Ingredients, 'yellow') ~ 'beetroot yellow',
       str_detect(Ingredients, 'beet') & str_detect(Ingredients, 'cooked|boiled') ~ 'beetroot cooked',
       str_detect(Ingredients, 'beet') & str_detect(Ingredients, 'root') & !str_detect(Ingredients, 'pickle') ~ 'beetroot',
+      str_detect(Ingredients, '\\bbeet\\b') ~ "beetroot",
       str_detect(Ingredients, 'curran') & str_detect(Ingredients, 'jam') ~ 'jam currant',
       str_detect(Ingredients, 'curran') & str_detect(Ingredients, 'jelly') ~ 'jelly currant',
       str_detect(Ingredients, 'black curran') & !str_detect(Ingredients, 'juice') ~ 'black currant',

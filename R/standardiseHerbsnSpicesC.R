@@ -32,7 +32,7 @@ standardiseHerbsnSpicesC <- function(df) {
       str_detect(Ingredients, 'chinese') & str_detect(Ingredients, 'spice') ~ 'chinese five spice',
       str_detect(Ingredients, 'cinnamon') & str_detect(Ingredients, 'bar|rod|stick') ~ 'cinnamon bar',
       str_detect(Ingredients, 'cinnamon') & !str_detect(Ingredients, 'muesli') ~ 'cinnamon',
-      str_detect(Ingredients, 'cloves|carnation') & !str_detect(Ingredients, 'garlic') ~ 'cloves',
+      str_detect(Ingredients, 'clove|carnation') & !str_detect(Ingredients, 'garlic') ~ 'cloves',
       str_detect(Ingredients, 'coriander') & str_detect(Ingredients, 'seed') ~ 'coriander seed',
       str_detect(Ingredients, 'coriander|cilantro') & !str_detect(Ingredients, 'seed') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf|malt') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'coriander fresh herbs',
       str_detect(Ingredients, 'coriander|cilantro') ~ 'coriander dried', #Standard
