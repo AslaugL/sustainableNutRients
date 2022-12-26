@@ -10,10 +10,13 @@
 #' @export
 standardiseAmounts <- function(df){
 
-  #Turn everything into the same unit
-  #Numbers
-  df %>% mutate(Ingredients = Ingredients %>%
-                  str_trim() %>%
+  #Use the mean of units like 3-4 etc.
+  df %>%
+    calculateMeanAmounts() %>%
+    #Turn everything into the same unit
+    #Numbers
+    mutate(Ingredients = Ingredients %>%
+                 str_trim() %>%
                  str_replace_all('["()]|possibly', '') %>%
                  str_replace(' s ', '') %>%
                  str_replace('1,000|1 000', '1000') %>%
@@ -24,11 +27,13 @@ standardiseAmounts <- function(df){
                  str_replace('(?<=\\d) \u2155', '.2') %>%
                  str_replace('(?<=\\d) \u2153', '.33') %>%
                  str_replace('(?<=\\d) \u00BC', '.25') %>%
+                 str_replace('(?<=\\d) \u215B', '.125') %>%
                  str_replace('\u2153', '0.33') %>%
                  str_replace('\u00BD', '0.5') %>%
                  str_replace('\u00BC', '0.25') %>%
                  str_replace('\u00BE', '0.75') %>%
                  str_replace('\u2154', '0.67') %>%
+                 str_replace('\u215B', '0.125') %>%
                  str_replace('2 -3|2-3', '3') %>% #Use three of each of the two foods with 2-3 written in the recipe
                  str_replace('half(?= pac)', '0.5')) %>%
 
@@ -80,6 +85,8 @@ standardiseAmounts <- function(df){
              str_replace('kilo', 'kg') %>%
              str_replace('\\sgr\\s', ' g ') %>%
              str_replace('grams', 'g') %>%
+             str_replace('((?<=\\d).in\\b)|((?<=\\d).inch\\b)|((?<=\\d).inches\\b)', 'inch') %>%
+             str_replace('(?<=\\d+)"\\b', ' inch') %>%
              str_replace('stk ltr|liter|litre', 'l') %>%
              str_replace('portions|servings', 'portion') %>%
              str_replace('portion|serving', 'portion') %>%
@@ -113,12 +120,14 @@ standardiseAmounts <- function(df){
              str_replace('sprigs|sprig|\\bstems\\b|\\bstem\\b|twigs', 'twig') %>%
              str_replace('pieces rosemary, fresh|stk rosemary fresh', 'bunch rosemary') %>%
              str_replace('basil leaf|fresh basil leaf, cut into thin strips', 'leaf basil') %>%
-             str_replace('pounds', 'pound') %>%
+             str_replace('pounds|\\blbs\\b', 'pound') %>%
+             str_replace('\\blb\\b', 'pound') %>%
              str_replace('ounces', 'ounce') %>%
              str_replace('chili stk|chili pcs', 'pcs chili') %>%
              str_replace('\\bpk\\b', 'pack') %>%
-             str_replace('\\bstilk\\b', 'stalk')) %>%
-
+             str_replace('\\bstilk\\b', 'stalk') %>%
+             str_replace('celery ribs', "stalk celery") %>%
+             str_replace('celery rib', "stalk celery")) %>%
 
     mutate(Ingredients = Ingredients %>%
              str_replace('neve|h\u00E5ndfull', 'handful') %>%
