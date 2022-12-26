@@ -86,7 +86,7 @@ standardiseAmounts <- function(df){
              str_replace('\\sgr\\s', ' g ') %>%
              str_replace('grams', 'g') %>%
              str_replace('((?<=\\d).in\\b)|((?<=\\d).inch\\b)|((?<=\\d).inches\\b)', 'inch') %>%
-             str_replace('(?<=\\d+)"\\b', ' inch') %>%
+             str_replace('(?<=\\d{1,3})"\\b', ' inch') %>%
              str_replace('stk ltr|liter|litre', 'l') %>%
              str_replace('portions|servings', 'portion') %>%
              str_replace('portion|serving', 'portion') %>%
