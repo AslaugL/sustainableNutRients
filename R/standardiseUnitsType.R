@@ -53,7 +53,7 @@
       unit == 'krm' ~ Amounts / 100,
       unit == 'drop' ~ Amounts / 2000, #One drop is 0.05ml
       unit == 'pinch' ~ Amounts / (20*16), #A pinch is usually defined as 1/16 of a tsp
-      unit == 'inch' ~ Amounts*2.54,
+      unit == 'inch' ~ Amounts*2.54, #To cm
 
       #Weight to grams
       unit == 'ounce' ~ Amounts * 28.35,
