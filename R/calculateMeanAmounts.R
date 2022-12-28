@@ -9,23 +9,34 @@
 #'
 #' @export
 calculateMeanAmounts <- function(df) {
-  
-  #Find the pattern
-  numerics <- df %>%
-    mutate(tmp = str_extract(Ingredients, "\\d+-\\d+")) %>%
-    #Separate it
-    select(tmp) %>%
-    unique() %>%
-    #calculate mean of the two numbers
-    separate(., tmp, c("no1", "no2"), sep = "-", remove = FALSE) %>%
-    mutate(across(c(no1, no2), ~as.numeric(.))) %>%
-    mutate(mean = as.character((no1 + no2)/2)) %>% #Character as Ingredients string is character
-    drop_na()
-  
-  #Replace in original
-  df %>%
-    mutate(Ingredients = str_replace_all(Ingredients,
-                                         #named vector for replacements
-                                         setNames(numerics$mean, numerics$tmp)))
-  
+
+  #Check if means need to be calculated
+  if(isTRUE(str_detect(df$Ingredients, "\\d+-\\d+"))) {
+
+    #Find the pattern
+    numerics <- df %>%
+      mutate(tmp = str_extract(Ingredients, "\\d+-\\d+")) %>%
+      #Separate it
+      select(tmp) %>%
+      unique() %>%
+      #calculate mean of the two numbers
+      separate(., tmp, c("no1", "no2"), sep = "-", remove = FALSE) %>%
+      mutate(across(c(no1, no2), ~as.numeric(.))) %>%
+      mutate(mean = as.character((no1 + no2)/2)) %>% #Character as Ingredients string is character
+      drop_na()
+
+    #Replace in original
+    df %>%
+      mutate(Ingredients = str_replace_all(Ingredients,
+                                           #named vector for replacements
+                                           setNames(numerics$mean, numerics$tmp)))
+
+  } else {
+
+    df
+
+  }
+
+
+
 }
