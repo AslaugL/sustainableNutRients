@@ -10,10 +10,16 @@
 #' @export
 standardiseAmounts <- function(df){
 
-  #Use the mean of units like 3-4 etc.
   df %>%
-    calculateMeanAmounts() %>%
     #Turn everything into the same unit
+    #Remove spaces
+    mutate(Ingredients = Ingredients %>%
+             #Remove invisible spaces
+             str_replace_all('\u2028', '') %>%
+             #Find fractions or numbers with a - or + between them and remove spaces
+             str_replace_all('(?<=([\\xbc-\\xbe]|\\d{1,3}))( - )|( \\+ )|(?<=([\\xbc-\\xbe]|\\d{1,3}))( -)|( \\+)', '-') %>%
+             #Remove spaces between / and numbers
+             str_replace_all('(?<=([\\xbc-\\xbe]|\\d{1,3})) \\/(?=([\\xbc-\\xbe]|\\d))', '\\/')) %>%
     #Numbers
     mutate(Ingredients = Ingredients %>%
                  str_trim() %>%
@@ -29,13 +35,15 @@ standardiseAmounts <- function(df){
                  str_replace('(?<=\\d) \u00BC', '.25') %>%
                  str_replace('(?<=\\d) \u215B', '.125') %>%
                  str_replace('\u2153', '0.33') %>%
-                 str_replace('\u00BD', '0.5') %>%
-                 str_replace('\u00BC', '0.25') %>%
-                 str_replace('\u00BE', '0.75') %>%
-                 str_replace('\u2154', '0.67') %>%
+                 str_replace('\u00BD|1\\/2', '0.5') %>%
+                 str_replace('\u00BC|1\\/4', '0.25') %>%
+                 str_replace('\u00BE|3\\/4', '0.75') %>%
+                 str_replace('\u2154|2\\/3', '0.67') %>%
                  str_replace('\u215B', '0.125') %>%
-                 str_replace('2 -3|2-3', '3') %>% #Use three of each of the two foods with 2-3 written in the recipe
                  str_replace('half(?= pac)', '0.5')) %>%
+
+    #Use the mean of units like 3-4 etc.
+    calculateMeanAmounts() %>%
 
     mutate(Ingredients = Ingredients %>%
 
