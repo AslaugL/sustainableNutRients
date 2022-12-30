@@ -5,7 +5,7 @@
 \alias{unit_weights}
 \title{Weight in grams of different units of foods.}
 \format{
-A data frame with 2016 rows and six variables.
+A data frame with 1685 rows and six variables.
 \describe{
 \item{Ingredients}{Ingredient name}
 \item{unit_enhet}{The unit of the ingredient}
