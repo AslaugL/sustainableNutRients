@@ -4,7 +4,7 @@ various <- list()
 
 #Load raw data from Matvaretabellen
 raw_data <- read_xlsx(
-  system.file("extdata", "matvaretabellen2020.xlsx", package = "nutRients")
+  system.file("extdata", "matvaretabellen2020.xlsx", package = "sustainableNutRients")
 )
 
 #Clean it up and use means for items with more than one addition (such as vegetables with both Norwegian and Imported values)----

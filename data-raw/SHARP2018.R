@@ -4,7 +4,7 @@
 various <- list()
 #Read sustainability data and change to fit recipes----
 SHARP <- read_csv(
-  system.file("extdata", "SHARPversion2018.csv", package = "nutRients")
+  system.file("extdata", "SHARPversion2018.csv", package = "sustainableNutRients")
   ) %>%
 
   #Rename to fit with the other datasets
@@ -345,7 +345,7 @@ SHARPFoodgroups <- SHARP %>%
   select(database_ID, L1) %>%
   rename(foodgroup = L1)
 
-saveRDS(SHARP2018, "./data-raw/SHARP2018_foodgroups.Rds")
+saveRDS(SHARPFoodgroups, "./data-raw/SHARP2018_foodgroups.Rds")
 
 #Save a dataframe to create query words from
 SHARP2018_query_prep <- SHARP %>%
