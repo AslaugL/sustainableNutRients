@@ -6,7 +6,7 @@
 #'  database from the Norwegian Directorate of Health, the University of Oslo
 #'  and the Norwegian Food Safety Authority.
 #'
-#' @format A data frame with 2016 rows and six variables.
+#' @format A data frame with 1685 rows and six variables.
 #' \describe{
 #'   \item{Ingredients}{Ingredient name}
 #'   \item{unit_enhet}{The unit of the ingredient}
