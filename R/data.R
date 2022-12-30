@@ -118,3 +118,17 @@
 #'
 #' @source \url{https://oda.com/no/recipes}
 "recipes_oda"
+
+#' Foodgroup categories from Matvaretabellen.
+#' @format A tibble with 2009 rows and two columns. The database_ID from Matvaretabellen
+#' and the foodgroup this food belongs to in Matvaretabellen.
+"matvaretabellen2020_foodgroups"
+
+#' Foodgroup categories from SHARP ID.
+#' @format A tibble with 600 rows and two columns. The database_ID from SHARP ID
+#' and the foodgroup this food belongs to in SHARP ID.
+"SHARP2018_foodgroups"
+
+#' 39 composite ingredients found in the recipes from Oda.
+#' @format A tibble with 326 rows and two variables: recipe_name and Ingredients.
+"composite_ingredients_oda"
