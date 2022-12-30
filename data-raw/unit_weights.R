@@ -665,6 +665,33 @@ unit_weights <- unit_weights %>%
   summarise(reference = str_c(unique(tmp), collapse = ", ")) %>%
   ungroup()
 
+#Only keep dl for volume
+unit_weights
+
+tmp <- unit_weights %>%
+  group_by(Ingredients) %>%
+  #Find the ingredients with spoon units
+  filter(any(unit_enhet %in% c("tbsp", "tsp", "ms", "ts", "ss"))) %>%
+  #Remove those that have dl already
+  filter(!any(unit_enhet == "dl")) %>%
+  ungroup() %>%
+  #Only keep spoon units
+  filter(unit_enhet %in% c("ts", "tsp", "tbsp", "ms", "ss")) %>%
+  #Turn tbsp and tsp units into dl
+  mutate(
+    grams_per_unit = case_when(
+      unit_enhet %in% c("tsp", "ts") ~ grams_per_unit*20,
+      unit_enhet %in% c("tbsp", "ss", "ms") ~ grams_per_unit*(6.67)),
+    unit_enhet = "dl") %>%
+  #Use the mean value
+  group_by(Ingredients, unit_enhet, database_ID, language, reference) %>%
+  summarise(tmp = mean(grams_per_unit)) %>% ungroup() %>%
+  rename(grams_per_unit = tmp)
+
+#Add back to unit_weights and remove all spoon units
+unit_weights <- full_join(unit_weights, tmp) %>%
+  filter(!unit_enhet %in% c("ts", "tsp", "ss", "tbsp", "ms"))
+
 #Save
 saveRDS(unit_weights, "./data-raw/unit_weights.Rds")
 
