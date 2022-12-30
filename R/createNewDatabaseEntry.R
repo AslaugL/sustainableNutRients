@@ -30,20 +30,23 @@ createNewDatabaseEntry <- function(df, database) {
       list(
 
       "db" = df2 %>%
-        rownames_to_column() %>%
-        mutate(database_ID = paste0("9999.", .data$rowname),
-               database_ID = as.numeric(database_ID)) %>%
-        select(-c(.data$rowname, Ingredients)),
+        group_by(Ingredients) %>%
+        mutate(tmp = 0.999,
+               database_ID = tmp + cur_group_id()) %>%
+        select(-tmp) %>%
+        ungroup() %>%
+        select(-Ingredients),
 
       "query_words" = df2 %>%
         select(Ingredients) %>%
         unique() %>%
+        group_by(Ingredients) %>%
+        mutate(tmp = 0.999,
+               database_ID = tmp + cur_group_id()) %>%
+        select(-tmp) %>%
+        ungroup() %>%
         separate(col = Ingredients, into = c("first_word", "second_word"), sep = "_") %>%
-        rownames_to_column() %>%
-        mutate(database_ID = paste0("9999.", .data$rowname),
-               database_ID = as.numeric(database_ID)) %>%
-        replace_na(list(second_word = '\\\\')) %>%
-        select(-.data$rowname)
+        replace_na(list(second_word = '\\\\'))
     ))
 
 
