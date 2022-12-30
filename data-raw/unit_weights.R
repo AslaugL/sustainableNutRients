@@ -6,7 +6,7 @@ various <- list()
 
 #Load raw data from the Norwegian directorate of health
 raw_data <- readxl::read_xlsx(
-  system.file("extdata", "weights_portion_sizes_foods_NorwegianDirectorateOfHealth_2015.xlsx", package = "nutRients"))
+  system.file("extdata", "weights_portion_sizes_foods_NorwegianDirectorateOfHealth_2015.xlsx", package = "sustainableNutRients"))
 
 #Reformat
 unit_weights <- raw_data %>% rename(
