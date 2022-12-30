@@ -7,6 +7,9 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
+    <loc>/articles/MapFoodsToDatabase.html</loc>
+  </url>
+  <url>
     <loc>/articles/StandardisingFoodItemsAndAmounts.html</loc>
   </url>
   <url>
@@ -22,6 +25,9 @@
     <loc>/reference/SHARP2018.html</loc>
   </url>
   <url>
+    <loc>/reference/SHARP2018_foodgroups.html</loc>
+  </url>
+  <url>
     <loc>/reference/SHARP2018_query.html</loc>
   </url>
   <url>
@@ -31,13 +37,22 @@
     <loc>/reference/calculateEnvironmentalImpactOfFoodlist.html</loc>
   </url>
   <url>
+    <loc>/reference/calculateMeanAmounts.html</loc>
+  </url>
+  <url>
     <loc>/reference/calculateNutrientContentOfFoodlist.html</loc>
   </url>
   <url>
     <loc>/reference/calculateWeightOfIngredients.html</loc>
   </url>
   <url>
+    <loc>/reference/checkFoodDatabaseMapping.html</loc>
+  </url>
+  <url>
     <loc>/reference/checkFoodStandardisation.html</loc>
+  </url>
+  <url>
+    <loc>/reference/composite_ingredients_oda.html</loc>
   </url>
   <url>
     <loc>/reference/cookedToRaw.html</loc>
@@ -59,6 +74,9 @@
   </url>
   <url>
     <loc>/reference/matvaretabellen2020.html</loc>
+  </url>
+  <url>
+    <loc>/reference/matvaretabellen2020_foodgroups.html</loc>
   </url>
   <url>
     <loc>/reference/matvaretabellen2020_query.html</loc>

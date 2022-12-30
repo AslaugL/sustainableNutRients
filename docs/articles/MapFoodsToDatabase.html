@@ -8,8 +8,8 @@
 <meta name="description" content="sustainableNutRients">
 <title>Map foods to database • sustainableNutRients</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Map foods to database">
 <meta property="og:description" content="sustainableNutRients">
@@ -179,9 +179,11 @@ environmental impact can be calculated! This is similar to converting
 volume to weight units, by using the findFoodInDatabase function. To add
 additional entries, for example of composite foods, a recipe for these
 foods must first be calculated (as shown below, with a shortened number
-of composite ingredients) and then additional_entries to the
+of composite ingredients, a larger list can be found in
+data(composite_ingredients_oda)) and then additional_entries to the
 findFoodInDatabase function can be created by createNewDatabaseEntry
-using the “nutrient” or “sustainability” argument.</p>
+using the “nutrient” or “sustainability” argument depending on which
+database is used.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nutrients_additional_ingredients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  </span>
@@ -217,9 +219,11 @@ using the “nutrient” or “sustainability” argument.</p>
 <span>  <span class="fu"><a href="../reference/calculateNutrientContentOfFoodlist.html">calculateNutrientContentOfFoodlist</a></span><span class="op">(</span><span class="va">.</span>, calculate_nutrients <span class="op">=</span> <span class="st">"per 100 g"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co">#Format as new database entries for the nutrients database</span></span>
 <span>  <span class="fu"><a href="../reference/createNewDatabaseEntry.html">createNewDatabaseEntry</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">"nutrients"</span><span class="op">)</span></span></code></pre></div>
+<p>The output from calculateWeightOfIngredients is used to calculate
+total nutrient content (default of calculateNutrientConcentOfFoodlist)
+of the recipes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#We use the output from calculateWeightOfIngredients to calculate total nutrient content (default of calculateNutrientConcentOfFoodlist)</span></span>
-<span><span class="va">nutrient_content</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findFoodInDatabase.html">findFoodInDatabase</a></span><span class="op">(</span><span class="va">weighted_ingredients</span>, <span class="st">"nutrients"</span>, additional_entries <span class="op">=</span> <span class="va">nutrients_additional_ingredients</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">nutrient_content</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findFoodInDatabase.html">findFoodInDatabase</a></span><span class="op">(</span><span class="va">weighted_ingredients</span>, <span class="st">"nutrients"</span>, additional_entries <span class="op">=</span> <span class="va">nutrients_additional_ingredients</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/calculateNutrientContentOfFoodlist.html">calculateNutrientContentOfFoodlist</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
