@@ -132,3 +132,7 @@
 #' 39 composite ingredients found in the recipes from Oda.
 #' @format A tibble with 326 rows and two variables: recipe_name and Ingredients.
 "composite_ingredients_oda"
+
+#' The units for the nutrients from matvaretabellen
+#' @format A tibble containting a column for nutrients and a corresponding column with their units.
+"matvaretabellen_units"
