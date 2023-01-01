@@ -88,7 +88,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
   }
 
-  #Pull the reference database from nutRient internal data
+  #Pull the reference database from sustainableNutRient internal data
   if(database == "volume_weight"){
 
     #Separate out ingredients with weight in kilo already, unnecessary to look through them
@@ -218,11 +218,11 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
       ) {
 
         #Database query words
-        reference <- matvaretabellen2020_query %>%
+        reference <- SHARP2018_query %>%
           bind_rows(additional_entries$query_words) #Add user entries
 
         #The database
-        db <- matvaretabellen2020 %>% bind_rows(additional_entries$db) #Add user entries
+        db <- SHARP2018 %>% bind_rows(additional_entries$db) #Add user entries
 
       } else {
         #Ask user to check additional entries formatting
@@ -442,6 +442,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'white bread mix' ~ fixFoodMappingError(database = reference, 'white bread', 'mix'),
           Ingredients %in% c('flaxseed meal', 'seed flax') ~ fixFoodMappingError(database = reference, 'flax', 'seed'),
           Ingredients == 'cookies amarettini' ~ fixFoodMappingError(database = reference, 'amaretti cookie'),
+          Ingredients == 'bean salad' ~ fixFoodMappingError(database = reference, 'bean salad'),
 
           #Seafood
           Ingredients == 'cod lutefisk' ~ fixFoodMappingError(database = reference, 'lutefisk'),
@@ -465,6 +466,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'whole turkey' ~ fixFoodMappingError(database = reference, 'turkey', 'meat'),
           Ingredients == 'pork neck' ~ fixFoodMappingError(database = reference, 'pork', 'neck chop'),
           Ingredients == 'beef minced meat 6 \u0025' ~ fixFoodMappingError(database = reference, 'beef minced meat', '6'),
+          Ingredients == "meatballs in tomato sauce" ~ fixFoodMappingError(database = reference, "meatball", "tomato sauce"),
 
           #Not in reference
           Ingredients %in% c('duck or goose fat for confit', 'lime leaf', 'cranberries jam', "beans'n'pork canned", 'onion seed',
@@ -522,12 +524,12 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
           #Grains, nuts, seeds, legumes
           Ingredients == 'espresso bean coffee ground' ~ fixFoodMappingError(database = reference, 'coffee ground'),
-          Ingredients == 'almond' ~ fixFoodMappingError(database = reference, 'almonds', 'sweet'),
           Ingredients == 'hazelnut' ~ fixFoodMappingError(database = reference, 'nut', 'hazel'),
-          Ingredients %in% c('lentil', 'lentil green') ~ fixFoodMappingError(database = reference, 'lentil', 'dry'),
+          Ingredients %in% c('lentil', 'lentil green', 'lentil red') ~ fixFoodMappingError(database = reference, 'lentil', 'dry'),
           Ingredients == 'peas green' ~ fixFoodMappingError(database = reference, 'pea', 'garden'),
           Ingredients %in% c('bean green asparagus', 'bean green', 'bean broad') ~ fixFoodMappingError(database = reference, 'bean with pods', 'with'),
-          str_detect(Ingredients, 'bean|chick pea|lentil') & !str_detect(Ingredients, 'canned|sprout|oil|flour|paste|coffee ground|white tomato') ~ fixFoodMappingError(database = reference, 'beans', 'dry'),
+          str_detect(Ingredients, 'bean|chick pea') &
+            !str_detect(Ingredients, 'canned|sprout|oil|flour|paste|coffee ground|white tomato|taco|salad') ~ fixFoodMappingError(database = reference, 'beans', 'dry'),
           str_detect(Ingredients, 'bean|chick pea|lentil') & str_detect(Ingredients, 'canned') | Ingredients == 'bean white tomato' ~ fixFoodMappingError(database = reference, 'bean', 'canned'),
           str_detect(Ingredients, 'noodle') ~ fixFoodMappingError(database = reference, 'noodle'),
           Ingredients == 'pistachio nut' ~ fixFoodMappingError(database = reference, 'pistachio'),
@@ -537,6 +539,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients %in% c('seed flax', 'flaxseed meal') ~ fixFoodMappingError(database = reference, 'linseed'),
           Ingredients == 'corn starch' ~ fixFoodMappingError(database = reference, 'corn', 'flour'), #Use as substitute
           Ingredients == 'chick pea flour' ~ fixFoodMappingError(database = reference, 'chick pea', 'flour'),
+          Ingredients == 'bean salad' ~ fixFoodMappingError(database = reference, 'bean salad'),
 
           #Veggies and fruit
           str_detect(Ingredients, 'pickled') & str_detect(Ingredients, 'ginger|sweet pepper|cucumber|onion|beetroot|chili') ~ fixFoodMappingError(database = reference, 'vegetables', 'pickled'),
@@ -573,6 +576,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           str_detect(Ingredients, 'reindeer|elk shoulder') ~ fixFoodMappingError(database = reference, 'mammals', 'meat'),
           str_detect(Ingredients, 'pork') & !str_detect(Ingredients, 'lard') ~ fixFoodMappingError(database = reference, 'pork'),
           Ingredients %in% c('lamb sheep cabbage stew meat', 'lamb sheep head') ~ fixFoodMappingError(database = reference, 'lamb', 'fresh'),
+          Ingredients == "meatballs in tomato sauce" ~ fixFoodMappingError(database = reference, "meatball", "tomato sauce"),
 
           #Poultry
           str_detect(Ingredients, 'turkey') & !str_detect(Ingredients, 'broth') ~ fixFoodMappingError(database = reference, 'turkey'),
@@ -616,18 +620,23 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           str_detect(Ingredients, 'halloumi|manchego|havarti|swiss|monterey jack|pepperjack|asiago|mozzarella|goat brown cheese|jarlsberg|cheese semi-hard|provolone|norvegia|emmentaler|cheese garlic') ~ fixFoodMappingError(database = reference, 'hard to semi-hard cheese'),
           str_detect(Ingredients, 'ricotta|cheese blue|camembert|chevre|neufchatel|port salut|brie|mascarpone|gorgonzola|cheese soft') | Ingredients %in% c('cheese goat') ~ fixFoodMappingError(database = reference, 'soft-ripened cheese'),
           Ingredients == 'cheese american' ~ fixFoodMappingError(database = reference, 'processed cheese and spreads'),
-          Ingredients == 'yogurt greek' | Ingredients == 'kefir' | str_detect(Ingredients, 'quark') ~ fixFoodMappingError(database = reference, 'yoghurt', 'plain'),
+          Ingredients == 'yogurt greek' |
+            Ingredients == 'kefir' |
+            str_detect(Ingredients, 'quark') |
+            str_detect(Ingredients, 'yoghurt skyr') ~ fixFoodMappingError(database = reference, 'yoghurt', 'plain'),
+
 
           #Bread and rolls
           Ingredients %in% c('bread', 'bread coarse', 'tortilla coarse', 'crisp bread coarse',
                              'bread crumb', 'bread brown chapati', 'bread coarse pita') ~ fixFoodMappingError(database = reference, 'wheat bread and rolls', 'brown'),
           Ingredients %in% c('hamburger bun', 'bread white', 'tortilla', 'crisp bread', 'breadstick', 'ciabatta',
-                             'rolls white', 'cracker cream', 'bread naan', 'bread flat hard', 'bread white pita') | str_detect(Ingredients, 'rolls white') ~ fixFoodMappingError(database = reference, 'wheat bread and rolls', 'white'),
+                             'rolls white', 'cracker cream', 'bread naan', 'bread flat hard', 'bread white pita',
+                             'pizza crust', 'pizza crust italian') | str_detect(Ingredients, 'rolls white') ~ fixFoodMappingError(database = reference, 'wheat bread and rolls', 'white'),
 
           #Herbs and spices
-          str_detect(Ingredients, 'saffron|fenugreek seed|mint fresh herbs|mint dried|lemon balm|turmeric|anise|marjoram|sazon seasoning|ginger|caraway|lemongrass|basil|rosemary|thyme|tarragon|pepper|sage|masala|oregano|spice mix|nutmeg|cloves|coriander|cumin|dill|fenugreek leaf|juniper berry|cinnamon|chives|chervil|cardamom|caper|allspice|bay leaf|paprika powder|fennel seed|garlic powder') &
+          str_detect(Ingredients, 'saffron|fenugreek seed|mint fresh herbs|mint dried|lemon balm|turmeric|anise|marjoram|sazon seasoning|ginger|caraway|lemongrass|basil|rosemary|thyme|tarragon|pepper|sage|garam masala|oregano|spice mix|nutmeg|cloves|coriander|cumin|dill|fenugreek leaf|juniper berry|cinnamon|chives|chervil|cardamom|caper|allspice|bay leaf|paprika powder|fennel seed|garlic powder') &
             !str_detect(Ingredients, 'sauce|paste|sweet|chili|sausage') |
-            str_detect(Ingredients, 'chili') & !str_detect(Ingredients, 'pepper|paste|sauce|sausage') |
+            str_detect(Ingredients, 'chili') & !str_detect(Ingredients, 'pepper|paste|sauce|sausage|carne') |
             Ingredients %in% c('herbs', 'different spices', 'spices', 'soup seasoning') ~ fixFoodMappingError(database = reference, 'mixed', 'herbs'),
 
           #Not in ref
@@ -635,7 +644,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                              'nori seaweed','salmon roe', "beans'n'pork canned", 'apricot preserve', 'apple sauce', 'chili bean paste sichuan',
                              'plantain', 'tabasco', 'tapioca', 'sake', 'wine rice', 'liquid smoke flavoring', 'carbonated beverage lemon-lime', 'sauce cranberry',
                              'pack high quality charcoal briquettes', 'cooking spray', 'quinoa', 'paste carrot', 'seed hemp', 'onion powder', 'rhubarb juice',
-                             'red food coloring', 'toro greek moussaka', 'banana', 'paste curry', 'can tomato soup', 'paste vanilla bean', 'lime leaf',
+                             'red food coloring', 'toro greek moussaka', 'banana', 'can tomato soup', 'paste vanilla bean', 'lime leaf',
                              'fish scraps for broth', 'fish soup base', 'paste garlic', 'vanillin', 'vanilla extract', 'toenjang soybean paste',
                              'pomegranate kernel', 'sauce white', 'celery seed', 'trout caviar', 'vanilla pod', 'condensed tomato soup', 'cream sauce base',
                              'sauce bearnaise', 'wine rice', 'soup onion instant', 'whip it stabilizer', 'butter-vanilla aroma', 'shake mixed spice') ~ 0,
