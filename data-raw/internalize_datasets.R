@@ -17,6 +17,10 @@ type_of_units <- readRDS("./data-raw/type-of-units.Rds")
 matvaretabellen2020_foodgroups <- readRDS("./data-raw/matvaretabellen2020_foodgroups.Rds")
 SHARP2018_foodgroups <- readRDS("./data-raw/SHARP2018_foodgroups.Rds")
 
+#units for matvaretabellen
+matvaretabellen_units <- readRDS("./data-raw/matvaretabellen_units.Rds")
+
+
 #Composite ingredients in Oda
 composite_ingredients_oda <- readRDS("./data-raw/composite_ingredients_oda.Rds")
 
@@ -26,6 +30,7 @@ usethis::use_data(unit_weights, unit_weights_query,
                   SHARP2018, SHARP2018_query,
                   pcs, type_of_units,
                   matvaretabellen2020_foodgroups, SHARP2018_foodgroups,
+                  matvaretabellen_units,
                   composite_ingredients_oda,
                   overwrite = TRUE,
                   internal = FALSE)
