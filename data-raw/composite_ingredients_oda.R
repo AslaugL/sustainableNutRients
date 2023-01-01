@@ -375,7 +375,41 @@ composite_ingredients_oda <- tibble(
     1 clove garlic
     4 tbsp olive oil
     1 tsp lemon juice
-    2 red bell peppers"
+    2 red bell peppers",
+    #Happy veggie chicken bean taco
+    "bean_taco;2 sweet peppers
+    2 onions
+    400 g canned black beans
+    5 tbsp sweet chili sauce
+    2 tbsp soy sauce
+    2 tsp smoked paprika powder
+    0.5 tsp chili powder
+    1 tsp ground cumin
+    0.5 ground coriander",
+    #BBC good foods chicken satay
+    "chicken_satay;1 cm ginger
+    2 clove garlic
+    1 lime
+    1 tsp honey
+    1 tbsp soy sauce
+    1 tbsp curry powder
+    3 tbsp peanut butter
+    500 g skinless chicken breast
+    165 ml coconut milk
+    1 tsp vegetable oil",
+    #Matprat pølsegryte/sausage stew
+    "sausage_stew;400 g sausage
+    0.5 pcs broccoli
+    1 pcs onion
+    1 clove garlic
+    400 g whole wheat pasta
+    800 g canned tomatoes
+    4 dl water
+    1 ts dried oregano
+    100 g grated cheese
+    2 dl cream
+    1 tsp sugar
+    100 g frozen peas"
   )) %>%
   #Format
   separate(., tmp, into = c("recipe_name", "Ingredients"), sep = ";") %>%
