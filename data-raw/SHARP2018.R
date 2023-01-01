@@ -222,6 +222,8 @@ SHARP <- SHARP %>%
            str_replace('wheat semolina', 'wheat flour semolina') %>%
            str_replace('rye flour, light', 'wheat flour rye') %>%
            str_replace('rye flour, wholemeal', 'wheat flour rye wholemeal') %>%
+           str_replace('passionfruits', 'passion fruit') %>%
+           str_replace('almonds sweet', 'almond') %>%
 
            #Meat
            str_replace('beef tallow including processed suet', 'tallow') %>%
