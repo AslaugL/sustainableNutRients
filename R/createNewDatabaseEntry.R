@@ -46,7 +46,7 @@ createNewDatabaseEntry <- function(df, database) {
         select(-tmp) %>%
         ungroup() %>%
         separate(col = Ingredients, into = c("first_word", "second_word"), sep = "_") %>%
-        replace_na(list(second_word = '\\\\'))
+        replace_na(list(second_word = '\\'))
     ))
 
 
