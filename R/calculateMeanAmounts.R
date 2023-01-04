@@ -11,7 +11,7 @@
 calculateMeanAmounts <- function(df) {
 
   #Check if means need to be calculated
-  if(isTRUE(str_detect(df$Ingredients, "\\d+-\\d+"))) {
+  if(isTRUE(any(str_detect(df$Ingredients, "\\d+-\\d+")))) {
 
     #Find the pattern
     numerics <- df %>%
