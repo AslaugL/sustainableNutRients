@@ -56,7 +56,7 @@
       unit == 'inch' ~ Amounts*2.54, #To cm
 
       #Weight to grams
-      unit == 'ounce' ~ Amounts * 28.35,
+      unit %in% c('ounce', 'oz') ~ Amounts * 28.35,
       unit == 'pound' ~ Amounts * 453.59,
 
       TRUE ~ Amounts),
