@@ -12,7 +12,7 @@ calculateCitrusJuiceZest <- function(df){
 
 #Change the amount of lemon/orange/lime juice/zest from whole pieces of fruit to dl when applicable
 temp <- df %>%
-  filter(str_detect(Ingredients, 'the juice|the zest')) %>%
+  filter(str_detect(Ingredients, 'the juice|the zest|orange juice') & unit == 'pcs') %>%
 
   #If it says 'juice and zest' treat as a whole fruit
   mutate(Ingredients = str_replace(Ingredients, ', the juice and zest', '')) %>%
@@ -40,7 +40,7 @@ temp <- df %>%
 #Add back
 df %>%
   #Remove old rows
-  filter(!str_detect(Ingredients, 'the juice|the zest')) %>%
+  filter(!(str_detect(Ingredients, 'the juice|the zest|orange juice') & unit == 'pcs')) %>%
   #Add updated ones
   bind_rows(temp)
 
