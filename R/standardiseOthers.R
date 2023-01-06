@@ -25,7 +25,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'barbecue|bbq|barbeque') & str_detect(Ingredients, 'rub') ~ 'barbecue rub',
       str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'fund') ~ 'beef fund',
       str_detect(Ingredients, 'beer') & str_detect(Ingredients, 'dark|amber|christmas') ~ 'beer dark',
-      str_detect(Ingredients, 'beer|ale') & !str_detect(Ingredients, 'jerusalen|artichoke|kale') ~ 'beer',
+      str_detect(Ingredients, 'beer|\\bale\\b') ~ 'beer',
       str_detect(Ingredients, 'beet') & str_detect(Ingredients, 'pickle') ~ 'beetroot pickled',
       Ingredients == 'black truffle or 2 tbsp s truffle oil' ~ 'black truffle',
       str_detect(Ingredients, "blackstrap") & str_detect(Ingredients, "molass") ~ "molasses blackstrap",
