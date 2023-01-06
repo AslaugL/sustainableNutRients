@@ -23,6 +23,7 @@ temp <- df %>%
       #Juice (info from https://www.webstaurantstore.com/blog/2760/juice-in-citrus-fruits.html)
       str_detect(Ingredients, 'lemon') & str_detect(Ingredients, 'juice') & str_detect(unit, 'pcs') ~ (Amounts*3)*0.015,
       str_detect(Ingredients, 'lime') & str_detect(Ingredients, 'juice') & str_detect(unit, 'pcs') ~ (Amounts*2)*0.015,
+      str_detect(Ingredients, 'orange') & str_detect(Ingredients, 'juice') & str_detect(unit, 'pcs') ~ (Amounts*4)*0.015,
       #Zest (info from https://bakingbites.com/2017/01/how-much-zest-does-citrus-lemon-yield/)
       str_detect(Ingredients, 'lemon') & str_detect(Ingredients, 'zest') & str_detect(unit, 'pcs') ~ (Amounts*(1/3))*0.15,
       str_detect(Ingredients, 'lime') & str_detect(Ingredients, 'zest') & str_detect(unit, 'pcs') ~ (Amounts*1)*0.15,
