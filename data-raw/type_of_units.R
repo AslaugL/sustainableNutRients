@@ -6,7 +6,7 @@ type_of_units = c(
 
   'cl', 'cup', 'dl', 'drop', 'flaske', 'glass', 'handful', 'l', 'ml', 'tins', 'quart',
 
-  'g', 'kg', 'ounce', 'pound', "lb",
+  'g', 'kg', 'ounce', 'oz', 'pound', "lb",
 
   'box', 'bunch', 'can', 'cm', 'hp',  'leaf', 'pot', 'tube', 'inch',
 
