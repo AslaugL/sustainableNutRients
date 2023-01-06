@@ -17,9 +17,9 @@ standardiseAmounts <- function(df){
              #Remove invisible spaces
              str_replace_all('\u2028', '') %>%
              #Find fractions or numbers with a - or + between them and remove spaces
-             str_replace_all('(?<=([\\xbc-\\xbe]|\\d{1,3}))( - )|( \\+ )|(?<=([\\xbc-\\xbe]|\\d{1,3}))( -)|( \\+)', '-') %>%
+             str_replace_all('(?<=([\u00BC-\u00BE\u2150-\u215E]|\\d{1,3}))( - )|( \\+ )|(?<=([\u00BC-\u00BE\u2150-\u215E]|\\d{1,3}))( -)|( \\+)', '-') %>%
              #Remove spaces between / and numbers
-             str_replace_all('(?<=([\\xbc-\\xbe]|\\d{1,3})) \\/(?=([\\xbc-\\xbe]|\\d))', '\\/')) %>%
+             str_replace_all('(?<=([\u00BC-\u00BE\u2150-\u215E]|\\d{1,3})) \\/(?=([\u00BC-\u00BE\u2150-\u215E]|\\d))', '\\/')) %>%
     #Numbers
     mutate(Ingredients = Ingredients %>%
                  str_trim() %>%
@@ -62,6 +62,7 @@ standardiseAmounts <- function(df){
              str_replace('\\bdl|\\bDL(?=\\w)', 'dl ') %>%
              str_replace('slice(?=[^s|^\\s|^d])', 'slice ') %>%
              str_replace('(?<=\\d)slice| skive ', ' slice ') %>%
+             str_replace('(?<=\\d)oz\\b', ' ounce') %>%
              str_replace('(?<=\\w|,)slice', ' slice') %>%
              str_replace('paprikai', 'paprika i') %>%
 
@@ -93,7 +94,8 @@ standardiseAmounts <- function(df){
              str_replace('kilo', 'kg') %>%
              str_replace('\\sgr\\s', ' g ') %>%
              str_replace('grams', 'g') %>%
-             str_replace('((?<=\\d).in\\b)|((?<=\\d).inch\\b)|((?<=\\d).inches\\b)', 'inch') %>%
+             str_replace_all('((?<=\\d).in\\b)|((?<=\\d).inch\\b)|((?<=\\d).inches\\b)', ' inch') %>%
+             str_replace_all('((?<=\\d).oz\\b)|((?<=\\d).oz\\b)|((?<=\\d).oz\\b)', ' ounce') %>%
              str_replace('(?<=\\d{1,3})"\\b', ' inch') %>%
              str_replace('stk ltr|liter|litre', 'l') %>%
              str_replace('portions|servings', 'portion') %>%
@@ -120,7 +122,6 @@ standardiseAmounts <- function(df){
              str_replace('stk of parsley sprig|pieces of parsley stalks|stk of parsley stalks', 'twig parsley') %>%
              str_replace('stk of rosemary sprig|stems fresh rosemary|piece of rosemary sprig|pieces of rosemary|pieces of fresh rosemary', 'twig rosemary') %>%
              str_replace('1 mug of parsley', '1 bunch parsley') %>%
-             str_replace('1 mug of parsley', '1 bunch parsley') %>%
              str_replace('piece basil, fresh', 'twig basil fresh') %>%
              str_replace('stk of neve coriander', 'handful coriander') %>%
              str_replace('stk leaf sage', 'leaf sage') %>%
@@ -140,5 +141,6 @@ standardiseAmounts <- function(df){
     mutate(Ingredients = Ingredients %>%
              str_replace('neve|h\u00E5ndfull', 'handful') %>%
              str_replace('\\bstk\\b', 'pcs') %>%
-             str_replace('\\bfedd\\b', 'clove'))
+             str_replace('\\bfedd\\b', 'clove') %>%
+             str_replace('inch piece|inch pcs', 'inch')) #Only keep inch when present
 }
