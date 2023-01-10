@@ -68,6 +68,7 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'boat') ~ 'ice cream boat',
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'sandwich') ~ 'ice cream sandwich',
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'lollipop') ~ 'ice cream lollipop',
+    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'ice') ~ 'ice cream',
     str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'vegan|plant-based|plant based') ~ 'cream plant-based',
     str_detect(Ingredients, 'cream') & ((str_detect(Ingredients, 'food') |
                                           !str_detect(Ingredients, 'cheese|sour|cracker|sauce|coconut|light|condensed|ice|balsamic|potato|vegan|plant')) ) ~ 'cream household 18 \u0025', #Standard

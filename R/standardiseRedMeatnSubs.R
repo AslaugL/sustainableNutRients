@@ -14,8 +14,9 @@ standardiseRedMeatnSubs <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'bacon|lettsaltet sideflesk|lardons') & str_detect(Ingredients, 'cooked') ~ 'bacon cooked',
+      str_detect(Ingredients, 'bacon|lettsaltet sideflesk|lardons') & str_detect(Ingredients, 'fat') ~ 'bacon fat',
       str_detect(Ingredients, 'bacon|lettsaltet sideflesk|lardons') & !str_detect(Ingredients, 'cheese|spread') ~ 'bacon',
-      str_detect(Ingredients, 'lard') ~ 'lard pork fat',
+      str_detect(Ingredients, '\\blard') ~ 'lard pork fat',
       str_detect(Ingredients, 'bankekj\u00F8tt|beef round roast|bottom round roast|knocked meat') | str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'round steak') ~ 'beef bottom round',
       str_detect(Ingredients, 'roast beef') ~ 'beef bottom round roast beef',
       str_detect(Ingredients, 'beef|angus') & str_detect(Ingredients, 'sirloin|tip') ~ 'beef sirloin', #Tips often come from the sirloin
@@ -55,7 +56,7 @@ standardiseRedMeatnSubs <- function(df) {
 
       str_detect(Ingredients, 'ham') & str_detect(Ingredients, 'cured') | str_detect(Ingredients, 'pancetta|prosciutto') ~ 'ham cured',
       str_detect(Ingredients, 'ham') & str_detect(Ingredients, 'smoked') ~ 'ham smoked',
-      str_detect(Ingredients, 'ham') & !str_detect(Ingredients, 'bacon|tenderloin|hamburger|champignon|pork from|turkey|steak|bone|cheese') ~ 'ham',
+      str_detect(Ingredients, 'ham') & !str_detect(Ingredients, 'bacon|tenderloin|hamburger|champignon|pork from|turkey|steak|bone|cheese|graham') ~ 'ham',
       str_detect(Ingredients, 'hamburger') & str_detect(Ingredients, 'vegetarian|vegan') ~ 'hamburger plant-based',
       str_detect(Ingredients, 'hamburger') & !str_detect(Ingredients, 'bun') ~ 'hamburger beef patty',
 

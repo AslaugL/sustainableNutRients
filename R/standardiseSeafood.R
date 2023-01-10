@@ -29,7 +29,7 @@ standardiseSeafood <- function(df) {
       str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'bread') ~ 'cod breaded',
       str_detect(Ingredients, 'fish fillet|firm white fish|different fillets of white fish|optional fish without skin and bone') & !str_detect(Ingredients, 'angler|cat|cod|pollock') ~ 'cod',
       str_detect(Ingredients, 'cod') ~ 'cod fillet',
-      str_detect(Ingredients, 'crab') & str_detect(Ingredients, 'shell') ~ 'crab shell',
+      str_detect(Ingredients, 'crab') & str_detect(Ingredients, '(?<!de-|de)shell') ~ 'crab shell',
       str_detect(Ingredients, 'crab') & str_detect(Ingredients, 'claw') ~ 'crab claw',
       str_detect(Ingredients, 'crab') ~ 'crab',
       str_detect(Ingredients, '\\btusk\\b|\\bcusk\\b|brosme') ~ 'cusk tusk white fish',

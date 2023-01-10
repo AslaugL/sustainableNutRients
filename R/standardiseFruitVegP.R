@@ -27,6 +27,7 @@ standardiseFruitVegP <- function(df){
       str_detect(Ingredients, 'pineapple') & str_detect(Ingredients, 'can') ~ 'pineapple canned',
       str_detect(Ingredients, 'pineapple') & str_detect(Ingredients, 'juice') ~ 'pineapple juice',
       str_detect(Ingredients, 'pineapple') ~ 'pineapple',
+      str_detect(Ingredients, 'plantain') & str_detect(Ingredients, 'chip') ~ 'plantain chip',
       str_detect(Ingredients, 'plantain') ~ 'plantain',
       str_detect(Ingredients, 'plum') & str_detect(Ingredients, 'red') ~ 'plum red',
       str_detect(Ingredients, 'plum') ~ 'plum',

@@ -22,6 +22,7 @@ standardiseFruitVegS <- function(df){
       str_detect(Ingredients, 'salad') & !str_detect(Ingredients, 'shrimp|oil|lentil|bean|beetroot|chicken|ready-made|ready made|potato') ~ 'salad',
       str_detect(Ingredients, 'sauerkraut') ~ 'sauerkraut',
       str_detect(Ingredients, 'scallion|green onion|spring onion') ~ 'scallion',
+      str_detect(Ingredients, 'seaweed') & !str_detect(Ingredients, 'nori') ~ 'seaweed',
       str_detect(Ingredients, 'shallot') ~ 'shallot',
       str_detect(Ingredients, 'smoothie mix') & str_detect(Ingredients, 'tropical') ~ 'smoothie mix tropical',
       str_detect(Ingredients, 'smoothie mix') ~ 'smoothie mix',
