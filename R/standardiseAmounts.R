@@ -40,6 +40,7 @@ standardiseAmounts <- function(df){
                  str_replace('\u00BE|3\\/4', '0.75') %>%
                  str_replace('\u2154|2\\/3', '0.67') %>%
                  str_replace('\u215B', '0.125') %>%
+                 str_replace('\u2155', '0.2') %>%
                  str_replace('half(?= pac)', '0.5')) %>%
 
     #Use the mean of units like 3-4 etc.
@@ -129,8 +130,8 @@ standardiseAmounts <- function(df){
              str_replace('sprigs|sprig|\\bstems\\b|\\bstem\\b|twigs', 'twig') %>%
              str_replace('pieces rosemary, fresh|stk rosemary fresh', 'bunch rosemary') %>%
              str_replace('basil leaf|fresh basil leaf, cut into thin strips', 'leaf basil') %>%
-             str_replace('pounds|\\blbs\\b', 'pound') %>%
-             str_replace('\\blb\\b', 'pound') %>%
+             str_replace('pounds|\\blbs\\b|\\lb\\.\\b', 'pound') %>%
+             str_replace('\\lb\\.\\b|\\blb\\b', 'pound') %>%
              str_replace('ounces', 'ounce') %>%
              str_replace('chili stk|chili pcs', 'pcs chili') %>%
              str_replace('\\bpk\\b', 'pack') %>%
@@ -142,5 +143,6 @@ standardiseAmounts <- function(df){
              str_replace('neve|h\u00E5ndfull', 'handful') %>%
              str_replace('\\bstk\\b', 'pcs') %>%
              str_replace('\\bfedd\\b', 'clove') %>%
-             str_replace('inch piece|inch pcs', 'inch')) #Only keep inch when present
+             str_replace('inch piece|inch pcs', 'inch') %>% #Only keep inch when present
+             str_replace('pound\\.', 'pound'))
 }
