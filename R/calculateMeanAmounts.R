@@ -11,11 +11,11 @@
 calculateMeanAmounts <- function(df) {
 
   #Check if means need to be calculated
-  if(isTRUE(any(str_detect(df$Ingredients, "\\d+-\\d+")))) {
+  if(isTRUE(any(str_detect(df$Ingredients, "\\d+-\\d+|\\d+ to \\d+")))) {
 
     #Find the pattern
     numerics <- df %>%
-      mutate(tmp = str_extract(Ingredients, "\\d+-\\d+")) %>%
+      mutate(tmp = str_extract(Ingredients, "\\d+-\\d+|\\d+ to \\d+")) %>%
       #Separate it
       select(tmp) %>%
       unique() %>%
