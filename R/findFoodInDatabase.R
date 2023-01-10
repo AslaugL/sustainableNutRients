@@ -288,7 +288,6 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'mustard honey' ~ fixFoodMappingError(database = reference, 'mustard'),
           Ingredients %in% c('salad lollo rosso', 'salad heart') & unit == 'leaf' ~ fixFoodMappingError(database = reference, 'lettuce'),
           Ingredients == 'bread crumb' & unit == 'slice' ~ fixFoodMappingError(database = reference, 'bread'),
-          str_detect(Ingredients, 'spice mix') & unit == 'pack' ~ fixFoodMappingError(database = reference, 'taco', 'spice'),
           Ingredients == 'cheese goat chevre white' & unit == 'pcs' ~ fixFoodMappingError(database = reference, 'soft ripened cheese'),
           Ingredients == 'watermelon' ~ fixFoodMappingError(database = reference, 'melon', 'water'),
           Ingredients == 'broccolini' ~ fixFoodMappingError(database = reference, 'broccolini'),
@@ -299,12 +298,13 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'corn flour' ~ fixFoodMappingError(database = reference, 'cornmeal', 'polenta'),
           Ingredients == 'chicken breast' & unit == 'dl' ~ fixFoodMappingError(database = reference, 'chicken', 'diced'),
           Ingredients == 'salad rocket' ~ fixFoodMappingError(database = reference, 'ruccola'),
-          Ingredients == 'lime lead' ~ fixFoodMappingError(database = reference, 'bay', 'leaf'), #Assume similar
+          Ingredients == 'lime leaf' ~ fixFoodMappingError(database = reference, 'bay', 'leaf'), #Assume similar
           Ingredients == 'oat quick' ~ fixFoodMappingError(database = reference, 'rolled', 'oat'),
           Ingredients == 'peach canned' ~ fixFoodMappingError(database = reference, 'peach', 'canned'),
           Ingredients == 'bread brown chapati' & unit == 'pcs' ~ fixFoodMappingError(database = reference, 'chapati'), #Assume similar
           str_detect(Ingredients, 'ice cream') ~ fixFoodMappingError(database = reference, 'ice cream'),
           str_detect(Ingredients, 'pita') ~ fixFoodMappingError(database = reference, 'pita', 'bread'),
+          Ingredients == 'pimiento chili pepper' ~ fixFoodMappingError(database = reference, 'chili', 'red'), #Small pepper
 
           #Ingredients with no references
           Ingredients %in% c('mustard powder', 'chinese five spice', 'dip mix', 'asafoetida powder',
@@ -323,7 +323,10 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'onion pickled' ~ fixFoodMappingError(database = reference, 'beetroot', 'pickled'),
           Ingredients == 'pizza sauce red' ~ fixFoodMappingError(database = reference, 'tomato', 'canned'),
           Ingredients %in% c('bread sausage', 'bread polar', "bread paratha") ~ fixFoodMappingError(database = reference, 'pita', 'bread'), #Similar
-          Ingredients == "margarine" ~ fixFoodMappingError(database = reference, 'butter'), #Similar
+          Ingredients %in% c("margarine", "lard pork fat", "bacon fat") ~ fixFoodMappingError(database = reference, 'butter'), #Similar
+          str_detect(Ingredients, 'spice mix') & unit == 'pack' ~ fixFoodMappingError(database = reference, 'taco', 'spice'),
+          str_detect(Ingredients, 'plantain') & unit == 'dl' ~ fixFoodMappingError(database = reference, 'banana'), #Similar
+          Ingredients == 'mangold' ~ fixFoodMappingError(database = reference, 'celery', 'stalk'), #Similar
 
           TRUE ~ database_ID
         ))
@@ -359,6 +362,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients %in% c('red chili', 'strong chili', 'chili peppers') ~ fixFoodMappingError(database = reference, 'chili pepper', 'red'),
           Ingredients == 'sweet corn kernels' ~ fixFoodMappingError(database = reference, 'sweet corn', 'canned'),
           Ingredients == 'sweet potato' ~ fixFoodMappingError(database = reference, 'sweet potato'),
+          Ingredients == 'pimiento chili pepper' ~ fixFoodMappingError(database = reference, 'sweet pepper', 'red'),
           Ingredients == 'chili pepper dried' ~ fixFoodMappingError(database = reference, 'chili pepper', 'red'),
           Ingredients %in% c('potato', 'potato boiled') ~ fixFoodMappingError(database = reference, 'potato'),
           Ingredients == 'jerusalem artichoke' ~ fixFoodMappingError(database = reference, 'jerusalem artichoke'),
@@ -467,6 +471,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'pork neck' ~ fixFoodMappingError(database = reference, 'pork', 'neck chop'),
           Ingredients == 'beef minced meat 6 \u0025' ~ fixFoodMappingError(database = reference, 'beef minced meat', '6'),
           Ingredients == "meatballs in tomato sauce" ~ fixFoodMappingError(database = reference, "meatball", "tomato sauce"),
+          Ingredients == "bacon fat" ~ fixFoodMappingError(database = reference, "pork", "lard"), #Closest match
 
           #Not in reference
           Ingredients %in% c('duck or goose fat for confit', 'lime leaf', 'cranberries jam', "beans'n'pork canned", 'onion seed',
