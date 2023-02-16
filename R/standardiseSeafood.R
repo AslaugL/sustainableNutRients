@@ -45,7 +45,7 @@ standardiseSeafood <- function(df) {
       str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'cake') & str_detect(Ingredients, 'coarse') ~ 'fish cakes coarse',
       str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'cake') ~ 'fish cakes',
       str_detect(Ingredients, 'fish, head, back bone') | Ingredients == 'fish cut' ~ 'fish scraps for broth',
-      str_detect(Ingredients, 'fish stick') ~ 'fish sticks',
+      str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'stick') ~ 'fish sticks',
       str_detect(Ingredients, 'fish') & str_detect(Ingredients, 'gratin') ~ 'fish gratin',
 
       str_detect(Ingredients, 'flounder') ~ 'flounder',

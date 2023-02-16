@@ -78,15 +78,16 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'pita') & str_detect(Ingredients, 'whole-wheat|whole wheat') ~ 'bread coarse pita',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'pocket|pita') ~ 'bread white pita',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'polar') ~ 'bread polar',
-      str_detect(Ingredients, 'bread') & !str_detect(Ingredients, 'flat|burger|rolls|pita|italian|olive oil|flour|margarine|sausage') ~ 'bread',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'sausage') ~ 'bread sausage',
       str_detect(Ingredients, 'bulgur|bulgar') ~ 'bulgur wheat',
       str_detect(Ingredients, 'bao|steam') & str_detect(Ingredients, 'bun') ~ 'bao bun',
       str_detect(Ingredients, 'focaccia') ~ 'bread white foccacia',
       str_detect(Ingredients, 'paratha') & str_detect(Ingredients, 'bread') ~ 'bread paratha',
+      str_detect(Ingredients, 'bread') & !str_detect(Ingredients, 'flat|burger|rolls|pita|italian|olive oil|flour|margarine|sausage') ~ 'bread',
 
       #Other
       str_detect(Ingredients, 'brazil') & str_detect(Ingredients, 'nut') ~ 'nut brazil',
+      str_detect(Ingredients, 'buck') & str_detect(Ingredients, 'wheat') ~ 'buckwheat',
 
       TRUE ~ Ingredients_standardised))
 }

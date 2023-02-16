@@ -43,7 +43,7 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'calf') & str_detect(Ingredients, 'liver') ~ 'beef calf liver',
       str_detect(Ingredients, 'calf') & str_detect(Ingredients, 'leg') ~ 'beef calf shoulder', #Actually hind leg but not in database,
       str_detect(Ingredients, 'calf') & str_detect(Ingredients, 'steak') ~ 'beef veal for roast',
-      str_detect(Ingredients, 'beef|cattle') & !str_detect(Ingredients, 'fund|broth|stock|bouilljon|bouillion|bouillon|consomme|gravy|tomato') ~ 'beef chuck roll',
+      str_detect(Ingredients, 'beef|cattle|\\bangus\\b') & !str_detect(Ingredients, 'fund|broth|stock|bouilljon|bouillion|bouillon|consomme|gravy|tomato') ~ 'beef chuck roll',
       str_detect(Ingredients, 'bone marrow') ~ 'marrow bone',
 
       str_detect(Ingredients, 'deer') & str_detect(Ingredients, 'ground') & !str_detect(Ingredients, 'rein|rain') ~ 'roe deer minced meat',
