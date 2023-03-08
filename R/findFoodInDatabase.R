@@ -132,7 +132,8 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         reference <- unit_weights_query %>%
           filter(.data$language == 'english') %>%
           select(-.data$language) %>%
-          bind_rows(additional_entries$query_words) %>% unique()
+          bind_rows(additional_entries$query_words) %>% unique() %>%
+          arrange(first_word, second_word)
 
         #The database
         db <- unit_weights %>%
@@ -181,7 +182,8 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
         #Database query words
         reference <- matvaretabellen2020_query %>%
-          bind_rows(additional_entries$query_words) #Add user entries
+          bind_rows(additional_entries$query_words) %>%#Add user entries
+          arrange(first_word, second_word)
 
         #The database
         db <- matvaretabellen2020 %>% bind_rows(additional_entries$db) #Add user entries
