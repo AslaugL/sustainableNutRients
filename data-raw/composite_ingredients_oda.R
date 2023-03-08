@@ -276,6 +276,14 @@ composite_ingredients_oda <- tibble(
     1 tbsp potato starch
     1 egg
     4 dl whole milk",
+    #Fish balls in curry sauce, from Oda
+    "fish ball_carry sauce;350 g sour cream porridge
+    600 g	fish balls
+    2 tbsp curry powder
+    800 g	stew mix
+    10 g chives
+    0,5 tsp	salt
+    0,5 tsp pepper",
     #BBC good food Fish cakes
     "fish_cake;450 g cod;
     2 leaf bay leaf
@@ -409,7 +417,18 @@ composite_ingredients_oda <- tibble(
     100 g grated cheese
     2 dl cream
     1 tsp sugar
-    100 g frozen peas"
+    100 g frozen peas",
+    #Tine sour cream porridge
+    "sour cream_porridge;5 dl sour cream 35%
+    2 dl wheat flour
+    5 dl whole milk
+    0.5 tsp salt",
+    #Stew mix vegetables REMA
+    "stew_mix;63 g potato
+    20 g carrot
+    9 g celeriac root
+    8 g leeks"
+
   )) %>%
   #Format
   separate(., tmp, into = c("recipe_name", "Ingredients"), sep = ";") %>%
