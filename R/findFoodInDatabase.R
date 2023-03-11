@@ -182,7 +182,9 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
         #Database query words
         reference <- matvaretabellen2020_query %>%
-          bind_rows(additional_entries$query_words) %>%#Add user entries
+          #Add user entries
+          bind_rows(additional_entries$query_words) %>%
+          #Arrange so it is still the first work in alphabetical order that is found first
           arrange(first_word, second_word)
 
         #The database
@@ -221,7 +223,10 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
         #Database query words
         reference <- SHARP2018_query %>%
-          bind_rows(additional_entries$query_words) #Add user entries
+          #Add user entries
+          bind_rows(additional_entries$query_words) %>%
+          #Arrange so it is still the first work in alphabetical order that is found first
+          arrange(first_word, second_word)
 
         #The database
         db <- SHARP2018 %>% bind_rows(additional_entries$db) #Add user entries
@@ -404,6 +409,8 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'milk evaporated' ~ fixFoodMappingError(database = reference, 'milk evaporated'),
           Ingredients == 'yoghurt greek' ~ fixFoodMappingError(database = reference, 'yogurt', 'greek'),
           Ingredients == 'buttermilk' ~ fixFoodMappingError(database = reference, 'buttermilk'),
+          #Milk with cocoa powder
+          str_detect(Ingredients, 'milk beverage chocolate') ~ fixFoodMappingError(database = reference, 'milk beverage', 'chocolate'),
 
           #Div
           Ingredients %in% c('mushroom', 'mushroom chestnut') ~ fixFoodMappingError(database = reference, 'mushroom'),
@@ -630,7 +637,9 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'yogurt greek' |
             Ingredients == 'kefir' |
             str_detect(Ingredients, 'quark') |
-            str_detect(Ingredients, 'yoghurt skyr') ~ fixFoodMappingError(database = reference, 'yoghurt', 'plain'),
+            str_detect(Ingredients, 'yoghurt skyr') ~ fixFoodMappingError(database = reference, 'yoghurt'),
+          #Milk with cocoa powder
+          str_detect(Ingredients, 'milk beverage chocolate') ~ fixFoodMappingError(database = reference, 'milk'),
 
 
           #Bread and rolls
