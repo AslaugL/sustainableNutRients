@@ -7,6 +7,9 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
+    <loc>/articles/Exploration.html</loc>
+  </url>
+  <url>
     <loc>/articles/MapFoodsToDatabase.html</loc>
   </url>
   <url>
@@ -80,6 +83,9 @@
   </url>
   <url>
     <loc>/reference/matvaretabellen2020_query.html</loc>
+  </url>
+  <url>
+    <loc>/reference/matvaretabellen_units.html</loc>
   </url>
   <url>
     <loc>/reference/nutRients-package.html</loc>
