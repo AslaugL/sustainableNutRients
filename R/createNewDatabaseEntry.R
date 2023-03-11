@@ -5,7 +5,7 @@
 #'
 #' @param df
 #' \itemize{
-#'  \item{For volume_weight, a dataframe three columns: either "Ingredients" or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"}
+#'  \item{For volume_weight, a dataframe three columns: either an identifier (default recipe_name) and Ingredients or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"}
 #'  \item{For "nutrients", the output from calculateNutrientContentOfFoodlist with option "per 100 g" selected or a three column dataframe with
 #'  an "Ingredients" column with food name, same as what can be found in the recipes or food list, a "nutrient" column with nutrient
 #'  names similar to what is found in Matvaretabellen and "nutrient_content_per_100g" of the food.}
@@ -15,12 +15,13 @@
 #'   indicator, same as in SHARP indicators database, and "environmental_impact_per_100g" of the food.}
 #' }
 #' @param database Database to create new entries for. Either "volume_weight", "nutrients" or "sustainability.
+#' @param identifier  A the column name for a column with an identifier for with the name of the new ingredient. Default is recipe_name.
 #'
 #' @return The nutrient content of each individual variable in the "identifier" column, either by total weight of all ingredients,
 #' per 100 grams or per portion.
 #'
 #' @export
-createNewDatabaseEntry <- function(df, database) {
+createNewDatabaseEntry <- function(df, database, identifier = 'recipe_name') {
 
   #Function to format new database entries
   supportFunction <- function(df2) {
@@ -30,23 +31,23 @@ createNewDatabaseEntry <- function(df, database) {
       list(
 
       "db" = df2 %>%
-        group_by(Ingredients) %>%
+        group_by(across(all_of(identifier))) %>%
         mutate(tmp = 0.999,
                database_ID = tmp + cur_group_id()) %>%
         select(-tmp) %>%
         ungroup() %>%
-        select(-Ingredients),
+        select(-contains(c(identifier, "Ingredients"))),
 
       "query_words" = df2 %>%
-        select(Ingredients) %>%
+        select(all_of(identifier)) %>%
         unique() %>%
-        group_by(Ingredients) %>%
+        group_by(across(all_of(identifier))) %>%
         mutate(tmp = 0.999,
                database_ID = tmp + cur_group_id()) %>%
-        select(-tmp) %>%
         ungroup() %>%
-        separate(col = Ingredients, into = c("first_word", "second_word"), sep = "_") %>%
-        replace_na(list(second_word = '\\'))
+        separate(col = contains(identifier), into = c("first_word", "second_word"), sep = "_") %>%
+        replace_na(list(second_word = '\\')) %>%
+        select(first_word, second_word, database_ID)
     ))
 
 
@@ -54,7 +55,7 @@ createNewDatabaseEntry <- function(df, database) {
 
   if(database == 'volume_weight') {
 
-    if(isTRUE(all.equal(names(df), c('Ingredients', 'unit', 'grams_per_unit')))) {
+    if(isTRUE(all.equal(names(df), c(identifier, 'unit', 'grams_per_unit')))) {
 
       new_entries <- supportFunction(df2 = df)
 
@@ -73,29 +74,29 @@ createNewDatabaseEntry <- function(df, database) {
         )
 
     }else{
-      stop("To create database entries for the volume_weight database, df must include the columns Ingredients or database_ID, unit and grams_per_unit.")
+      stop("To create database entries for the volume_weight database, df must include the columns identifier or database_ID, unit and grams_per_unit.")
     }
 
 
   }else if(database == 'nutrients') {
 
-    if(isTRUE(all.equal(names(df), c("Ingredients", "nutrient", "nutrient_content_per_hektogram")))) {
+    if(isTRUE(all.equal(names(df), c(identifier, "nutrient", "nutrient_content_per_hektogram")))) {
 
       new_entries <- supportFunction(df2 = df)
 
     } else {
-      stop("To create database entries for the nutrients database, df must only include the columns Ingredients, nutrient and nutrients_per_hektogram")
+      stop("To create database entries for the nutrients database, df must only include the columns identifier, nutrient and nutrients_per_hektogram")
     }
 
 
   }else if(database == 'sustainability') {
 
-    if(isTRUE(all.equal(names(df), c('Ingredients', 'environmental_impact_indicator', 'environmental_impact_per_hektogram')))) {
+    if(isTRUE(all.equal(names(df), c(identifier, 'environmental_impact_indicator', 'environmental_impact_per_hektogram')))) {
 
       new_entries <- supportFunction(df2 = df)
 
     } else {
-      stop("To create database entries for the sustainability database, df must include only the columns Ingredients, environmental_impact_indicator and environmental_impact_per_hektogram.")
+      stop("To create database entries for the sustainability database, df must include only the columns identifier, environmental_impact_indicator and environmental_impact_per_hektogram.")
     }
 
   }else{
