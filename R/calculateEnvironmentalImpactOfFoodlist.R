@@ -15,19 +15,53 @@
 #' @export
 calculateEnvironmentalImpactOfFoodlist <- function(df, calculate_sustainability = 'total', identifier = 'recipe_name') {
 
+  #Drop NA values help function
+  drop_nas <- function(df, identifier) {
+
+    if(sum(is.na(df$environmental_impact_indicator)) > 0) {
+
+      #Print recipe names and warning
+      has_missing <- df %>%
+        filter(is.na(environmental_impact_indicator)) %>%
+        select(all_of(identifier)) %>% unique() %>%
+        as.character()
+
+      print(paste0(
+        "These ", noquote(identifier), " ", has_missing,
+        " have values not mapped to SHARP DB, be sure mapping has been correct. NA values are removed before calculating environmental impact"))
+
+      #Filter out the NA foods
+      without_NAs <- df %>%
+        filter(!is.na(environmental_impact_indicator))
+
+    } else {
+
+      without_NAs <- df
+
+    }
+
+    without_NAs
+
+  }
+
+
   if(calculate_sustainability == 'total') {
 
-    df %>%
+    without_NAs <- drop_nas(df = df, identifier = identifier)
+
+    without_NAs %>%
       mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
       select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact) %>%
       group_by(across(all_of(identifier)), environmental_impact_indicator) %>%
       summarise(environmental_impact = sum(environmental_impact, na.rm = TRUE)) %>%
       ungroup() %>%
-      rename(Ingredients = all_of(identifier))
+      rename(recipe_name = all_of(identifier))
 
   }else if(calculate_sustainability == 'per 100 g'){
 
-    df %>%
+    without_NAs <- drop_nas(df = df, identifier = identifier)
+
+    without_NAs %>%
       mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
       select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact, Amounts) %>%
       group_by(across(all_of(identifier)), environmental_impact_indicator) %>%
@@ -36,18 +70,20 @@ calculateEnvironmentalImpactOfFoodlist <- function(df, calculate_sustainability 
       ungroup() %>%
       mutate(environmental_impact_per_hektogram = environmental_impact/total_recipe_weight) %>%
       select(-c(total_recipe_weight, environmental_impact)) %>%
-      rename(Ingredients = all_of(identifier))
+      rename(recipe_name = all_of(identifier))
 
   }else if(calculate_sustainability == 'per portion') {
 
-    df %>%
+    without_NAs <- drop_nas(df = df, identifier = identifier)
+
+    without_NAs %>%
       mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
       select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact, Amounts, number_of_portions) %>%
       group_by(across(all_of(identifier)), environmental_impact_indicator, number_of_portions) %>%
       summarise(environmental_impact = sum(environmental_impact, na.rm = TRUE)) %>%
       ungroup() %>%
       mutate(environmental_impact_per_portion = environmental_impact/number_of_portions) %>%
-      rename(Ingredients = all_of(identifier))
+      rename(recipe_name = all_of(identifier))
 
   }else{
     stop("calculate_sustainability must be either 'total', 'per 100 g' or 'per portion'")
