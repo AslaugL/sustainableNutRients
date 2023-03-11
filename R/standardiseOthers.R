@@ -50,8 +50,8 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'coffee') & str_detect(Ingredients, 'filter') & str_detect(Ingredients, 'brew') ~ 'coffee filter brew',
       str_detect(Ingredients, 'coffee') & str_detect(Ingredients, 'filter') ~ 'coffee filter powder',
       str_detect(Ingredients, 'coffee') & str_detect(Ingredients, 'espresso') & str_detect(Ingredients, 'powder') ~ 'coffee espresso powder',
-      (str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'milk') & !str_detect(Ingredients, 'candy')) |
-        str_detect(Ingredients, 'milk heart') ~ 'chocolate milk',
+      (str_detect(Ingredients, 'chocolate milk') & !str_detect(Ingredients, 'candy')) ~ 'milk beverage chocolate',
+      str_detect(Ingredients, 'milk chocolate') | str_detect(Ingredients, 'milk heart') ~ 'milk chocolate',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'semi|dark') ~ 'chocolate semi-sweet',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'unsweetened') ~ 'chocolate unsweetened',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'white') ~ 'chocolate white',
@@ -118,6 +118,8 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'liquorice') & str_detect(Ingredients, 'powder') ~ 'liquorice powder',
       str_detect(Ingredients, 'liquorice') ~ 'liquorice',
 
+      str_detect(Ingredients, "mac") & str_detect(Ingredients, "cheese") & str_detect(Ingredients, "bacon") ~ "mac and cheese bacon",
+      str_detect(Ingredients, "mac") & str_detect(Ingredients, "cheese") ~ "mac and cheese",
       str_detect(Ingredients, 'madeira') ~ 'madeira fortified wine 15 vol-% alcohol',
       str_detect(Ingredients, 'marmelade|marmalade') & str_detect(Ingredients, 'blueberr') ~ 'marmelade blueberry',
       str_detect(Ingredients, 'marmelade|marmalade') & str_detect(Ingredients, 'fig') ~ 'marmelade fig',
@@ -305,6 +307,9 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'yeast') & str_detect(Ingredients, 'nutritional') ~ 'yeast nutritional',
       str_detect(Ingredients, 'yeast') ~ 'yeast',
       str_detect(Ingredients, 'yellow') & str_detect(Ingredients, 'cake') & str_detect(Ingredients, 'mix') ~ 'yellow cake mix',
+
+      #Baking ingredients
+      str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'bean') ~ 'vanilla bean',
 
       TRUE ~ Ingredients_standardised))
 }

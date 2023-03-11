@@ -26,6 +26,7 @@ standardiseDairynSubsM <- function(df) {
       str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'extra light|skim milk') ~ 'milk 0.1 %',
       str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'evaporated|condensed') ~ 'milk evaporated',
       str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'powder') & str_detect(Ingredients, 'nonfat') ~ 'milk powder nonfat',
+      str_detect(Ingredients, 'milk') & str_detect(Ingredients, 'powder') ~ 'milk powder',
       str_detect(Ingredients, 'milk|drink') & str_detect(Ingredients, 'coconut') ~ 'milk coconut',
       str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'coconut') ~ 'milk coconut cream full fat',
 

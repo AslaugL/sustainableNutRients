@@ -30,9 +30,12 @@ standardiseFruitVegS <- function(df){
       str_detect(Ingredients, 'spinach') & str_detect(Ingredients, 'baby') ~ 'spinach baby',
       str_detect(Ingredients, 'spinach') ~ 'spinach',
       str_detect(Ingredients, 'sprout') & str_detect(Ingredients, 'alfalfa') ~ 'sprouts alfalfa',
+
+      str_detect(Ingredients, 'stew') & str_detect(Ingredients, 'mix') ~ 'stew mix',
       str_detect(Ingredients, 'stirfry|stir-fry|stir fry') & str_detect(Ingredients, 'mix') ~ 'stir fry assorted vegetables',
       str_detect(Ingredients, 'strawberr') & str_detect(Ingredients, 'jam') ~ 'jam strawberry',
       str_detect(Ingredients, 'strawberr') ~ 'strawberries',
+
       str_detect(Ingredients, 'sugar') & str_detect(Ingredients, 'pea') ~ 'sugar snap pea',
       str_detect(Ingredients, 'swede') | (str_detect(Ingredients, 'cabbage') & str_detect(Ingredients, 'root')) | str_detect(Ingredients, 'rutabaga') ~ 'swede',
       str_detect(Ingredients, 'pickle') & str_detect(Ingredients, 'red pepper|paprika|sweet pepper') ~ 'sweet pepper pickled',

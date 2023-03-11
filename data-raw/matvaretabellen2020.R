@@ -347,6 +347,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'milk, semi-skimmed, unspecified' ~ 'milk_1',
   food_item == 'milk, whole, unspecified' ~ 'whole milk_3.5',
   food_item == 'coconut milk, canned' ~ 'milk_coconut',
+  food_item == 'milk beverage, with chocolate flavour, litago' ~ 'milk beverage_chocolate',
   food_item == 'quark, 1 % fat' ~ 'quark_1',
   food_item == 'quark, 7 % fat' ~ 'quark_7',
   food_item == 'milk, cultured, skimmed, skummet kulturmelk' ~ 'buttermilk', #Similar in nutrient content

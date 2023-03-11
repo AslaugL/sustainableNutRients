@@ -277,7 +277,7 @@ composite_ingredients_oda <- tibble(
     1 egg
     4 dl whole milk",
     #Fish balls in curry sauce, from Oda
-    "fish ball_carry sauce;350 g sour cream porridge
+    "fish ball_curry sauce;350 g sour cream porridge
     600 g	fish balls
     2 tbsp curry powder
     800 g	stew mix
@@ -306,9 +306,23 @@ composite_ingredients_oda <- tibble(
     0.25 tså garlic powder
     0.25 tsp italian seasoning
     0.5 cup vegetable oil",
+    #Fish soup Tine
+    "fish_soup;2 pcs potato
+    2 pcs carrot
+    0.25 pcs celeriac root
+    1 pcs onion
+    2 clove garlic
+    1 l fish stock
+    1 tsp salt
+    0.5 tsp pepper
+    3 dl cream 18%
+    100 g salmon
+    100 g shrimp
+    100 g mussels
+    100 g cod",
     #Ricardo cuisine meatballs in tomato sauce
     "meatball_tomato sauce;3 clove garlic
-    1 leaf bay
+    1 leaf bay leaf
     0.25 tsp red pepper flakes
     30 ml olive oil
     28 oz tomatoes
@@ -336,7 +350,7 @@ composite_ingredients_oda <- tibble(
     "curry_paste;3 tbsp coriander seed
     1 tsp fennel seed
     1 tsp pepper
-    1 tsp tumeric
+    1 tsp turmeric
     2 tbsp cumin
     1 tsp cinnamon
     1 tsp paprika powder
@@ -427,7 +441,26 @@ composite_ingredients_oda <- tibble(
     "stew_mix;63 g potato
     20 g carrot
     9 g celeriac root
-    8 g leeks"
+    8 g leeks",
+    #Hummus Matprat
+    "hummus;480 g canned chickpeas
+    0.5 pcs lemon the juice of
+    4 clove garlic
+    1 tsp salt
+    1 tbsp tahini
+    0.5 tsp cumin
+    1.25 dl vegetable oil
+    1 tbsb fresh parsley",
+    #mac and cheese fra TV2
+    "mac and cheese_bacon;400 g pasta macaroni
+    2 tsp olive oil
+    200 g bacon
+    1 clove garlic
+    2 tbsp butter
+    2 tbsp wheat flour
+    6 dl milk
+    200 g grated cheese
+    1 pcs shallot"
 
   )) %>%
   #Format

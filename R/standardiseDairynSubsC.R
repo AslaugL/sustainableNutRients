@@ -36,6 +36,7 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'halloumi') ~ 'cheese halloumi',
     str_detect(Ingredients, 'jarlsberg') ~ 'cheese jarlsberg',
     str_detect(Ingredients, 'manchego') ~ 'cheese manchego',
+    str_detect(Ingredients, 'gouda') ~ 'cheese gouda',
     str_detect(Ingredients, 'mascarpone') ~ 'cheese mascarpone',
     str_detect(Ingredients, 'mozzarella') ~ 'cheese mozzarella',
     str_detect(Ingredients, 'norvegia') ~ 'cheese norvegia',
