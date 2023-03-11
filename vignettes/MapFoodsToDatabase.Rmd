@@ -64,7 +64,7 @@ not_in_volume_weight <- tibble(
           "sauce_pad pcs 150",
           "soup_tomato pcs 530",
           "vanilla_pod pcs 3")
-) %>% separate(col = tmp, into = c("Ingredients", "unit", "grams_per_unit"), sep = " ") %>%
+) %>% separate(col = tmp, into = c("recipe_name", "unit", "grams_per_unit"), sep = " ") %>%
   mutate(grams_per_unit = as.numeric(grams_per_unit)) %>%
   createNewDatabaseEntry(., "volume_weight")
 
