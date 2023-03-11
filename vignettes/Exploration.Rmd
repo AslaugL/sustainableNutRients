@@ -1,0 +1,300 @@
+---
+title: "Exploring nutrients or environmental indicators"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Visualise nutrients or environmental indicators}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  results = "hide"
+)
+```
+
+# Load libraries
+```{r setup, message = FALSE}
+library(sustainableNutRients)
+library(tidyverse)
+library(ggbeeswarm)
+library(gghalves)
+
+theme_set(theme_bw())
+```
+
+## Calculate nutritional content and environmental content per portion
+The data used here are the recipes from Oda used in "Map foods to database".
+```{r read-data, echo=FALSE, message=FALSE, warning=FALSE}
+# Read the data
+data("recipes_oda")
+data(composite_ingredients_oda)
+
+#Additional entries to databases
+additional_entries <- list(
+  
+  "volume_weight" = tibble(
+    tmp = c("bolognese_vegetarian pcs 370",
+            "hummus pcs 165",
+            "pizza_dough pcs 210",
+            "sauce_pizza pack 400",
+            "sauce_pad pcs 150",
+            "soup_tomato pcs 530",
+            "vanilla_pod pcs 3",
+            "fish balls_curry sauce pcs 800")
+  ) %>% separate(col = tmp, into = c("recipe_name", "unit", "grams_per_unit"), sep = " ") %>%
+    mutate(grams_per_unit = as.numeric(grams_per_unit)) %>%
+    createNewDatabaseEntry(., "volume_weight"),
+
+  "nutrients" = composite_ingredients_oda %>%
+    #Standardise food and unit names and amounts, turn volume to weight and calculate nutrient content
+   standardiseFoodList() %>%
+    findFoodInDatabase(., "volume_weight") %>%
+    calculateWeightOfIngredients() %>%
+    findFoodInDatabase(., "nutrients") %>%
+    #Calculate nutrients per 100 g as this will be used as additional entries to calculate nutrient content of other recipes
+    calculateNutrientContentOfFoodlist(., calculate_nutrients = "per 100 g") %>%
+    #Format as new database entries for the nutrients database
+    createNewDatabaseEntry(., "nutrients"),
+
+  "environmental_impact" = composite_ingredients_oda %>%
+   #Standardise food and unit names and amounts, turn volume to weight and calculate nutrient content
+    standardiseFoodList() %>%
+    findFoodInDatabase(., "volume_weight") %>%
+    calculateWeightOfIngredients() %>%
+    findFoodInDatabase(., "sustainability") %>%
+    #Calculate env impact per 100 g as this will be used as additional entries to calculate nutrient content of other recipes
+    calculateEnvironmentalImpactOfFoodlist(., calculate_sustainability = "per 100 g") %>%
+    #Format as new database entries for the nutrients database
+    createNewDatabaseEntry(., "sustainability")
+)
+
+#Run twice since some composite ingredients are used in other composite ingredients
+additional_entries$nutrients <-  composite_ingredients_oda %>%
+    #Standardise food and unit names and amounts, turn volume to weight and calculate nutrient content
+    standardiseFoodList() %>%
+    findFoodInDatabase(., "volume_weight") %>%
+    calculateWeightOfIngredients() %>%
+    findFoodInDatabase(., "nutrients", additional_entries = additional_entries$nutrients) %>%
+    #Calculate nutrients per 100 g as this will be used as additional entries to calculate nutrient content of other recipes
+    calculateNutrientContentOfFoodlist(., calculate_nutrients = "per 100 g") %>%
+    #Format as new database entries for the nutrients database
+    createNewDatabaseEntry(., "nutrients")
+
+additional_entries$environmental_impact <- composite_ingredients_oda %>%
+   #Standardise food and unit names and amounts, turn volume to weight and calculate nutrient content
+    standardiseFoodList() %>%
+    findFoodInDatabase(., "volume_weight") %>%
+    calculateWeightOfIngredients() %>%
+    #Calculate env impact per 100 g as this will be used as additional entries to calculate nutrient content of other recipes
+    #Run twice since some of the ingredients are used in the composite ingredients themselves
+    findFoodInDatabase(., "sustainability", additional_entries = additional_entries$environmental_impact) %>%
+    calculateEnvironmentalImpactOfFoodlist(., calculate_sustainability = "per 100 g") %>%
+    #Format as new database entries for the nutrients database
+    createNewDatabaseEntry(., "sustainability")
+```
+
+```{r calculate-ingredient-values}
+#Calculate nutrient content and environmental impact
+calculations <- list()
+calculations$nutrient_content <- recipes_oda$recipes %>%
+  standardiseFoodList() %>%
+  #Fix name of an ingredient
+  mutate(Ingredients = case_when(
+    Original_ingredients == "fish balls in curry sauce ready-made" ~ "fish balls in curry sauce",
+    TRUE ~ Ingredients)) %>%
+  #Map to volume_weight database
+  findFoodInDatabase(., "volume_weight", additional_entries = additional_entries$volume_weight) %>%
+  calculateWeightOfIngredients() %>%
+  #Map tp nutrient database,add number of portions and calculate nutrient content per portion
+  findFoodInDatabase(., "nutrients", additional_entries = additional_entries$nutrients) %>%
+  mutate(database_ID = case_when(
+    Ingredients == "fish balls in curry sauce" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "fish ball", "curry sauce"),
+    Ingredients == "sausage stew" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "sausage", "stew"),
+    Ingredients == "stew mix" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "stew", "mix"),
+    TRUE ~ database_ID)) %>%
+  #Add number of portions
+  left_join(., recipes_oda$meta %>% select(recipe_name, number_of_portions) %>% unique()) %>%
+  calculateNutrientContentOfFoodlist(., calculate_nutrients = "per portion")
+
+calculations$environmental_impact <- recipes_oda$recipes %>%
+  standardiseFoodList() %>%
+  #Fix name of an ingredient
+  mutate(Ingredients = case_when(
+    Original_ingredients == "fish balls in curry sauce ready-made" ~ "fish balls in curry sauce",
+    TRUE ~ Ingredients)) %>%
+  #Map to volume_weight database
+  findFoodInDatabase(., "volume_weight", additional_entries = additional_entries$volume_weight) %>%
+  calculateWeightOfIngredients() %>%
+  #Map to SHARP ID, add number of portions and calculate environmental impact per portion
+  findFoodInDatabase(., "sustainability", additional_entries = additional_entries$environmental_impact)  %>%
+  mutate(database_ID = case_when(
+    Ingredients == "fish balls in curry sauce" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "fish ball", "curry sauce"),
+    Ingredients == "sausage stew" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "sausage", "stew"),
+    Ingredients == "stew mix" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "stew", "mix"),
+    str_detect(Ingredients, "mac and cheese") ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "mac and cheese", "bacon"),
+    Ingredients == "bean salad" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "bean salad"),
+    Ingredients == "meatballs in tomato sauce" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "meatball", "tomato sauce"),
+    TRUE ~ database_ID)) %>%
+  #Add number of portions
+  left_join(., recipes_oda$meta %>% select(recipe_name, number_of_portions) %>% unique()) %>%
+  calculateEnvironmentalImpactOfFoodlist(., calculate_sustainability = "per portion")
+```
+
+```{r plots-protein-sources, include = FALSE}
+# 
+# protein_sources <- recipes_oda$recipes %>%
+#   standardiseFoodList() %>%
+#   #Map to SHARP ID, add number of portions and calculate environmental impact per portion
+#   findFoodInDatabase(., "sustainability", additional_entries = additional_entries$environmental_impact) %>%
+#   #Add foodgroups
+#   left_join(., sustainableNutRients:::SHARP2018_foodgroups) %>%
+#   #Find protein source
+#   select(Ingredients, foodgroup, recipe_name) %>% unique() %>%
+#   #Separate into beef, lamb, pork, poultry, lean fish, oily fish, shellfish, vegetarian, vegan
+#   #Animal sourced foods
+#   mutate(protein = case_when(
+# 
+#     str_detect(Ingredients, 'beef|meatball') & !str_detect(Ingredients, 'fund|broth|gravy|elk|deer|venison') ~ 'beef',
+#     str_detect(Ingredients, 'reindeer|elk|rabbit|grouse|roe deer|venison') ~ 'game',
+#     str_detect(Ingredients, 'lamb') & !str_detect(Ingredients, 'broth|salad') ~ 'lamb',
+#     str_detect(Ingredients, 'pork|bacon|sausage|ham|salami') & !str_detect(Ingredients, 'lard|beef|burger') ~ 'pork',
+#     str_detect(Ingredients, 'chicken|turkey|duck|goose') & !str_detect(Ingredients, 'broth|fat|sauce') ~ 'poultry',
+# 
+#     str_detect(Ingredients, 'pollock|cod|anglerfish|fish cakes coarse|fish ball|fish stick|haddock|grouper|catfish|sea bass|halibut|tuna') ~ 'lean fish', #The fishcakes are made out of mostly haddock
+#     str_detect(Ingredients, 'salmon|trout|arctic char|mackerel|herring|sardine|anchovy') & !str_detect(Ingredients, 'roe') ~ 'oily fish',
+#     str_detect(Ingredients, 'squid|prawn|shrimp|mussel|crab|lobster|shellfish|scampi|clam|scallop') & !str_detect(Ingredients, 'paste') ~ 'shellfish'
+# 
+#     )) %>%
+#   #Vegetarian or vegan foods
+#   group_by(recipe_name, foodgroup) %>%
+#   mutate(
+#     protein = case_when(
+# 
+#       !any(foodgroup %in% c('Seafood', 'Eggs', 'Milk and dairy products', 'Meat and nmeat products', 'Fish, seafood, amphibians, reptiles and invertebrates')) &
+#         !str_detect(Ingredients, 'lamb|game|fish|beef|chicken|turkey|shrimp|cheese|condensed cream|egg\\b|duck|honey|pork|mayonnaise|barbeque|oyster|worcestershire|sausage|ham\\b|shortening|sour cream|tzatziki') &
+#         !Ingredients %in% c('butter', 'unsalted butter', 'butter clarified ghee', 'butter for cooking',
+#                             'buttermilk', 'refrigerated buttermilk biscuit dough', 'spice butter', 'puff pastry',
+#                             'shop-bought shortcrust pastry') ~ 'plants',
+#       !any(foodgroup %in% c('Seafood', 'Meat and\nmeat products')) & !str_detect(Ingredients, 'condensed cream|beef|fish|shrimp|duck|sausage|shortening') ~ 'vegetarian',
+#       TRUE ~ protein),
+#     vegetarian = case_when(
+#       protein %in% c('plants', 'vegetarian') ~ 'vegetarian',
+#       TRUE ~ protein
+# 
+#       )) %>% group_by(recipe_name) #%>%
+#     #Clean up
+#     # summarise(type = case_when(
+#     #   any(protein == 'beef') ~ 'Beef',
+#     #   any(protein == 'game') ~ 'Game',
+#     #   any(protein == 'lamb') ~ 'Lamb',
+#     #   any(protein == 'poultry') ~ 'Poultry',
+#     #   any(protein == 'lean fish') ~ 'Lean fish',
+#     #   any(protein == 'oily fish') ~ 'Oily fish',
+#     #   any(protein == 'shellfish') ~ 'Shellfish',
+#     #   any(protein == 'pork') ~ 'Pork',
+#     #   all(protein == 'plants') ~ 'Vegan',
+#     #   all(vegetarian == 'vegetarian') ~ 'Vegetarian'
+#     #   )) %>% ungroup()
+
+```
+
+## Plot data
+### Nutrient content
+Looking at how much of the recommended intake of nutrient found per portion of the recipes.
+```{r nutrients-rdi, fig.width=8, fig.height=5}
+# Recommended intake of nutrients for adult women in Norway
+nutrient_units <- tibble(
+  'nutrient' = c('Vitamin A', 'Retinol', 'Beta-carotene',
+                'Vitamin D','Vitamin E', 'Thiamin',
+                'Riboflavin','Niacin', 'Vitamin B6',
+                'Folate', 'Vitamin B12', 'Vitamin C',
+                'Calcium', 'Iron', 'Sodium',
+                'Potassium', 'Magnesium', 'Zinc',
+                'Selenium', 'Copper', 'Phosphorus',
+                'Iodine'),  
+  'rdi' = c(700, 700, 8400,
+            10, 8, 1.1,
+            1.3, 15, 1.2,
+            400, 2, 75,
+            800, 15, 2300,
+            3100, 280, 7,
+            50, 0.9, 600,
+            150))
+
+# Calculate pct of intake per portion
+rdi_per_portion <- calculations$nutrient_content %>%
+  right_join(nutrient_units) %>%
+  mutate(pct_rdi_per_portion = (nutrient_content_per_portion/rdi)*100)
+
+#Minerals
+ggplot(rdi_per_portion %>% filter(nutrient %in% c('Calcium', 'Iron', 'Sodium',
+                'Potassium', 'Magnesium', 'Zinc',
+                'Selenium', 'Copper', 'Phosphorus',
+                'Iodine')), aes(x = nutrient, y = pct_rdi_per_portion)) +
+  geom_half_boxplot(side = "r", outlier.shape = NA) +
+  geom_half_violin() +
+  geom_quasirandom(alpha = 0.5, size = 2, shape = 21) +
+  labs(
+    title = "Percent of recommended daily intake of minerals found per portion of the recipes",
+    x = "Mineral",
+    y = "Percent of RDI"
+  ) +
+  coord_cartesian(ylim = c(0, 750)) #Cut out a few outliers to make plot more readable
+# Water soluble vitamins
+ggplot(rdi_per_portion %>% filter(nutrient %in% c('Thiamin',
+                'Riboflavin','Niacin', 'Vitamin B6',
+                'Folate', 'Vitamin B12', 'Vitamin C')), aes(x = nutrient, y = pct_rdi_per_portion)) +
+  geom_half_boxplot(side = "r", outlier.shape = NA) +
+  geom_half_violin() +
+  geom_quasirandom(alpha = 0.5, size = 2, shape = 21) +
+  labs(
+    title = "Percent of recommended daily intake of water soluble vitamins found per portion of the recipes",
+    x = "Water soluble vitamin",
+    y = "Percent of RDI"
+  ) +
+  coord_cartesian(ylim = c(0, 500))
+# Fat soluble vitamins
+ ggplot(rdi_per_portion %>% filter(nutrient %in% c('Vitamin A', 'Retinol', 'Beta-carotene',
+                'Vitamin D','Vitamin E')), aes(x = nutrient, y = pct_rdi_per_portion)) +
+  geom_half_boxplot(side = "r", outlier.shape = NA) +
+  geom_half_violin() +
+  geom_quasirandom(alpha = 0.5, size = 2, shape = 21) +
+  labs(
+    title = "Percent of recommended daily intake of fat soluble vitamins found per portion of the recipes",
+    x = "Fat soluble vitamin",
+    y = "Percent of RDI"
+  ) +
+  coord_cartesian(ylim = c(0, 750)) 
+```
+
+### Environmental impact of the recipes
+After calculating the environmental impact of the recipes, it is nice to have a look at it. Using ggplot to visualise the environmental impact of the recipes 
+````{r nutrient-content-env-impact, fig.width=5, fig.height=5}
+#Environmental impact per 100g vs per portion
+ggplot(calculations$environmental_impact, aes(x = environmental_impact_indicator, y =environmental_impact_per_portion)) +
+  geom_half_violin() +
+  geom_half_boxplot(side = "r", outlier.shape = NA) +
+  geom_quasirandom(alpha = 0.5, size = 1, shape = 21) +
+  facet_wrap(~environmental_impact_indicator, scales = "free") +
+  labs(
+    title = "Environmental impact per portion of Oda recipes SHARP ID",
+    y = "Environmental impact in",
+    x = "Environmental impact indicator"
+  )
+
+# Recipes with only one portion have a larger environmental impact than recipes with more than 1 portion, look only at those.
+# Environmental impact per 100g vs per portion removing those with a portion size of 1
+ggplot(calculations$environmental_impact %>% filter(number_of_portions != 1), aes(x = environmental_impact_indicator, y =environmental_impact_per_portion)) +
+  geom_half_violin() +
+  geom_half_boxplot(side = "r", outlier.shape = NA) +
+  geom_quasirandom(alpha = 0.5, size = 1, shape = 21) +
+  facet_wrap(~environmental_impact_indicator, scales = "free") +
+  labs(
+    title = "Environmental impact per portion of Oda recipes with number of portions >1 mapped to SHARP ID",
+    y = "Environmental impact in",
+    x = "Environmental impact indicator"
+  )
+```
