@@ -2,7 +2,7 @@
 title: "Exploring nutrients or environmental indicators"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Visualise nutrients or environmental indicators}
+  %\VignetteIndexEntry{Exploring nutrients or environmental indicators}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -224,77 +224,59 @@ nutrient_units <- tibble(
             50, 0.9, 600,
             150))
 
+#Plot function
+buildPlot <- function(dataframe, title, x_axis, x_axis_title, y_axis, y_axis_title, ylim, title_text_size = 12) {
+  
+  ggplot(dataframe, aes(x = .data[[x_axis]], y = .data[[y_axis]])) +
+    geom_half_boxplot(side = "r", outlier.shape = NA) +
+    geom_half_violin() +
+    geom_quasirandom(alpha = 0.5, size = 2, shape = 21) +
+    labs(
+      title = title,
+      x = x_axis_title,
+      y = y_axis_title
+    ) +
+    coord_cartesian(ylim = ylim) +
+    theme(plot.title = element_text(size = title_text_size))
+  
+}
+
 # Calculate pct of intake per portion
 rdi_per_portion <- calculations$nutrient_content %>%
   right_join(nutrient_units) %>%
   mutate(pct_rdi_per_portion = (nutrient_content_per_portion/rdi)*100)
 
 #Minerals
-ggplot(rdi_per_portion %>% filter(nutrient %in% c('Calcium', 'Iron', 'Sodium',
-                'Potassium', 'Magnesium', 'Zinc',
-                'Selenium', 'Copper', 'Phosphorus',
-                'Iodine')), aes(x = nutrient, y = pct_rdi_per_portion)) +
-  geom_half_boxplot(side = "r", outlier.shape = NA) +
-  geom_half_violin() +
-  geom_quasirandom(alpha = 0.5, size = 2, shape = 21) +
-  labs(
-    title = "Percent of recommended daily intake of minerals found per portion of the recipes",
-    x = "Mineral",
-    y = "Percent of RDI"
-  ) +
-  coord_cartesian(ylim = c(0, 750)) #Cut out a few outliers to make plot more readable
+buildPlot(dataframe = rdi_per_portion %>% filter(nutrient %in% c(
+  'Calcium', 'Iron', 'Sodium',
+  'Potassium', 'Magnesium', 'Zinc',
+  'Selenium', 'Copper', 'Phosphorus',
+  'Iodine')), 
+  title = "Percent of recommended daily intake of minerals found per portion of the recipes", x_axis = "nutrient", x_axis_title = "Mineral", y_axis = "pct_rdi_per_portion", y_axis_title = "Percent of RDI", ylim = c(0, 600)) #Cut out a few outliers to make plot more readable
+
 # Water soluble vitamins
-ggplot(rdi_per_portion %>% filter(nutrient %in% c('Thiamin',
-                'Riboflavin','Niacin', 'Vitamin B6',
-                'Folate', 'Vitamin B12', 'Vitamin C')), aes(x = nutrient, y = pct_rdi_per_portion)) +
-  geom_half_boxplot(side = "r", outlier.shape = NA) +
-  geom_half_violin() +
-  geom_quasirandom(alpha = 0.5, size = 2, shape = 21) +
-  labs(
-    title = "Percent of recommended daily intake of water soluble vitamins found per portion of the recipes",
-    x = "Water soluble vitamin",
-    y = "Percent of RDI"
-  ) +
-  coord_cartesian(ylim = c(0, 500))
+buildPlot(dataframe = rdi_per_portion %>% filter(nutrient %in% c(
+  'Thiamin', 'Riboflavin','Niacin', 'Vitamin B6',
+  'Folate', 'Vitamin B12', 'Vitamin C')), 
+  title = "Percent of recommended daily intake of water soluble vitamins found per portion of the recipes", x_axis = "nutrient", x_axis_title = "Water soluble vitamin", y_axis = "pct_rdi_per_portion", y_axis_title = "Percent of RDI", ylim = c(0, 500))
+
 # Fat soluble vitamins
- ggplot(rdi_per_portion %>% filter(nutrient %in% c('Vitamin A', 'Retinol', 'Beta-carotene',
-                'Vitamin D','Vitamin E')), aes(x = nutrient, y = pct_rdi_per_portion)) +
-  geom_half_boxplot(side = "r", outlier.shape = NA) +
-  geom_half_violin() +
-  geom_quasirandom(alpha = 0.5, size = 2, shape = 21) +
-  labs(
-    title = "Percent of recommended daily intake of fat soluble vitamins found per portion of the recipes",
-    x = "Fat soluble vitamin",
-    y = "Percent of RDI"
-  ) +
-  coord_cartesian(ylim = c(0, 750)) 
+buildPlot(dataframe = rdi_per_portion %>% filter(nutrient %in% c(
+  'Vitamin A', 'Retinol', 'Beta-carotene', 'Vitamin D','Vitamin E')), 
+  title = "Percent of recommended daily intake of fat soluble vitamins found per portion of the recipes", x_axis = "nutrient", x_axis_title = "Fat soluble vitamin", y_axis = "pct_rdi_per_portion", y_axis_title = "Percent of RDI", ylim = c(0, 750))
 ```
 
 ### Environmental impact of the recipes
 After calculating the environmental impact of the recipes, it is nice to have a look at it. Using ggplot to visualise the environmental impact of the recipes 
-````{r nutrient-content-env-impact, fig.width=5, fig.height=5}
+```{r nutrient-content-env-impact, fig.width=5, fig.height=5}
 #Environmental impact per 100g vs per portion
-ggplot(calculations$environmental_impact, aes(x = environmental_impact_indicator, y =environmental_impact_per_portion)) +
-  geom_half_violin() +
-  geom_half_boxplot(side = "r", outlier.shape = NA) +
-  geom_quasirandom(alpha = 0.5, size = 1, shape = 21) +
-  facet_wrap(~environmental_impact_indicator, scales = "free") +
-  labs(
-    title = "Environmental impact per portion of Oda recipes SHARP ID",
-    y = "Environmental impact in",
-    x = "Environmental impact indicator"
-  )
+buildPlot(dataframe = calculations$environmental_impact, 
+  title = "Environmental impact per portion of Oda recipes SHARP ID", x_axis = "environmental_impact_indicator", x_axis_title = "Environmental impact indicator", y_axis = "environmental_impact_per_portion", y_axis_title = "Environmental impact in", ylim = c(0, 7), title_text_size = 11) +
+  facet_wrap(~environmental_impact_indicator, scales = "free") 
 
 # Recipes with only one portion have a larger environmental impact than recipes with more than 1 portion, look only at those.
 # Environmental impact per 100g vs per portion removing those with a portion size of 1
-ggplot(calculations$environmental_impact %>% filter(number_of_portions != 1), aes(x = environmental_impact_indicator, y =environmental_impact_per_portion)) +
-  geom_half_violin() +
-  geom_half_boxplot(side = "r", outlier.shape = NA) +
-  geom_quasirandom(alpha = 0.5, size = 1, shape = 21) +
-  facet_wrap(~environmental_impact_indicator, scales = "free") +
-  labs(
-    title = "Environmental impact per portion of Oda recipes with number of portions >1 mapped to SHARP ID",
-    y = "Environmental impact in",
-    x = "Environmental impact indicator"
-  )
+buildPlot(dataframe = calculations$environmental_impact %>% filter(number_of_portions != 1), 
+  title = "Environmental impact per portion of Oda recipes \nwith number of portions >1 mapped to SHARP ID", x_axis = "environmental_impact_indicator", x_axis_title = "Environmental impact indicator", y_axis = "environmental_impact_per_portion", y_axis_title = "Environmental impact in", ylim = c(0, 7), title_text_size = 11) +
+  facet_wrap(~environmental_impact_indicator, scales = "free") 
 ```
