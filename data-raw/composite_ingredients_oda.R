@@ -24,14 +24,6 @@ composite_ingredients_oda <- tibble(
     20 g carrot
     9 g celeriac
     8 g leek",
-    #Inspiredtaste.net hummus
-    "hummus;250 g chickpeas
-    60 ml lemon juice
-    60 ml tahini
-    1 clove garlic
-    30 ml olive oil
-    0.5 tsp cumin
-    2.5 tbsp water",
     #Inspredtaste.net coleslaw
     "coleslaw;2 pound cabbage
     2 carrots
@@ -465,7 +457,8 @@ composite_ingredients_oda <- tibble(
   )) %>%
   #Format
   separate(., tmp, into = c("recipe_name", "Ingredients"), sep = ";") %>%
-  separate_rows(., Ingredients, sep = "\\n")
+  separate_rows(., Ingredients, sep = "\\n") %>%
+  mutate(Ingredients = str_trim(Ingredients))
 
 #Save
 saveRDS(composite_ingredients_oda, "./data-raw/composite_ingredients_oda.Rds")
