@@ -126,6 +126,7 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'sausage') & !str_detect(Ingredients, 'mustard|sauce|bread') ~ 'sausage',
 
       str_detect(Ingredients, 'vegetable') & str_detect(Ingredients, 'pate|paste|spread') ~ 'vegetable spread',
+      str_detect(Ingredients, 'vegisterkake') ~ 'vegisterkake',
 
       TRUE ~ Ingredients_standardised))
 }

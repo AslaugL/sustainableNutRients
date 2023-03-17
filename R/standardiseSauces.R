@@ -23,6 +23,7 @@ standardiseSauces <- function(df) {
     str_detect(Ingredients, 'browning') & str_detect(Ingredients, 'sauce') ~ 'sauce browning',
 
     str_detect(Ingredients, 'carbonara') & str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'mix|powder') ~ 'carbonara powder mix',
+    str_detect(Ingredients, 'carbonara') & str_detect(Ingredients, 'sauce') ~ 'carbonara sauce',
     str_detect(Ingredients, 'cream sauce') & str_detect(Ingredients, 'base') ~ 'cream sauce base',
 
     str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'base') ~ 'hollandaise base',
@@ -73,6 +74,7 @@ standardiseSauces <- function(df) {
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'ravigotte') ~ 'sauce ravigotte',
 
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'sandefjord') ~ 'sauce sandefjord',
+    str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'satay') ~ 'sauce satay',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'sweet') |
       str_detect(Ingredients, 'ketjap medja|ketjap manis') ~ 'sauce sweet soy',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'soy') ~ 'sauce soy',

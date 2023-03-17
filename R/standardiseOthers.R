@@ -181,11 +181,11 @@ standardiseOthers <- function(df) {
 
       str_detect(Ingredients, 'remoulade') ~ 'remoulade',
       #Ready made meals
-      str_detect(Ingredients, 'bean taco') & str_detect(Ingredients, 'ready-made|ready made') ~ 'bean taco',
-      str_detect(Ingredients, 'chana masala') & str_detect(Ingredients, 'ready-made|ready made') ~ 'chana masala',
-      str_detect(Ingredients, 'sausage stew') & str_detect(Ingredients, 'ready-made|ready made') ~ 'sausage stew',
-      str_detect(Ingredients, 'bolognese') & str_detect(Ingredients, 'ready-made|ready made')  & str_detect(Ingredients, 'vegetarian') ~ 'bolognese vegetarian',
-      str_detect(Ingredients, 'beans in chili|chili con carne') & str_detect(Ingredients, 'ready-made|ready made') ~ 'chili con carne',
+      str_detect(Ingredients, 'bean taco') & str_detect(Ingredients, 'ready-made|ready made|done') ~ 'bean taco',
+      str_detect(Ingredients, 'chana masala') & str_detect(Ingredients, 'ready-made|ready made|done') ~ 'chana masala',
+      str_detect(Ingredients, 'sausage stew') & str_detect(Ingredients, 'ready-made|ready made|done') ~ 'sausage stew',
+      str_detect(Ingredients, 'bolognese') & str_detect(Ingredients, 'ready-made|ready made|done')  & str_detect(Ingredients, 'vegetarian') ~ 'bolognese vegetarian',
+      str_detect(Ingredients, 'beans in chili|chili con carne') & str_detect(Ingredients, 'ready-made|ready made|done') ~ 'chili con carne',
       str_detect(Ingredients, 'lasagna') & str_detect(Ingredients, 'ready-made|ready made') ~ 'lasagna',
       str_detect(Ingredients, 'lapskaus') & str_detect(Ingredients, 'ready-made|ready made') ~ 'lapsskaus',
       str_detect(Ingredients, 'meat stew') & str_detect(Ingredients, 'ready-made|ready made') ~ 'meat stew',
@@ -264,6 +264,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'toro jegergryte') ~ 'toro jegegryte',
       str_detect(Ingredients, 'toro moussaka') ~ 'toro moussaka',
       str_detect(Ingredients, 'tzatziki') ~ 'tzatziki',
+      str_detect(Ingredients, 'tenacious men') ~ 'jelly candy seigmenn',
 
       str_detect(Ingredients, 'vermouth') ~ 'vermouth fortified wine 15 vol-% alcohol',
       str_detect(Ingredients, 'vinegar') & str_detect(Ingredients, 'apple|cider') ~ 'vinegar apple cider',
