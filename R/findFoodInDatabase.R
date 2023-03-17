@@ -115,8 +115,13 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         filter(.data$language == 'english') %>%
         rename(unit = unit_enhet) %>%
         mutate(unit = unit %>%
-                 str_replace('neve', 'handful') %>%
-                 str_replace('brutto', 'pcs')) %>%
+                 str_replace('neve', 'handful')) %>%
+        #Use brutto weight when possible
+        group_by(Ingredients) %>%
+        mutate(unit = case_when(
+          any(unit == "brutto") ~ str_replace(unit, "brutto", "pcs"),
+          TRUE ~ str_replace(unit, "netto", "pcs")
+        )) %>% ungroup() %>%
         select(-c(Ingredients, .data$language, reference))
 
     }else if(!is.null(additional_entries)){
@@ -140,8 +145,13 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           filter(.data$language == 'english') %>%
           rename(unit = unit_enhet) %>%
           mutate(unit = unit %>%
-                   str_replace('neve', 'handful') %>%
-                   str_replace('brutto', 'pcs')) %>%
+                   str_replace('neve', 'handful')) %>%
+          #Use brutto weight when possible
+          group_by(Ingredients) %>%
+          mutate(unit = case_when(
+            any(unit == "brutto") ~ str_replace(unit, "brutto", "pcs"),
+            TRUE ~ str_replace(unit, "netto", "pcs")
+          )) %>% ungroup() %>%
           select(-c(Ingredients, .data$language, reference)) %>%
           bind_rows(additional_entries$db) %>% unique()
 
