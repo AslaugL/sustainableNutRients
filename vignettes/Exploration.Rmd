@@ -34,7 +34,6 @@ data(composite_ingredients_oda)
 
 #Additional entries to databases
 additional_entries <- list(
-  
   "volume_weight" = tibble(
     tmp = c("bolognese_vegetarian pcs 370",
             "hummus pcs 165",
@@ -97,32 +96,32 @@ additional_entries$environmental_impact <- composite_ingredients_oda %>%
 ```
 
 ```{r calculate-ingredient-values}
-#Calculate nutrient content and environmental impact
-calculations <- list()
-calculations$nutrient_content <- recipes_oda$recipes %>%
-  standardiseFoodList() %>%
-  #Fix name of an ingredient
-  mutate(Ingredients = case_when(
-    Original_ingredients == "fish balls in curry sauce ready-made" ~ "fish balls in curry sauce",
-    TRUE ~ Ingredients)) %>%
-  #Map to volume_weight database
-  findFoodInDatabase(., "volume_weight", additional_entries = additional_entries$volume_weight) %>%
-  calculateWeightOfIngredients() %>%
-  #Map tp nutrient database,add number of portions and calculate nutrient content per portion
-  findFoodInDatabase(., "nutrients", additional_entries = additional_entries$nutrients) %>%
-  mutate(database_ID = case_when(
-    Ingredients == "fish balls in curry sauce" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "fish ball", "curry sauce"),
-    Ingredients == "sausage stew" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "sausage", "stew"),
-    Ingredients == "stew mix" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "stew", "mix"),
-    TRUE ~ database_ID)) %>%
-  #Add number of portions
-  left_join(., recipes_oda$meta %>% select(recipe_name, number_of_portions) %>% unique()) %>%
-  calculateNutrientContentOfFoodlist(., calculate_nutrients = "per portion")
-
-calculations$environmental_impact <- recipes_oda$recipes %>%
-  standardiseFoodList() %>%
-  #Fix name of an ingredient
-  mutate(Ingredients = case_when(
+#Calculate nutrient content and environmental impact per portion
+#First standardise recipe ingredient names and amounts and map recipe ingredients to databases
+standardised_recipe <- recipes_oda$recipes %>%
+    mutate(Ingredients = Ingredients %>%
+             str_replace("slider bread", "hamburger bread") %>%
+             str_replace(" stalk ", "pcs")) %>%
+    standardiseFoodList()
+mapped_to_database <- list(
+  "nutrients" = standardised_recipe %>%
+    #Fix name of an ingredient
+    mutate(Ingredients = case_when(
+      Original_ingredients == "fish balls in curry sauce ready-made" ~ "fish balls in curry sauce",
+      TRUE ~ Ingredients)) %>%
+    #Map to volume_weight database
+    findFoodInDatabase(., "volume_weight", additional_entries = additional_entries$volume_weight) %>%
+    calculateWeightOfIngredients() %>%
+    #Map tp nutrient database,add number of portions and calculate nutrient content per portion
+    findFoodInDatabase(., "nutrients", additional_entries = additional_entries$nutrients) %>%
+    mutate(database_ID = case_when(
+      Ingredients == "fish balls in curry sauce" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "fish ball", "curry sauce"),
+      Ingredients == "sausage stew" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "sausage", "stew"),
+      Ingredients == "stew mix" ~ fixFoodMappingError(additional_entries$nutrients$query_words, "stew", "mix"),
+      TRUE ~ database_ID)),
+  
+  "environmental_impact" = standardised_recipe %>%
+    mutate(Ingredients = case_when(
     Original_ingredients == "fish balls in curry sauce ready-made" ~ "fish balls in curry sauce",
     TRUE ~ Ingredients)) %>%
   #Map to volume_weight database
@@ -136,8 +135,19 @@ calculations$environmental_impact <- recipes_oda$recipes %>%
     Ingredients == "stew mix" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "stew", "mix"),
     str_detect(Ingredients, "mac and cheese") ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "mac and cheese", "bacon"),
     Ingredients == "bean salad" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "bean salad"),
+    Ingredients == "bean taco" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "bean", "taco"),
+    Ingredients == "chili sin carne ready made" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "chili", "sin carne"),
     Ingredients == "meatballs in tomato sauce" ~ fixFoodMappingError(additional_entries$environmental_impact$query_words, "meatball", "tomato sauce"),
-    TRUE ~ database_ID)) %>%
+    TRUE ~ database_ID))
+)
+#Calculate nutrient content and environmental impact per portion
+calculations <- list()
+calculations$nutrient_content <- mapped_to_database$nutrients %>%
+  #Add number of portions
+  left_join(., recipes_oda$meta %>% select(recipe_name, number_of_portions) %>% unique()) %>%
+  calculateNutrientContentOfFoodlist(., calculate_nutrients = "per portion")
+
+calculations$environmental_impact <- mapped_to_database$environmental_impact %>%
   #Add number of portions
   left_join(., recipes_oda$meta %>% select(recipe_name, number_of_portions) %>% unique()) %>%
   calculateEnvironmentalImpactOfFoodlist(., calculate_sustainability = "per portion")
@@ -226,7 +236,6 @@ nutrient_units <- tibble(
 
 #Plot function
 buildPlot <- function(dataframe, title, x_axis, x_axis_title, y_axis, y_axis_title, ylim, title_text_size = 12) {
-  
   ggplot(dataframe, aes(x = .data[[x_axis]], y = .data[[y_axis]])) +
     geom_half_boxplot(side = "r", outlier.shape = NA) +
     geom_half_violin() +
@@ -238,7 +247,6 @@ buildPlot <- function(dataframe, title, x_axis, x_axis_title, y_axis, y_axis_tit
     ) +
     coord_cartesian(ylim = ylim) +
     theme(plot.title = element_text(size = title_text_size))
-  
 }
 
 # Calculate pct of intake per portion
@@ -253,7 +261,6 @@ buildPlot(dataframe = rdi_per_portion %>% filter(nutrient %in% c(
   'Selenium', 'Copper', 'Phosphorus',
   'Iodine')), 
   title = "Percent of recommended daily intake of minerals found per portion of the recipes", x_axis = "nutrient", x_axis_title = "Mineral", y_axis = "pct_rdi_per_portion", y_axis_title = "Percent of RDI", ylim = c(0, 600)) #Cut out a few outliers to make plot more readable
-
 # Water soluble vitamins
 buildPlot(dataframe = rdi_per_portion %>% filter(nutrient %in% c(
   'Thiamin', 'Riboflavin','Niacin', 'Vitamin B6',
@@ -267,16 +274,209 @@ buildPlot(dataframe = rdi_per_portion %>% filter(nutrient %in% c(
 ```
 
 ### Environmental impact of the recipes
-After calculating the environmental impact of the recipes, it is nice to have a look at it. Using ggplot to visualise the environmental impact of the recipes 
+Using ggplot to visualise the environmental impact of the recipes 
 ```{r nutrient-content-env-impact, fig.width=5, fig.height=5}
-#Environmental impact per 100g vs per portion
+#Environmental impact per portion
 buildPlot(dataframe = calculations$environmental_impact, 
-  title = "Environmental impact per portion of Oda recipes SHARP ID", x_axis = "environmental_impact_indicator", x_axis_title = "Environmental impact indicator", y_axis = "environmental_impact_per_portion", y_axis_title = "Environmental impact in", ylim = c(0, 7), title_text_size = 11) +
+  title = "Environmental impact per portion of Oda recipes SHARP ID", x_axis = "environmental_impact_indicator", x_axis_title = "Environmental impact indicator", y_axis = "environmental_impact_per_portion", y_axis_title = "Environmental impact in", ylim = c(0, 25), title_text_size = 11) +
   facet_wrap(~environmental_impact_indicator, scales = "free") 
-
 # Recipes with only one portion have a larger environmental impact than recipes with more than 1 portion, look only at those.
-# Environmental impact per 100g vs per portion removing those with a portion size of 1
 buildPlot(dataframe = calculations$environmental_impact %>% filter(number_of_portions != 1), 
-  title = "Environmental impact per portion of Oda recipes \nwith number of portions >1 mapped to SHARP ID", x_axis = "environmental_impact_indicator", x_axis_title = "Environmental impact indicator", y_axis = "environmental_impact_per_portion", y_axis_title = "Environmental impact in", ylim = c(0, 7), title_text_size = 11) +
+  title = "Environmental impact per portion of Oda recipes \nwith number of portions >1 mapped to SHARP ID", x_axis = "environmental_impact_indicator", x_axis_title = "Environmental impact indicator", y_axis = "environmental_impact_per_portion", y_axis_title = "Environmental impact", ylim = c(0, 7), title_text_size = 11) +
   facet_wrap(~environmental_impact_indicator, scales = "free") 
+```
+### Nutriscore
+The Nutriscore is a front of pack label that should give consumers at-a-glance information about a foods healthiness. The Nutriscore is calculated per 100 g, from the amount of energy, macronutrients and percentage of fruit/vegetables and healthy oils in a food.
+```{r nutriscore-function}
+#Function to calculate the Nutriscore of a recipe
+#' @param df Dataframe with nutrient content per 100g and percentage of weight of fruit/vegetables and healthy oils
+calculateNutriscore <- function(df, raw_scores = FALSE){
+  
+  #Join them together and calculate nutriscore
+  nutriscore_raw <- df %>%
+    
+    #Calculate nutriscore
+    mutate(nutriscore_raw = case_when(
+      #Energy
+      nutrient == 'Kilojoules' & nutrient_content_per_hektogram <= 335 ~ 0,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >335 & nutrient_content_per_hektogram <= 670) ~ 1,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >670 & nutrient_content_per_hektogram <= 1005) ~ 2,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >1005 & nutrient_content_per_hektogram <= 1340) ~ 3,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >1340 & nutrient_content_per_hektogram <= 1675) ~ 4,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >1675 & nutrient_content_per_hektogram <= 2010) ~ 5,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >2010 & nutrient_content_per_hektogram <= 2345) ~ 6,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >2345 & nutrient_content_per_hektogram <= 2680) ~ 7,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >2680 & nutrient_content_per_hektogram <= 3015) ~ 8,
+      nutrient == 'Kilojoules' & (nutrient_content_per_hektogram >3015 & nutrient_content_per_hektogram <= 3350) ~ 9,
+      nutrient == 'Kilojoules' & nutrient_content_per_hektogram >3350 ~ 10,
+      
+      #(Added) Sugars
+      nutrient == 'Sugar' & nutrient_content_per_hektogram <= 4.5 ~ 0,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >4.5 & nutrient_content_per_hektogram <= 9) ~ 1,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >9 & nutrient_content_per_hektogram <= 13.5) ~ 2,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >13.5 & nutrient_content_per_hektogram <= 18) ~ 3,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >18 & nutrient_content_per_hektogram <= 22.5) ~ 4,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >22.5 & nutrient_content_per_hektogram <= 27) ~ 5,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >27 & nutrient_content_per_hektogram <= 31) ~ 6,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >31 & nutrient_content_per_hektogram <= 36) ~ 7,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >36 & nutrient_content_per_hektogram <= 40) ~ 8,
+      nutrient == 'Sugar' & (nutrient_content_per_hektogram >40 & nutrient_content_per_hektogram <= 45) ~ 9,
+      nutrient == 'Sugar' & nutrient_content_per_hektogram >45 ~ 10,
+      
+      #Saturated Fat
+      nutrient == 'SatFa' & nutrient_content_per_hektogram <= 1 ~ 0,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >1 & nutrient_content_per_hektogram <= 2) ~ 1,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >2 & nutrient_content_per_hektogram <= 3) ~ 2,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >3 & nutrient_content_per_hektogram <= 4) ~ 3,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >4 & nutrient_content_per_hektogram <= 5) ~ 4,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >5 & nutrient_content_per_hektogram <= 6) ~ 5,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >6 & nutrient_content_per_hektogram <= 7) ~ 6,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >7 & nutrient_content_per_hektogram <= 8) ~ 7,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >8 & nutrient_content_per_hektogram <= 9) ~ 8,
+      nutrient == 'SatFa' & (nutrient_content_per_hektogram >9 & nutrient_content_per_hektogram <= 10) ~ 9,
+      nutrient == 'SatFa' & nutrient_content_per_hektogram >10 ~ 10,
+      
+      #Sodium
+      nutrient == 'Sodium' & nutrient_content_per_hektogram <= 90 ~ 0,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >90 & nutrient_content_per_hektogram <= 180) ~ 1,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >180 & nutrient_content_per_hektogram <= 270) ~ 2,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >270 & nutrient_content_per_hektogram <= 360) ~ 3,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >360 & nutrient_content_per_hektogram <= 450) ~ 4,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >450 & nutrient_content_per_hektogram <= 540) ~ 5,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >540 & nutrient_content_per_hektogram <= 630) ~ 6,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >630 & nutrient_content_per_hektogram <= 720) ~ 7,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >720 & nutrient_content_per_hektogram <= 810) ~ 8,
+      nutrient == 'Sodium' & (nutrient_content_per_hektogram >810 & nutrient_content_per_hektogram <= 900) ~ 9,
+      nutrient == 'Sodium' & nutrient_content_per_hektogram >900 ~ 10,
+      
+      #Fruits and veggies an legumes and nuts and (certain) oils
+      nutrient == 'nutriscore_amounts_pct' & nutrient_content_per_hektogram <= 40 ~ 0,
+      nutrient == 'nutriscore_amounts_pct' & (nutrient_content_per_hektogram > 40 & nutrient_content_per_hektogram <= 60) ~ 1,
+      nutrient == 'nutriscore_amounts_pct' & (nutrient_content_per_hektogram > 60 & nutrient_content_per_hektogram <= 80) ~ 2,
+      nutrient == 'nutriscore_amounts_pct' & nutrient_content_per_hektogram > 80 ~ 5,
+      
+      #Fibre
+      nutrient == 'Dietary fibre' & nutrient_content_per_hektogram <= 0.9 ~ 0,
+      nutrient == 'Dietary fibre' & (nutrient_content_per_hektogram >0.9 & nutrient_content_per_hektogram <=1.9) ~ 1,
+      nutrient == 'Dietary fibre' & (nutrient_content_per_hektogram >1.9 & nutrient_content_per_hektogram <=2.8) ~ 2,
+      nutrient == 'Dietary fibre' & (nutrient_content_per_hektogram >2.8 & nutrient_content_per_hektogram <=3.7) ~ 3,
+      nutrient == 'Dietary fibre' & (nutrient_content_per_hektogram >3.7 & nutrient_content_per_hektogram <=4.7) ~ 4,
+      nutrient == 'Dietary fibre' & nutrient_content_per_hektogram >4.7 ~ 5,
+      
+      #Protein
+      nutrient == 'Protein' & nutrient_content_per_hektogram <= 1.6 ~ 0,
+      nutrient == 'Protein' & (nutrient_content_per_hektogram >1.6 & nutrient_content_per_hektogram <=3.2) ~ 1,
+      nutrient == 'Protein' & (nutrient_content_per_hektogram >3.2 & nutrient_content_per_hektogram <=4.8) ~ 2,
+      nutrient == 'Protein' & (nutrient_content_per_hektogram >4.8 & nutrient_content_per_hektogram <=6.4) ~ 3,
+      nutrient == 'Protein' & (nutrient_content_per_hektogram >6.4 & nutrient_content_per_hektogram <=8.0) ~ 4,
+      nutrient == 'Protein' & nutrient_content_per_hektogram >8.0 ~ 5,
+    )) %>% drop_na(nutriscore_raw) #Drop nutrients not needed for calculations
+  
+  #temporary categories used to calculate final score
+  categories <- nutriscore_raw %>%
+    mutate(category = case_when(
+      nutrient %in% c('Kilojoules', 'Sugar', 'SatFa', 'Sodium') ~ 'N',
+      nutrient %in% c('nutriscore_amounts_pct', 'Dietary fibre', 'Protein') ~ 'P'
+    )) %>% drop_na(category) %>%
+    #get scores for the categories
+    group_by(recipe_name, category) %>%
+    summarise(nutriscore_raw = sum(nutriscore_raw)) %>%
+    ungroup() %>%
+    #Turn into wide format
+    pivot_wider(
+      names_from = 'category',
+      values_from = 'nutriscore_raw'
+    )
+  
+  categories_2 <- nutriscore_raw %>%
+    mutate(category = case_when(
+      nutrient == 'nutriscore_amounts_pct' ~ 'FruitVegLegumesNutsOils',
+      nutrient == 'Dietary fibre' ~ 'Fibre',
+      nutrient == 'Protein' ~ 'Protein'
+    )) %>% drop_na(category) %>%
+    #get scores for the categories
+    group_by(recipe_name, category) %>%
+    summarise(nutriscore_raw = sum(nutriscore_raw)) %>%
+    ungroup() %>%
+    #Turn into wide format
+    pivot_wider(
+      names_from = 'category',
+      values_from = 'nutriscore_raw'
+    ) %>%
+    # 0 for recipes without fruit legumes nuts
+    mutate(FruitVegLegumesNutsOils = case_when(
+      is.na(FruitVegLegumesNutsOils) ~ 0,
+      TRUE ~ FruitVegLegumesNutsOils
+    ))
+  
+  #Calculate nutriscore 
+  nutriscore <- full_join(categories, categories_2) %>%
+    mutate(nutriscore = case_when(
+      N < 11 ~ N-P,
+      N >= 11 & FruitVegLegumesNutsOils >= 5 ~ N-P,
+      N >= 11 & FruitVegLegumesNutsOils < 5 ~ N-(FruitVegLegumesNutsOils+Fibre)
+    ),
+    nutriscore_letter = case_when(
+      nutriscore <= -1 ~ 'A',
+      nutriscore >= 0 & nutriscore <=2 ~ 'B',
+      nutriscore >= 3 & nutriscore <=10 ~ 'C',
+      nutriscore >= 11 & nutriscore <=18 ~ 'D',
+      nutriscore >= 19 ~ 'E',
+    )) %>%
+    #Turn letters into factor
+    mutate(nutriscore_letter = as.factor(nutriscore_letter))
+}
+
+```
+```{r nutriscore-dataframe, include = FALSE}
+calculations$nutrient_content_100g <- mapped_to_database$nutrients %>%
+  calculateNutrientContentOfFoodlist(., calculate_nutrients = "per 100 g")
+```
+```{r nutriscore-calculation}
+# Calculate percentage of fruit/vegetables/oil in a recipe
+# Weight of all ingredients, use ingredients mapped to SHARP db to use the foodgroups in SHARP later
+nutriscore <- mapped_to_database$environmental_impact %>%
+  #Only look at recipes that have no composite ingredients for simplicity's sake
+  group_by(recipe_name) %>% filter(!any(database_reference == "Not in database")) %>%
+  #Use foodgroups from SHARP
+  left_join(., SHARP2018_foodgroups) %>%
+  select(recipe_name, Ingredients, Amounts, foodgroup) %>% distinct() %>%
+  # #Mark the foods relevant for Nutriscore
+  mutate(
+     nutriscore_foods = case_when(
+       (foodgroup %in% c('Vegetables and vegetable products', 'Fruit and fruit products', 'Fruit/vegetable juice and nectar', 'Legumes, nuts, oilseeds and spices') & !str_detect(Ingredients, 'mushroom|coconut milk|sesame seed|pine')) | str_detect(Ingredients, 'olive oil|rapeseed oil|walnut oil') ~ 'nutriscore_fruit_veg_legumes_nuts_oils',
+       TRUE ~ "Other")
+    ) %>%
+  # Calculate percent of total recipe weight
+  #Dried fruit/veg and ketchup/purees should be doubled
+  mutate(
+      Amounts = case_when(
+        nutriscore_foods == "nutriscore_fruit_veg_legumes_nuts_oils" & str_detect(Ingredients, 'paste tomato|ketchup|dried|raisin|prune') ~ Amounts*2,
+        TRUE ~ Amounts)) %>%
+  group_by(recipe_name, nutriscore_foods) %>%
+  mutate(weight_foodgroups = sum(Amounts, na.rm = TRUE)) %>% ungroup() %>%
+  select(recipe_name, weight_foodgroups, nutriscore_foods) %>% distinct() %>%
+  group_by(recipe_name) %>%
+  #Use same column name as nutrient content dataframe
+  mutate(
+    nutrient_content_per_hektogram = (weight_foodgroups/sum(weight_foodgroups, na.rm = TRUE))*100,
+         nutrient = "nutriscore_amounts_pct") %>%
+  filter(nutriscore_foods != "Other") %>%
+  select(recipe_name, nutrient, nutrient_content_per_hektogram) %>%
+  #Add nutrients and calculate Nutriscore
+  bind_rows(., calculations$nutrient_content_100g) %>%
+  calculateNutriscore()
+```
+Plotting the results
+```{r nutriscore-plots}
+ggplot(nutriscore, aes(x = nutriscore_letter, fill = nutriscore_letter)) +
+  geom_bar(show.legend = FALSE) +
+  labs(
+    title = "Nutriscore of a subset of Oda recipes",
+    y = "Number of recipes",
+    x = "Nutriscore letter"
+  ) +
+  #Use Nutriscore coloring scheme
+  scale_fill_manual(values = c("A" = "#028141", "B" = "#85BB2F", "C" = "#FECB03", "D" = "#EE8100", "E" = "#E63D11"))
+
 ```

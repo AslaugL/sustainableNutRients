@@ -187,7 +187,6 @@ using the “nutrient” or “sustainability” argument depending on which
 database is used.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nutrients_additional_ingredients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  </span>
 <span>  <span class="co">#Find recipes of the composite ingredients</span></span>
 <span>  tmp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="co">#From Oda webstore</span></span>
@@ -225,7 +224,9 @@ database is used.</p>
 total nutrient content (default of calculateNutrientConcentOfFoodlist)
 of the recipes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nutrient_content</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findFoodInDatabase.html">findFoodInDatabase</a></span><span class="op">(</span><span class="va">weighted_ingredients</span>, <span class="st">"nutrients"</span>, additional_entries <span class="op">=</span> <span class="va">nutrients_additional_ingredients</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">nutrient_content</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findFoodInDatabase.html">findFoodInDatabase</a></span><span class="op">(</span></span>
+<span>  <span class="va">weighted_ingredients</span>, <span class="st">"nutrients"</span>, </span>
+<span>  additional_entries <span class="op">=</span> <span class="va">nutrients_additional_ingredients</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/calculateNutrientContentOfFoodlist.html">calculateNutrientContentOfFoodlist</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `environmental_impact_indicator`.</span></span></code></pre></div>
 </div>

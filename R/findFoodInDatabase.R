@@ -36,7 +36,6 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
       if(str_detect(ingredient, regex(paste0('\\b', reference$second_word[i], '\\b|\\b', reference$second_word[i], '\\w+'), ignore_case = TRUE)) &
          str_detect(ingredient, regex(paste0('\\b', reference$first_word[i], '\\b|\\b', reference$first_word[i], '\\w+'), ignore_case = TRUE)) ){
 
-        print('...')
         results <- results %>%
           add_row(Ingredients = ingredient,
                   database_reference = paste0(reference$first_word[i], ', ', reference$second_word[i]),
@@ -56,7 +55,6 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         if (str_detect(ingredient, regex(paste0('\\b', reference$first_word[i], '\\b'), ignore_case = TRUE))  &
             isFALSE(str_detect(ingredient, regex(paste0('\\b', reference$second_word[i], '\\b|\\b', reference$second_word[i], '\\w+'), ignore_case = TRUE)) )){
 
-          print('...')
           results <- results %>%
             add_row(Ingredients = ingredient,
                     database_reference = reference$first_word[i],
@@ -69,7 +67,6 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         } else if (str_detect(ingredient, regex(paste0('\\b', reference$first_word[i], '\\w+'), ignore_case = TRUE)) &
                    reference$second_word[i] == '\\') {
 
-          print('...')
           results <- results %>%
             add_row(Ingredients = ingredient,
                     database_reference = reference$first_word[i],

@@ -80,7 +80,6 @@ With the weight of our foods, their nutrient content and environmental impact ca
 
 ```{r nutrient-composite-ingredients-show, message = FALSE, results=FALSE}
 nutrients_additional_ingredients <- tibble(
-  
   #Find recipes of the composite ingredients
   tmp = c(
     #From Oda webstore
@@ -115,7 +114,9 @@ nutrients_additional_ingredients <- tibble(
   createNewDatabaseEntry(., "nutrients")
 ```
 ```{r nutrient-composite-ingredients-hide, message = FALSE, echo=FALSE, results=FALSE, warning=FALSE}
+#Read in full list of composite ingredients in these recipes
 data(composite_ingredients_oda)
+#Calculate nutrient content
 nutrients_additional_ingredients <- composite_ingredients_oda %>%
   #Standardise food and unit names and amounts, turn volume to weight and calculate nutrient content
   standardiseFoodList() %>%
@@ -129,7 +130,9 @@ nutrients_additional_ingredients <- composite_ingredients_oda %>%
 ```
 The output from calculateWeightOfIngredients is used to calculate total nutrient content (default of calculateNutrientConcentOfFoodlist) of the recipes:
 ```{r nutrient-environmental-calculations, message=FALSE, results = FALSE}
-nutrient_content <- findFoodInDatabase(weighted_ingredients, "nutrients", additional_entries = nutrients_additional_ingredients) %>%
+nutrient_content <- findFoodInDatabase(
+  weighted_ingredients, "nutrients", 
+  additional_entries = nutrients_additional_ingredients) %>%
   calculateNutrientContentOfFoodlist()
 ```
 

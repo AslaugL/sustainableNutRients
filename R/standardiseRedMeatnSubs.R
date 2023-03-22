@@ -58,7 +58,7 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'ham') & str_detect(Ingredients, 'smoked') ~ 'ham smoked',
       str_detect(Ingredients, 'ham') & !str_detect(Ingredients, 'bacon|tenderloin|hamburger|champignon|pork from|turkey|steak|bone|cheese|graham') ~ 'ham',
       str_detect(Ingredients, 'hamburger') & str_detect(Ingredients, 'vegetarian|vegan') ~ 'hamburger plant-based',
-      str_detect(Ingredients, 'hamburger') & !str_detect(Ingredients, 'bun') ~ 'hamburger beef patty',
+      str_detect(Ingredients, 'hamburger') & !str_detect(Ingredients, 'bun|bread') ~ 'hamburger beef patty',
 
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'shoulder|in slice|neck|with bone') ~ 'lamb shoulder', #Shoulder and neck meat can be interchanged
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'breast and skirt') ~ 'lamb breast skirt',
