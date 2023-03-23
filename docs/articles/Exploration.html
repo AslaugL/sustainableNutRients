@@ -237,10 +237,10 @@ cookies etc.</p>
 <span><span class="fu">buildPlot</span><span class="op">(</span>dataframe <span class="op">=</span> <span class="va">calculations</span><span class="op">$</span><span class="va">environmental_impact</span>, </span>
 <span>  title <span class="op">=</span> <span class="st">"Environmental impact per portion of Oda recipes SHARP ID"</span>, x_axis <span class="op">=</span> <span class="st">"environmental_impact_indicator"</span>, x_axis_title <span class="op">=</span> <span class="st">"Environmental impact indicator"</span>, y_axis <span class="op">=</span> <span class="st">"environmental_impact_per_portion"</span>, y_axis_title <span class="op">=</span> <span class="st">"Environmental impact in"</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">25</span><span class="op">)</span>, title_text_size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">environmental_impact_indicator</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="Exploration_files/figure-html/nutrient-content-env-impact_per_portion-1.png" width="480">
-Similarly with the nutrient content, some of these values are very high.
-Looking only are recipes with more than one portion gives a slightly
-different view:</p>
+<p><img src="Exploration_files/figure-html/nutrient-content-env-impact_per_portion-1.png" width="480"></p>
+<p>Similarly with the nutrient content, some of these values are very
+high. Looking only are recipes with more than one portion gives a
+slightly different view:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Recipes with only one portion have a larger environmental impact than recipes with more than 1 portion, look only at those.</span></span>
 <span><span class="fu">buildPlot</span><span class="op">(</span>dataframe <span class="op">=</span> <span class="va">calculations</span><span class="op">$</span><span class="va">environmental_impact</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">number_of_portions</span> <span class="op">!=</span> <span class="fl">1</span><span class="op">)</span>, </span>
