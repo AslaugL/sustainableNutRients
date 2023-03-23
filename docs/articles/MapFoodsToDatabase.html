@@ -226,9 +226,16 @@ of the recipes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nutrient_content</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/findFoodInDatabase.html">findFoodInDatabase</a></span><span class="op">(</span></span>
 <span>  <span class="va">weighted_ingredients</span>, <span class="st">"nutrients"</span>, </span>
+<span>  <span class="co">#Using the additional entries to the database calculated above</span></span>
 <span>  additional_entries <span class="op">=</span> <span class="va">nutrients_additional_ingredients</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/calculateNutrientContentOfFoodlist.html">calculateNutrientContentOfFoodlist</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `environmental_impact_indicator`.</span></span></code></pre></div>
+<p>Instead of calculating nutrient content for the total nutrient
+content of a recipe, it can be calculated “per portion” or “per 100 g”
+by using the calculate_nutrient argument. In the same manner,
+environmental impact can be calculated using
+calculateEnvironmentalImpactOfFoodlist that has the same arguments that
+calculateNutrientContentOfFoodlist.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -129,11 +129,12 @@ nutrients_additional_ingredients <- composite_ingredients_oda %>%
   createNewDatabaseEntry(., "nutrients")
 ```
 The output from calculateWeightOfIngredients is used to calculate total nutrient content (default of calculateNutrientConcentOfFoodlist) of the recipes:
-```{r nutrient-environmental-calculations, message=FALSE, results = FALSE}
+```{r nutrient-environmental-calculations_total, message=FALSE, results = FALSE}
 nutrient_content <- findFoodInDatabase(
   weighted_ingredients, "nutrients", 
+  #Using the additional entries to the database calculated above
   additional_entries = nutrients_additional_ingredients) %>%
   calculateNutrientContentOfFoodlist()
 ```
-
+Instead of calculating nutrient content for the total nutrient content of a recipe, it can be calculated "per portion" or "per 100 g" by using the calculate_nutrient argument. In the same manner, environmental impact can be calculated using calculateEnvironmentalImpactOfFoodlist that has the same arguments that calculateNutrientContentOfFoodlist.
 
