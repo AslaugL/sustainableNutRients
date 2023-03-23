@@ -49,13 +49,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createNewDatabaseEntry</span><span class="op">(</span><span class="va">df</span>, <span class="va">database</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">createNewDatabaseEntry</span><span class="op">(</span><span class="va">df</span>, <span class="va">database</span>, identifier <span class="op">=</span> <span class="st">"recipe_name"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>df</dt>
-<dd><ul><li><p>For volume_weight, a dataframe three columns: either "Ingredients" or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"</p></li>
+<dd><ul><li><p>For volume_weight, a dataframe three columns: either an identifier (default recipe_name) and Ingredients or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"</p></li>
 <li><p>For "nutrients", the output from calculateNutrientContentOfFoodlist with option "per 100 g" selected or a three column dataframe with
 an "Ingredients" column with food name, same as what can be found in the recipes or food list, a "nutrient" column with nutrient
 names similar to what is found in Matvaretabellen and "nutrient_content_per_100g" of the food.</p></li>
@@ -68,6 +68,10 @@ indicator, same as in SHARP indicators database, and "environmental_impact_per_1
 
 <dt>database</dt>
 <dd><p>Database to create new entries for. Either "volume_weight", "nutrients" or "sustainability.</p></dd>
+
+
+<dt>identifier</dt>
+<dd><p>A the column name for a column with an identifier for with the name of the new ingredient. Default is recipe_name.</p></dd>
 
 </dl></div>
     <div class="section level2">

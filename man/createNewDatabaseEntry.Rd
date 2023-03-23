@@ -4,11 +4,11 @@
 \alias{createNewDatabaseEntry}
 \title{createNewDatabaseEntry}
 \usage{
-createNewDatabaseEntry(df, database)
+createNewDatabaseEntry(df, database, identifier = "recipe_name")
 }
 \arguments{
 \item{df}{\itemize{
-\item{For volume_weight, a dataframe three columns: either "Ingredients" or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"}
+\item{For volume_weight, a dataframe three columns: either an identifier (default recipe_name) and Ingredients or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"}
 \item{For "nutrients", the output from calculateNutrientContentOfFoodlist with option "per 100 g" selected or a three column dataframe with
 an "Ingredients" column with food name, same as what can be found in the recipes or food list, a "nutrient" column with nutrient
 names similar to what is found in Matvaretabellen and "nutrient_content_per_100g" of the food.}
@@ -19,6 +19,8 @@ indicator, same as in SHARP indicators database, and "environmental_impact_per_1
 }}
 
 \item{database}{Database to create new entries for. Either "volume_weight", "nutrients" or "sustainability.}
+
+\item{identifier}{A the column name for a column with an identifier for with the name of the new ingredient. Default is recipe_name.}
 }
 \value{
 The nutrient content of each individual variable in the "identifier" column, either by total weight of all ingredients,
