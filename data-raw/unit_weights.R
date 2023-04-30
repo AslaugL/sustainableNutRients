@@ -371,7 +371,8 @@ temp <- list(
   c('yoghurt', 'pcs', '500', 'Tine', 'english'),
 
   #Div
-  c('aioli', 'box', '202,4', 'Oda Mills Aioli', 'english'), #Calcuated by using the same density as mayo
+  c('aioli', 'box', '202.4', 'Oda Mills Aioli', 'english'), #Calcuated by using the same density as mayo
+  c('aioli', 'dl', '101.4', 'FoodData Central', 'english'),
   c('caviar', 'tube', '245', 'Mills kaviar', 'english'),
   c('broth cube', 'pcs', '10', 'TORO klar kjøttbuljong', 'english'),
   c('tabasco', 'dl', '101.4', 'FoodData Central', 'english'),
@@ -402,7 +403,6 @@ temp <- list(
   c('miso', 'dl', '116.2', 'FoodData Central', 'english'),
   c('oil chili', 'dl', '101.44', 'FoodData Central', 'english'),
   c('chocolate', 'dl', '101.44', 'FoodData Central', 'english'),
-
   #MISSING
   c('Einebær/juniper berry', 'pcs', '', '', 'norwegian/english'),
   c('Einebær/juniper berry', 'dl', '', '', 'norwegian/english'),
@@ -610,6 +610,7 @@ unit_weights <- unit_weights %>%
            str_replace('tortilla, wheat flour, wholemeal', 'tortilla coarse') %>%
            str_replace('tomatoes, sun-dried, in oil', 'tomato sun dried in oil') %>%
            str_replace('tomatoes, sun-dried', 'tomato sun dried') %>%
+           str_replace('desiccated coconut', 'coconut mass') %>%
 
            #Change all plural forms to singular
            str_replace('anchovies', 'anchovy') %>%
@@ -695,3 +696,27 @@ unit_weights <- full_join(unit_weights, tmp) %>%
 #Save
 saveRDS(unit_weights, "./data-raw/unit_weights.Rds")
 
+#Simplify way to add new food items
+#Read in already created db
+old <- readRDS("./data-raw/unit_weights.Rds")
+
+#Ingredients with IDs already
+new <- tibble(
+  temp = c(
+
+    "chocolate spread, nut spread;dl;100",
+    "gelatin;pcs;2" #Same as leaf
+
+
+  )
+) %>%
+  separate(., temp, into = c("Ingredients", "unit_enhet", "grams_per_unit"), sep = ";") %>%
+  #Add IDs
+  left_join(., old %>% select(Ingredients, database_ID) %>% unique()) %>%
+  mutate(language = "english", reference = "",
+         grams_per_unit = as.numeric(as.character(grams_per_unit)))
+
+#Save both old and new
+all <- bind_rows(old, new)
+
+saveRDS(all, "./data-raw/unit_weights2.Rds")
