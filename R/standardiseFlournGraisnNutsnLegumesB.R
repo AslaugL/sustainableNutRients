@@ -37,6 +37,7 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'horse|broad|fava|brew') ~ 'bean broad',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'tomat') & !str_detect(Ingredients, 'chili sin carne') ~ 'bean white tomato',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'can') ~ "beans'n'pork canned",
+      str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'in') ~ "beans chili canned",
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'can') ~ 'bean canned',
 
       #Biscuits
@@ -83,7 +84,7 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'bao|steam') & str_detect(Ingredients, 'bun') ~ 'bao bun',
       str_detect(Ingredients, 'focaccia') ~ 'bread white foccacia',
       str_detect(Ingredients, 'paratha') & str_detect(Ingredients, 'bread') ~ 'bread paratha',
-      str_detect(Ingredients, 'bread') & !str_detect(Ingredients, 'flat|burger|rolls|pita|italian|olive oil|flour|margarine|sausage') ~ 'bread',
+      str_detect(Ingredients, 'bread') & !str_detect(Ingredients, 'flat|burger|rolls|pita|italian|olive oil|flour|margarine|sausage|potato') ~ 'bread',
 
       #Other
       str_detect(Ingredients, 'brazil') & str_detect(Ingredients, 'nut') ~ 'nut brazil',

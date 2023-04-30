@@ -18,6 +18,8 @@ standardiseFlournGraisnNutsnLegumesC <- function(df) {
       str_detect(Ingredients, 'cashew') & str_detect(Ingredients, 'roast|toast') ~ 'cashew nut roasted',
       str_detect(Ingredients, 'cashew') ~ 'cashew nut',
       str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'chili') ~ 'chili nut',
+      str_detect(Ingredients, 'coconut') & str_detect(Ingredients, 'mass') ~ 'coconut mass',
+      str_detect(Ingredients, 'coconut') & str_detect(Ingredients, 'flake') ~ 'coconut flake',
       str_detect(Ingredients, 'coconut') & !str_detect(Ingredients, 'milk|granola|oil|fat') ~ 'coconut',
 
       #Chia

@@ -47,7 +47,8 @@ standardiseFlournGraisnNutsnLegumesP <- function(df) {
       str_detect(Ingredients, 'pizza dough') ~ 'pizza dough',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'flour') ~ 'potato starch',
       str_detect(Ingredients, 'lompe') |
-        str_detect(Ingredients, 'potet') & str_detect(Ingredients, 'lefse') ~ 'potato flatbread lompe',
+        str_detect(Ingredients, 'potet') & str_detect(Ingredients, 'lefse') |
+        str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'bread') ~ 'potato flatbread lompe',
       str_detect(Ingredients, 'puff pastry|butter dough') ~ 'puff pastry',
       str_detect(Ingredients, 'lefse') ~ 'lefse',
 

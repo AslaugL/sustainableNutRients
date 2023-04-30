@@ -319,6 +319,11 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           str_detect(Ingredients, 'ice cream') ~ fixFoodMappingError(database = reference, 'ice cream'),
           str_detect(Ingredients, 'pita') ~ fixFoodMappingError(database = reference, 'pita', 'bread'),
           Ingredients == 'pimiento chili pepper' ~ fixFoodMappingError(database = reference, 'chili', 'red'), #Small pepper
+          Ingredients == "chili pepper jalapeno pickled" & unit == "pcs" ~ fixFoodMappingError(database = reference, 'jalapeño'), #Regular jalapeno
+
+          #Hard cheese slices
+          Ingredients %in% c("cheese cheddar", "cheese semi-hard") &
+            unit == "slice" ~ fixFoodMappingError(database = reference, 'hard to semi-hard cheese'), #Standard Norwegian white cheese slices
 
           #Ingredients with no references
           Ingredients %in% c('mustard powder', 'chinese five spice', 'dip mix', 'asafoetida powder',
