@@ -1,7 +1,7 @@
 #Use store bought breads and rolls as default
 
 #Create query words to search through a recipe list to link it to unit_weights
-unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(grams_per_unit, unit_enhet, reference)) %>% unique() %>% #Only keep names, not units
+unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(grams_per_unit, unit_enhet, reference)) %>% unique() %>% #Only keep names, not units
   mutate(Ingredients = str_replace_all(Ingredients, ',', '')) %>%
 
   #First two words contain the most important information to identify the ingredients
@@ -44,6 +44,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(grams
       Ingredients == 'chicken skewer satay' ~ 'chicken skewer',
       Ingredients == 'tomato sun dried' ~ "tomato",
       Ingredients == 'tomato sun dried in oil' ~ "tomato",
+      Ingredients == "cloudberries" ~ "cloud",
       TRUE ~ first_word),
 
     second_word = case_when(
@@ -92,6 +93,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights.Rds") %>% select(-c(grams
       Ingredients == 'egg noodle cooked' ~ 'cooked',
       Ingredients == 'tomato sun dried' ~ "sun dried",
       Ingredients == 'tomato sun dried in oil' ~ "sun dried in oil",
+      Ingredients == "cloudberries" ~ "berry",
       TRUE ~ second_word
     )
   ) %>%
