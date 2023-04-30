@@ -24,7 +24,8 @@
 createNewDatabaseEntry <- function(df, database, identifier = 'recipe_name') {
 
   #Function to format new database entries
-  supportFunction <- function(df2) {
+  #' @param original_database Database from sustainableNutRients to check if new entry is already in db
+  supportFunction <- function(df2, original_database) {
 
     #Suppress warning from separate function call (will come if there are no words separated by '_')
     suppressWarnings(
@@ -57,24 +58,37 @@ createNewDatabaseEntry <- function(df, database, identifier = 'recipe_name') {
 
     if(isTRUE(all.equal(names(df), c(identifier, 'unit', 'grams_per_unit')))) {
 
-      new_entries <- supportFunction(df2 = df)
-
-    }else if(isTRUE(all.equal(names(df), c('database_ID', 'unit', 'grams_per_unit')))){
-
+      #Find existing IDs from entries already in db, create new ones for completely new entries
       new_entries <- list(
 
-        'db' = df %>%
-          select(unit, grams_per_unit, database_ID),
-
-        'query_words' = unit_weights_query %>%
-          filter(.data$language == "english") %>%
-          filter(database_ID %in% df$database_ID) %>%
-          select(-.data$language)
-
+        'query_words' = df %>%
+          #Only use identifier to query against database
+          select(all_of(identifier)) %>% unique() %>%
+          #Format as database query words, then turn into one column in both new entries
+          separate(col = contains(identifier), into = c("first_word", "second_word"), sep = "_", remove = FALSE) %>%
+          replace_na(list(second_word = '\\')) %>%
+          #GET IDs from entires already present in databases
+          left_join(., sustainableNutRients:::unit_weights_query %>% filter(language == "english") %>% unique() %>% select(-language), by = c("first_word", "second_word")) %>%
+          group_by(first_word, second_word) %>%
+          mutate(
+            database_ID = case_when(
+              is.na(database_ID) ~ cur_group_id() + .99999,
+              TRUE ~ database_ID)
+            ) %>%
+          ungroup()
         )
 
+      #Get the databse_IDs and connect them to the new database entries
+      new_entries$db <- df %>%
+        select(contains(identifier), unit, grams_per_unit) %>%
+        left_join(new_entries$query_words %>% select(contains(identifier), database_ID)) %>%
+        select(unit, grams_per_unit, database_ID)
+
+      new_entries$query_words <- new_entries$query_words %>%
+        select(-contains(identifier))
+
     }else{
-      stop("To create database entries for the volume_weight database, df must include the columns identifier or database_ID, unit and grams_per_unit.")
+      stop("To create database entries for the volume_weight database, df must include the columns identifier, unit and grams_per_unit.")
     }
 
 
