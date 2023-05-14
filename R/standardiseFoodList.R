@@ -19,6 +19,8 @@ standardiseFoodList <- function(df) {
     #Standardise food name
     standardiseFoodNames() %>%
     #Standardise unit types
-    standardiseUnitsType()
+    standardiseUnitsType() %>%
+    #Convert fresh herbs to dried/dried her to fresh
+    convertFreshHerbsToDried()
 
 }

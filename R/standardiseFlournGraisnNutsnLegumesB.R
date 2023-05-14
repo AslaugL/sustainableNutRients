@@ -30,7 +30,10 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
         (str_detect(Ingredients, 'can|box|carton|drained|boiled') | str_detect(Amounts, 'can|box|stk|carton') ) ~ 'bean white canned',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'kidney|red') &
         (str_detect(Ingredients, 'can|box|carton') | str_detect(Ingredients, 'drained') | str_detect(Amounts, 'can|box|stk|carton') ) ~ 'bean kidney canned',
+      str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'pinto') &
+        (str_detect(Ingredients, 'can|box|carton') | str_detect(Ingredients, 'drained') | str_detect(Amounts, 'can|box|stk|carton') ) ~ 'bean pinto canned',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'black') ~ 'bean black',
+      str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'pinto') ~ 'bean pinto',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'white|navy|cannellini|butter') ~ 'bean white',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'kidney|red') ~ 'bean kidney',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'green|french|break|snap') ~ 'bean green',

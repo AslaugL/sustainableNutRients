@@ -24,7 +24,7 @@ standardiseDairynSubsY <- function(df) {
          str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt')) & str_detect(Ingredients, 'tropical') ~ 'yoghurt skyr tropical flavored',
       str_detect(Ingredients, 'yogurt|yoghurt') & str_detect(Ingredients, 'skyr') |
         str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt') ~ 'yoghurt skyr',
-      str_detect(Ingredients, 'yogurt|yoghurt') & str_detect(Ingredients, 'plant-based|plant based|vegan') ~ 'yoghurt plant based',
+      str_detect(Ingredients, 'yogurt|yoghurt') & str_detect(Ingredients, 'plant-based|plant based|vegan') ~ 'yoghurt plant-based',
       str_detect(Ingredients, 'yogurt|yoghurt') ~ 'yoghurt plain',
 
       TRUE ~ Ingredients_standardised))

@@ -14,6 +14,7 @@ standardiseFlournGraisnNutsnLegumesA <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'flour') ~ 'almond flour',
+      str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'butter') | str_detect(Ingredients, '\\bnut') & str_detect(Ingredients, 'butter\\b') ~ 'almond butter', #Use as default
       str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'extract') ~ 'almond extract',
       str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'salt') & !str_detect(Ingredients, 'potato') ~ 'almond salted',
       str_detect(Ingredients, 'almond') & !str_detect(Ingredients, 'potato') ~ 'almond',

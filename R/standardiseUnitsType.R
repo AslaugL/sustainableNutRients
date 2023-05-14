@@ -73,7 +73,7 @@
 
        #Some special cases
        Ingredients %in% c('shrimp', 'salad rocket') ~ str_replace(unit, 'handful', 'dl'),
-       str_detect(Ingredients, 'beef') & !str_detect(Ingredients, 'tongue|cube') ~ str_replace(unit, 'pcs|slice', 'portion'),
+       str_detect(Ingredients, 'beef') & !str_detect(Ingredients, 'tongue|cube|tomato') ~ str_replace(unit, 'pcs|slice', 'portion'),
        str_detect(Ingredients, 'cod fillet') ~ str_replace(unit, 'slice', 'portion'),
        str_detect(Ingredients, 'salad|caper|parsley') ~ str_replace(unit, 'handful', 'dl'),
 

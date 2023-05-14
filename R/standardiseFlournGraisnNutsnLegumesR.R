@@ -25,7 +25,7 @@ standardiseFlournGraisnNutsnLegumesR <- function(df) {
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'sushi') ~ 'rice sushi',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'noodle') ~ 'rice noodle',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'porridge') ~ 'rice porridge',
-      str_detect(Ingredients, 'porridge') ~ 'porridge',
+      str_detect(Ingredients, 'porridge') & !str_detect(Ingredients, "oat|sour cream") ~ 'porridge',
       str_detect(Ingredients, 'rice') & !str_detect(Ingredients, 'beef|potato|vinegar|wine|barley|broccoli|cauliflower|liquo') ~ 'rice white long grain',
 
       TRUE ~ Ingredients_standardised))

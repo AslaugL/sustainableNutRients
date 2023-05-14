@@ -1,4 +1,4 @@
-#Script to create the database for unit and weights per food item
+ #Script to create the database for unit and weights per food item
 
 #Weight and portion size database
 #Empty list to fill with various variables
@@ -391,7 +391,7 @@ temp <- list(
   c('sauce white', 'pack', '38', 'Toro Hvit Saus', 'english'),
   c('sauce teriyaki', 'dl', '94.7', 'FoodData Central', 'english'),
   c('sauce hoisin', 'dl', '111.6', 'FoodData Central', 'english'),
-  c('sauce', 'hp', 'dl', '114.97', 'FoodData Central', 'english'),
+  c('sauce', 'hp', '114.97', 'FoodData Central', 'english'),
   c('salsa', 'dl', '94.7', 'FoodData Central', 'english'),
   c('dip mix', 'pack', '22', 'Maarud', 'english'),
   c('tandoori spice', 'dl', '106.8', 'FoodData Central', 'english'),
@@ -403,11 +403,9 @@ temp <- list(
   c('miso', 'dl', '116.2', 'FoodData Central', 'english'),
   c('oil chili', 'dl', '101.44', 'FoodData Central', 'english'),
   c('chocolate', 'dl', '101.44', 'FoodData Central', 'english'),
-  #MISSING
-  c('Einebær/juniper berry', 'pcs', '', '', 'norwegian/english'),
-  c('Einebær/juniper berry', 'dl', '', '', 'norwegian/english'),
-  c('pickled onion', 'dl', '', '', 'english'),
-  c('salmon roe', 'dl', '', '', 'english')
+  c('Einebær/juniper berry', 'pcs', '1', '', 'norwegian/english'),
+  c('pickled onion', 'dl', '55', 'Assume same as reguler onions', 'english'),
+  c('salmon roe', 'dl', '94.68', 'FoodData Central', 'english')
 
 )
 
@@ -577,7 +575,7 @@ various$not_needed <- unit_weights %>%
                              'sukker hvitt', 'anchovies, canned', 'anchovy fillets, canned', 'salmon, smoked, dry salted',
                              'mackerel fillet, in tomato sauce, canned', 'cod roe', 'tuna canned', 'ground meat, raw', 'bread, semi-coarse', 'bread, white',
                              'cream cracker', 'salami', 'rice parboiled', 'caramels', 'marshmallows', 'ice cream', 'pancakes',
-                             'biscuit, with oats, digestive', 'biscuit, marie', 'biscuit, for childen'))
+                             'biscuit, with oats, digestive', 'biscuit, marie', 'biscuit, for childen', 'muesli'))
 
 #Remove the not needed ingredients
 unit_weights <- unit_weights %>%
@@ -704,19 +702,31 @@ old <- readRDS("./data-raw/unit_weights.Rds")
 new <- tibble(
   temp = c(
 
-    "chocolate spread, nut spread;dl;100",
-    "gelatin;pcs;2" #Same as leaf
-
-
+    "chocolate spread, nut spread;dl;100;",
+    "gelatin;pcs;2;", #Same as leaf
+    "sauce satay;dl;108.2;FoodData Central",
+    "sauce ponzu;dl;111.59;FoodData Central",
+    "sauce tomato;dl;103.55;FoodData Central",
+    "sauce barbeque;dl;120.89;FoodData Central",
+    "granola;dl;50;Same as muesli from Helsedir",
+    "granola;portion;100;Same as muesli from Helsedir",
+    "lemon balm_fresh;dl_bunch_neve;20;Lemon balm is in the mint family, so same as mint"
   )
 ) %>%
-  separate(., temp, into = c("Ingredients", "unit_enhet", "grams_per_unit"), sep = ";") %>%
+  separate_rows(., temp, sep = "_") %>%
+  separate(., temp, into = c("Ingredients", "unit_enhet", "grams_per_unit", "reference"), sep = ";") %>%
   #Add IDs
   left_join(., old %>% select(Ingredients, database_ID) %>% unique()) %>%
-  mutate(language = "english", reference = "",
+  mutate(language = "english",
          grams_per_unit = as.numeric(as.character(grams_per_unit)))
 
 #Save both old and new
-all <- bind_rows(old, new)
+all <- bind_rows(old, new) %>%
+  #Create new ID's
+  group_by(Ingredients) %>%
+  mutate(database_ID = case_when(
+    is.na(database_ID) ~ cur_group_id() + 0.77,
+    TRUE ~ database_ID
+  )) %>% ungroup()
 
 saveRDS(all, "./data-raw/unit_weights2.Rds")

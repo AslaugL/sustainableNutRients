@@ -39,6 +39,7 @@ standardiseSauces <- function(df) {
 
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'cheese') ~ 'sauce cheese',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'brittany') ~ 'sauce chicken brittany',
+    str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'butterchicken') ~ 'sauce butterchicken',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'chicken') ~ 'sauce chicken',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'sweet') ~ 'sauce sweet chili',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'hot') |
@@ -47,7 +48,7 @@ standardiseSauces <- function(df) {
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'salt') ~ 'sauce salt chili',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'mild') ~ 'sauce mild chili',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'garlic') ~ 'sauce chili garlic',
-    str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') ~ 'sauce chili',
+    str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'chili') & !str_detect(Ingredients, "sausage") ~ 'sauce chili',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'cranberr') ~ 'sauce cranberry',
     str_detect(Ingredients, 'sauce|saus') & str_detect(Ingredients, 'cream') ~ 'sauce cream',
 

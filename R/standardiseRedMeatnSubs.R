@@ -83,7 +83,7 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'nugget') & str_detect(Ingredients, 'plant|vegan') ~ 'nugget plant-based',
 
       str_detect(Ingredients, 'pepperoni') ~ 'sausage pepperoni',
-      str_detect(Ingredients, 'plant-based|plant based|vegan|vegetarian') &str_detect(Ingredients, 'mince|ground') ~ 'plant based minced meat',
+      str_detect(Ingredients, 'plant-based|plant based|vegan|vegetarian') &str_detect(Ingredients, 'mince|ground') ~ 'plant-based minced meat',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'butt') ~ 'pork shoulder',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'ground|mince') & str_detect(Ingredients, 'medister|high fat|25') ~ 'pork minced meat 25%',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'ground|mince') ~ 'pork minced meat',

@@ -29,6 +29,7 @@ standardiseFlournGraisnNutsnLegumesC <- function(df) {
       str_detect(Ingredients, 'pea') & str_detect(Ingredients, 'chick') &
         (str_detect(Ingredients, 'can|box|carton') | str_detect(Ingredients, 'drained') | str_detect(unit, 'can|box|stk|carton') ) ~ 'chick pea canned',
       str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'chick|gram') ~ 'chick pea flour',
+      str_detect(Ingredients, 'chickpea|chick pea') & str_detect(Ingredients, 'dry|dried') ~ 'chick pea dry',
       str_detect(Ingredients, 'chickpea|chick pea') & !str_detect(Ingredients, 'lentil') ~ 'chick pea',
 
       #Ciabatta

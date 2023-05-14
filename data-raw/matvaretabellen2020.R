@@ -24,7 +24,9 @@ clean_nutrients <- raw_data %>%
   mutate(food_item = str_to_lower(food_item),
          Foodgroup = str_to_lower(Foodgroup)) %>%
   #Keep some ingredients
-  filter((food_item %in% c('chocolate bar, milk', 'chocolate, white', 'chocolate, cooking, plain, minimum 35 % cocoa', 'chocolate, snickers', 'ice cream, dairy', 'chocolate, dark, 70 % cocoa')) |
+  filter((food_item %in% c(
+    'chocolate bar, milk', 'chocolate, white', 'chocolate, cooking, plain, minimum 35 % cocoa',
+    'chocolate, snickers', 'ice cream, dairy', 'chocolate, dark, 70 % cocoa')) |
            !str_detect(Foodgroup,
                        'dessert|other meat products, prepared|other meats, minced, offal, prepared|egg, prepared|cookies|cod liver oil|homemade|chocolate|instant|cake|breakfast cereals|porridge|pizza')) %>%
 
@@ -134,6 +136,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'halibut, atlantic' ~ 'halibut',
   food_item == 'mackerel fillet, in tomato sauce, 60 % mackerel, canned' ~ 'mackerel_tomato canned',
   food_item == 'cusk, tusk, raw' ~ 'cusk_tusk',
+  food_item == "dover sole, raw" ~ 'sole_dover',
 
   #Herbs and spices----
   food_item == 'anise seeds' ~ 'anise',
@@ -237,6 +240,10 @@ clean_nutrients <- raw_data %>%
   food_item == 'grapes, unspecified, raw' ~ 'grape',
   food_item == 'peaches, canned, in syrup' ~ 'peach_canned',
 
+  food_item == 'melon, cantaloupe, raw' ~ 'melon_cantaloupe',
+  food_item == 'melon, honeydew' ~ 'melon_honeydew',
+  food_item == 'melon, galia' ~ 'melon_galia',
+
   #Grains----
   food_item == 'almonds' ~ 'almond',
   food_item == 'pearled barley' ~ 'pearl barley',
@@ -289,6 +296,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'sunflower seeds' ~ 'sunflower_seed',
   food_item == 'linseeds, flax seeds, crushed' ~ 'flax_seed',
   food_item == 'pecan nuts' ~ 'pecan_nut',
+  food_item == 'brazil nuts' ~ 'brazil_nut',
 
   str_detect(food_item, 'bread, semi-coarse') & str_detect(food_item, '25-50') & str_detect(food_item, 'industrially made') ~ 'bread',
   str_detect(food_item, 'bread, white') & str_detect(food_item, '0-25') & str_detect(food_item, 'industrially made') & !str_detect(food_item, 'spiral|square') ~ 'bread_white',
@@ -297,7 +305,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'tortilla, wheat flour' ~ 'tortilla',
   food_item == 'pizza crust, no filling' ~ 'pizza_crust',
 
-  #oils----
+  #Oils----
   food_item == 'oil, peanut' ~ 'peanut_oil',
   food_item == 'mayonnaise, full fat, 80 % fat' ~ 'mayonnaise',
   food_item == 'oil, olive, extra virgin' ~ 'olive_oil',
@@ -341,6 +349,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'cream, sour, 35 % fat, crème fraîche' ~ 'sour cream_35/crème fraîche_35',
   food_item == 'cream, sour, low-fat, 18 % fat' ~ 'sour cream_18/crème fraîche_18',
   food_item == 'cream, sour, extra low-fat, 10 % fat' ~ 'sour cream_10/crème fraîche_10',
+  food_item == 'cheese, whey, unspecified' ~ 'cheese_brown',
   food_item == 'milk, cultured, whole, kefir' ~ 'kefir',
   food_item == 'margarine, hard' ~ 'margarine',
   food_item == 'milk, skimmed, tine' ~ 'milk_0.1',
@@ -398,6 +407,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'chocolate, cooking, plain, minimum 35 % cocoa' ~ 'chocolate_semi-sweet',
   food_item == 'chocolate, snickers' ~ 'chocolate_candy bar',
   food_item == 'chocolate, dark, 70 % cocoa' ~ 'chocolate_dark', #Not really, but darkest they have
+  food_item == 'popcorn, air popped, industrially made' ~ 'popcorn',
+  food_item == 'gelatin' ~ 'gelatin',
 
   #Keep the unspecified ingredients
   str_detect(food_item, ', unspecified, raw') ~ str_replace(food_item, ', unspecified, raw', ''),
@@ -422,7 +433,7 @@ clean_nutrients <- raw_data %>%
 
   mutate(Ingredients = case_when(
     #Turn seeds and nuts and some fruits into singular form
-    str_detect(food_item, 'nuts') ~ str_replace(food_item, 'nuts', 'nut'),
+    str_detect(food_item, 'nuts') & !str_detect(Ingredients, 'pecan|brazil') ~ str_replace(food_item, 'nuts', 'nut'),
     #str_detect(food_item, 'seeds') ~ str_replace(food_item, 'seeds', 'seed'),
 
     #Some other fruits and vegetable
@@ -450,18 +461,18 @@ clean_nutrients <- raw_data %>%
 #FDC uses different files for food item names, nutrient content and nutrient names
 #Nutrients
 fromFoodDataCentral_nutrients <- read_csv(
-  system.file("extdata", "food_nutrient_FoodDataCentral_april2021.csv", package = "nutRients"))
+  system.file("extdata", "food_nutrient_FoodDataCentral_april2021.csv", package = "sustainableNutRients"))
 fromFoodDataCentral_nutrient_names <- read_csv(
-  system.file("extdata", "nutrient_incoming_name_FoodDataCentral_april2021.csv", package = "nutRients"))
+  system.file("extdata", "nutrient_incoming_name_FoodDataCentral_april2021.csv", package = "sustainableNutRients"))
 #Food items
 fromFoodDataCentral_foods <- read_csv(
-  system.file("extdata", "food_FoodDataCentral_april2021.csv", package = "nutRients")) %>%
+  system.file("extdata", "food_FoodDataCentral_april2021.csv", package = "sustainableNutRients")) %>%
 
   #Select foods of interest
   filter(description %in% c(
 
     #Grains
-    'Tempeh',
+    'Tempeh', 'Seeds, chia seeds, dried', 'Buckwheat', 'Edamame, frozen, unprepared',
 
     #Meat products
     'Beef, variety meats and by-products, tongue, raw', 'Pork, fresh, variety meats and by-products, kidneys, raw',
@@ -470,7 +481,7 @@ fromFoodDataCentral_foods <- read_csv(
     #Fruit and veg
     'Jams and preserves, apricot', 'Artichokes, (globe or french), raw', 'Plantains, yellow, raw', 'Sauerkraut, canned, solids and liquids',
     "Tomato products, canned, paste, without salt added (Includes foods for USDA's Food Distribution Program)",
-    'Lime juice, raw',
+    'Lime juice, raw', 'Figs, raw', 'Cabbage, chinese (pak-choi), raw',
     #Sorrel
     'Sourdock, young leaves (Alaska Native)',
 
@@ -478,7 +489,7 @@ fromFoodDataCentral_foods <- read_csv(
     'Tamarind nectar, canned', 'Spices, chervil, dried', 'Spices, allspice, ground', 'Coriander (cilantro) leaves, raw',
     'Spices, cloves, ground', 'Spices, cumin seed', 'Spices, fenugreek seed', 'Lemon grass (citronella), raw',
     'Spearmint, fresh', 'Spearmint, dried', 'Mustard, prepared, yellow', 'Spices, onion powder',
-    'Spices, sage, ground', 'Seasoning mix, dry, sazon, coriander & annatto',
+    'Spices, sage, ground', 'Seasoning mix, dry, sazon, coriander & annatto', 'Spices, garlic powder',
 
     #Dairy
     'Cheese, cottage, lowfat, 2% milkfat', 'Cheese spread, pasteurized process, American',
@@ -487,12 +498,14 @@ fromFoodDataCentral_foods <- read_csv(
 
     #Seafood
     'Mollusks, clam, mixed species, raw', 'Fish, grouper, mixed species, raw', 'Fish, sea bass, mixed species, raw',
+    'Seaweed, wakame, raw',
 
     #Div
     'Seaweed, agar, dried', 'Soup, onion, dry, mix', 'Alcoholic beverage, rice (sake)',
     'Shortening, vegetable, household, composite', 'Pickle relish, sweet', 'Syrups, maple',
     'Sauce, ready-to-serve, pepper, TABASCO', 'Tapioca, pearl, dry', 'Molasses', 'Vital wheat gluten',
-    'Horseradish, prepared', 'Oil, coconut', 'Fat, goose')) %>%
+    'Horseradish, prepared', 'Oil, coconut', 'Fat, goose', 'Frostings, glaze, prepared-from-recipe',
+    'Vanilla extract')) %>%
 
   #Rename to fit ingredient names
   mutate(description = description %>%
@@ -541,7 +554,15 @@ fromFoodDataCentral_foods <- read_csv(
            str_replace('Vital wheat gluten', 'gluten') %>%
            str_replace('Horseradish, prepared', 'horseradish_prepared') %>%
            str_replace('Oil, coconut', 'coconut_oil') %>%
-           str_replace('Fat, goose', 'goose_fat')
+           str_replace('Fat, goose', 'goose_fat') %>%
+           str_replace('Seeds, chia seeds, dried', 'seed_chia') %>%
+           str_replace('Frostings, glaze, prepared-from-recipe', 'decorative glaze') %>%
+           str_replace('Edamame, frozen, unprepared', 'bean_edamame') %>%
+           str_replace('Spices, garlic powder', 'garlic_powder') %>%
+           str_replace('Figs, raw', 'fig') %>%
+           str_replace('Seaweed, wakame, raw', 'wakame') %>%
+           str_replace('Vanilla extract', 'vanilla_extract') %>%
+           str_replace('Cabbage, chinese \\(pak-choi\\), raw', 'cabbage_pak choi')
          #'Tamarind nectar, canned'
   ) %>%
 

@@ -96,7 +96,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'gelatin') & str_detect(Ingredients, 'sheet') ~ 'gelatin sheet',
       str_detect(Ingredients, '\\bgelatin\\b') ~ 'gelatin',
       str_detect(Ingredients, '\\bgel\\b') & str_detect(Ingredients, 'color') ~ 'gel coloring',
-      str_detect(Ingredients, '\\bgel\\b') & str_detect(Ingredients, 'top') ~ 'gel tops',
+      str_detect(Ingredients, '\\bgel\\b') & str_detect(Ingredients, 'top') ~ 'jelly candy gel tops',
       str_detect(Ingredients, 'guacamole') & !str_detect(Ingredients, 'spice') ~ 'guacamole',
 
       str_detect(Ingredients, 'harissa') & str_detect(Ingredients, 'mild') ~ 'harissa mild',
@@ -179,7 +179,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'pizza filling') ~ 'pizza filling',
       str_detect(Ingredients, 'popcorn') ~ 'popcorn',
 
-      str_detect(Ingredients, 'remoulade') ~ 'remoulade',
+      str_detect(Ingredients, 'remoulade|remulade') ~ 'remulade',
       #Ready made meals
       str_detect(Ingredients, 'bean taco') & str_detect(Ingredients, 'ready-made|ready made|done') ~ 'bean taco',
       str_detect(Ingredients, 'chana masala') & str_detect(Ingredients, 'ready-made|ready made|done') ~ 'chana masala',
@@ -282,11 +282,11 @@ standardiseOthers <- function(df) {
 
       str_detect(Ingredients, 'water') & !str_detect(Ingredients, 'corn|beef|tuna|coffee|chili|cream|cress|chestnut|melon') ~ 'water',
       str_detect(Ingredients, 'water to the corn') ~ 'water',
-      str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice') & str_detect(Ingredients, 'vegetable') ~ 'broth cube vegetable',
-      str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice') & str_detect(Ingredients, 'fish') ~ 'broth cube fish',
-      str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice') & str_detect(Ingredients, 'beef|meat') ~ 'broth cube beef',
-      str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice') & str_detect(Ingredients, 'chicken') ~ 'broth cube chicken',
-      str_detect(Ingredients, 'stock|broth|bouillon|borth') & str_detect(Ingredients, 'cube|dice') ~ 'broth cube',
+      str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice|powder') & str_detect(Ingredients, 'vegetable') ~ 'broth cube vegetable',
+      str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice|powder') & str_detect(Ingredients, 'fish') ~ 'broth cube fish',
+      str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice|powder') & str_detect(Ingredients, 'beef|meat') ~ 'broth cube beef',
+      str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice|powder') & str_detect(Ingredients, 'chicken') ~ 'broth cube chicken',
+      str_detect(Ingredients, 'stock|broth|bouillon|borth') & str_detect(Ingredients, 'cube|dice|powder') ~ 'broth cube',
       str_detect(Ingredients, 'stock|broth|bouillon|power') & str_detect(Ingredients, 'chicken') ~ 'water broth chicken',
       str_detect(Ingredients, 'stock|broth|bouillon|bouilljon|consomme') & str_detect(Ingredients, 'beef|meat') ~ 'water broth beef',
       str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'shellfish') ~ 'water broth shellfish',

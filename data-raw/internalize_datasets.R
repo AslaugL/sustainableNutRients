@@ -1,6 +1,6 @@
 #Read the Rds files and save them to sysdata
 #Databases
-unit_weights <- readRDS("./data-raw/unit_weights.Rds")
+unit_weights <- readRDS("./data-raw/unit_weights2.Rds")
 unit_weights_query <- readRDS("./data-raw/unit_weights_query.Rds")
 
 matvaretabellen2020 <- readRDS("./data-raw/matvaretabellen2020.Rds")
