@@ -27,7 +27,7 @@ standardiseFruitVegL <- function(df){
       str_detect(Ingredients, 'lime') & str_detect(Ingredients, 'peel|sheel|zest|rind') & !str_detect(Ingredients, 'juice') ~ 'lime, the zest',
       str_detect(Ingredients, 'lime') & str_detect(Ingredients, 'juice|pressed') & !str_detect(Ingredients, 'peel') ~ 'lime, the juice',
       str_detect(Ingredients, 'lime') & str_detect(unit, 'tsp|tbsp|dl') ~ 'lime, the juice',
-      str_detect(Ingredients, 'lime') & !str_detect(Ingredients, 'sheet|lemon|leaf|beverage') ~ 'lime',
+      str_detect(Ingredients, 'lime') & !str_detect(Ingredients, 'sheet|lemon|leaf|beverage|gran|mix') ~ 'lime',
       str_detect(Ingredients, 'lingonberr') & str_detect(Ingredients, 'jam') ~ 'lingonberry jam',
       str_detect(Ingredients, 'lingonberr') ~ 'lingonberry',
       str_detect(Ingredients, 'lychee') ~ 'lychee',

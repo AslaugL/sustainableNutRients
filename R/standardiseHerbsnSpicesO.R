@@ -15,9 +15,11 @@ standardiseHerbsnSpicesO <- function(df) {
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'onion') & str_detect(Ingredients, 'powder') ~ 'onion powder',
       str_detect(Ingredients, 'onion') & str_detect(Ingredients, 'seed') ~ 'onion seed',
-      str_detect(Ingredients, 'oregano') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'oregano fresh herbs',
-      str_detect(Ingredients, 'oregano') & str_detect(Ingredients, 'dried|spice') ~ 'oregano dried',
-      str_detect(Ingredients, 'oregano') ~ 'oregano dried', #Standard
+      (str_detect(Ingredients, 'oregano') &
+         (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(unit, 'twig|bunch|leaf|neve|dl'))) &
+        !str_detect(Ingredients, 'with oregano') ~ 'oregano fresh herbs',
+      str_detect(Ingredients, 'oregano') & str_detect(Ingredients, 'dried|spice') & !str_detect(Ingredients, 'with oregano') ~ 'oregano dried',
+      str_detect(Ingredients, 'oregano') & !str_detect(Ingredients, 'with oregano') ~ 'oregano dried', #Standard
 
       TRUE ~ Ingredients_standardised))
 }

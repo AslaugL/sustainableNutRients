@@ -16,7 +16,7 @@ standardiseFlournGraisnNutsnLegumesT <- function(df) {
       str_detect(Ingredients, 'tahini') ~ 'tahini',
       str_detect(Ingredients, 'tart') & str_detect(Ingredients, 'shell') ~ 'tart shell',
       str_detect(Ingredients, 'tortilla') & str_detect(Ingredients, 'whole|coarse') ~ 'tortilla coarse',
-      str_detect(Ingredients, 'tortilla') & str_detect(Ingredients, 'corn') ~ 'tortilla corn',
+      str_detect(Ingredients, 'tortilla') & str_detect(Ingredients, 'corn|maize') ~ 'tortilla corn',
       str_detect(Ingredients, 'tortilla|wraps') & !str_detect(Ingredients, 'pita|chip') ~ 'tortilla',
 
       TRUE ~ Ingredients_standardised))

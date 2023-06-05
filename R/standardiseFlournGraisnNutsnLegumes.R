@@ -20,6 +20,7 @@ standardiseFlournGraisnNutsnLegumes <- function(df) {
     standardiseFlournGraisnNutsnLegumesG() %>%
     standardiseFlournGraisnNutsnLegumesH() %>%
     standardiseFlournGraisnNutsnLegumesL() %>%
+    standardiseFlournGraisnNutsnLegumesM() %>%
     standardiseFlournGraisnNutsnLegumesN() %>%
     standardiseFlournGraisnNutsnLegumesO() %>%
     standardiseFlournGraisnNutsnLegumesP() %>%

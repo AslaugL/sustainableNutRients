@@ -10,7 +10,7 @@
 #' @export
 standardiseMushrooms <- function(df) {
   df  %>%
-    
+
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'aroma') & str_detect(Ingredients, 'champignon|mushroom|soup') ~ 'mushroom aroma champignon',
@@ -23,7 +23,8 @@ standardiseMushrooms <- function(df) {
       str_detect(Ingredients, 'champig') ~ 'mushroom champignon',
       str_detect(Ingredients, 'mushroom') & str_detect(Ingredients, 'chestnut') ~ 'mushroom chestnut',
       str_detect(Ingredients, 'mushroom') & str_detect(Ingredients, 'drained') ~ 'mushroom canned',
-      str_detect(Ingredients, 'mushroom') & !str_detect(Ingredients, 'rice|condensed') ~ 'mushroom',
-      
+      str_detect(Ingredients, 'mushroom') & str_detect(Ingredients, 'extract') ~ 'mushroom extract',
+      str_detect(Ingredients, 'mushroom') & !str_detect(Ingredients, 'rice|condensed|pate|spread|pâté|pate') ~ 'mushroom',
+
       TRUE ~ Ingredients_standardised))
 }

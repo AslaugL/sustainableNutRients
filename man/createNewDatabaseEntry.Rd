@@ -21,6 +21,8 @@ indicator, same as in SHARP indicators database, and "environmental_impact_per_1
 \item{database}{Database to create new entries for. Either "volume_weight", "nutrients" or "sustainability.}
 
 \item{identifier}{A the column name for a column with an identifier for with the name of the new ingredient. Default is recipe_name.}
+
+\item{original_database}{Database from sustainableNutRients to check if new entry is already in db}
 }
 \value{
 The nutrient content of each individual variable in the "identifier" column, either by total weight of all ingredients,

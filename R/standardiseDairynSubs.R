@@ -12,6 +12,7 @@ standardiseDairynSubs <- function(df) {
   df  %>%
 
     #Standardise
+    standardiseDairynSubsA() %>%
     standardiseDairynSubsB() %>%
     standardiseDairynSubsC() %>%
     standardiseDairynSubsK() %>%

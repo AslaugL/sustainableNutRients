@@ -13,7 +13,7 @@ standardiseFruitVegF <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'fennel') & !str_detect(Ingredients, 'seed') ~ 'fennel',
+      str_detect(Ingredients, 'fennel') & !str_detect(Ingredients, 'seed|salami') ~ 'fennel',
       str_detect(Ingredients, 'fig') & str_detect(Ingredients, 'dried') ~ 'fig dried',
       str_detect(Ingredients, 'fig') & str_detect(Ingredients, 'tart') ~ 'fig tart',
       str_detect(Ingredients, 'fig') ~ 'fig',

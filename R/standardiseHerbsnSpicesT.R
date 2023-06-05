@@ -20,7 +20,7 @@ standardiseHerbsnSpicesT <- function(df) {
       str_detect(Ingredients, 'tarragon') & !str_detect(Ingredients, 'parsley|rosemary|thyme|chervil|mint|basil|chives|dill|coriander') ~ 'tarragon dried', #Standard
       str_detect(Ingredients, 'thyme') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'thyme fresh herbs',
       str_detect(Ingredients, 'thyme') ~ 'thyme dried', #Standard
-      str_detect(Ingredients, 'turmeric') ~ 'turmeric',
+      str_detect(Ingredients, 'turmeric') & !str_detect(Ingredients, 'tea') ~ 'turmeric',
 
       TRUE ~ Ingredients_standardised))
 }

@@ -397,6 +397,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'salsa' ~ fixFoodMappingError(database = reference, 'chunky', 'salsa'),
           Ingredients == 'pear' ~ fixFoodMappingError(database = reference, 'pear'),
           Ingredients == 'jam blueberries' ~ fixFoodMappingError(database = reference, 'jam'),
+          Ingredients == 'tomato beef' ~ fixFoodMappingError(database = reference, 'tomato'),
 
           #Dairy
           Ingredients == 'parmesan cheese' ~ fixFoodMappingError(database = reference, 'parmesan'),
@@ -503,6 +504,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == "meatballs in tomato sauce" ~ fixFoodMappingError(database = reference, "meatball", "tomato sauce"),
           Ingredients == "bacon fat" ~ fixFoodMappingError(database = reference, "pork", "lard"), #Closest match
           Ingredients == 'chicken wing' ~ fixFoodMappingError(database = reference, "chicken", "drumstick"),
+          Ingredients == 'hamburger beef patty' ~ fixFoodMappingError(database = reference, "beef", "minced meat"),
 
           #Substitutions or ingredients not found in Matvaretabellen
           Ingredients %in% c('garlic oil', 'oil truffle') ~ fixFoodMappingError(database = reference, 'olive', 'oil'), #Garlic/truffle oil can be made by placing garlic in olive oil
@@ -523,18 +525,24 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'aioli' ~ fixFoodMappingError(database = reference, 'mayonnaise'), #Similar
 
           #Not in reference
-          (Ingredients %in% c('duck or goose fat for confit', 'lime leaf', 'cranberries jam', "beans'n'pork canned", 'onion seed',
+          ((Ingredients %in% c('duck or goose fat for confit', 'lime leaf', 'cranberries jam', "beans'n'pork canned", 'onion seed',
                              'cooking spray', 'red food coloring', 'beef fund', 'fish scraps for broth', 'chili bean paste sichuan',
                              'pack high quality charcoal briquettes', 'pomegranate kernel', 'yeast nutritional', 'condensed tomato soup',
                              'salmon roe', 'spice seasoning pepper', 'toro greek moussaka', 'paste chili', 'carbonated beverage lemon-lime',
-                             'fish soup base', 'spice mix guacamole', 'lamb sheep head', 'lemon balm', 'can tomato soup', 'sauce white',
+                             'fish soup base', 'spice mix guacamole', 'lamb sheep head', 'can tomato soup', 'sauce white',
                              'lingonberry jam', 'marrow bone', 'rhubarb juice', 'beef bones', 'whip it stabilizer', 'toenjang soybean paste',
                              '20 pound pack high quality charcoal briquettes', 'wine rice', 'trout caviar', 'vanillin', 'cream sauce base',
-                             'vanilla pod', 'vanilla extract', 'butter-vanilla aroma', 'paste vanilla bean', 'blueberries pie filling',
-                             'milk powder nonfat', 'garlic powder', 'apricot nectar', 'apricot preserve', 'apple sauce', 'oil chili sichuan',
-                             'frozen vegetable mix')  &
+                             'vanilla pod', 'butter-vanilla aroma', 'paste vanilla bean', 'blueberries pie filling',
+                             'milk powder nonfat', 'apricot nectar', 'apricot preserve', 'apple sauce', 'oil chili sichuan',
+                             'frozen vegetable mix') |
+              str_detect(Ingredients, 'spice mix(?! taco)')
+            )  &
             #If user have added these ingredients, keep
             !str_detect(database_ID, ".999")) ~ 0,
+
+          # Extra check for instant soups not in ref
+           (str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'instant') & !str_detect(database_reference, 'instant')) &
+            !(str_detect(database_ID, ".999") & str_detect(database_reference, 'instant')) ~ 0,
 
           TRUE ~ database_ID
         ))
@@ -595,7 +603,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'fresh cranberry' ~ fixFoodMappingError(database = reference, 'cranberries'),
           Ingredients == 'olive green' ~ fixFoodMappingError(database = reference, 'olives', 'canned'),
           Ingredients %in% c('red chili', 'strong chili', 'chili peppers') ~ fixFoodMappingError(database = reference, 'chili', 'pepper'),
-          Ingredients == 'tomato bunch' ~ fixFoodMappingError(database = reference, 'tomato'),
+          Ingredients %in% c('tomato bunch', 'tomato beef') ~ fixFoodMappingError(database = reference, 'tomato'),
           Ingredients %in% c('salad', 'salad heart', 'salad lollo rosso') ~ fixFoodMappingError(database = reference, 'head', 'lettuce'),
           Ingredients == 'salad crispi' ~ fixFoodMappingError(database = reference, 'crisp', 'lettuce'),
           Ingredients == 'salsa tomato' ~ fixFoodMappingError(database = reference, 'chunky', 'salsa'), #Standard

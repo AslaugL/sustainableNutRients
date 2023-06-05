@@ -13,6 +13,7 @@ standardiseFruitVegE <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'eggplant|aubergine') & str_detect(Ingredients, 'puree') ~ 'eggplant puree',
       str_detect(Ingredients, 'eggplant|aubergine') ~ 'eggplant',
 
       TRUE ~ Ingredients_standardised

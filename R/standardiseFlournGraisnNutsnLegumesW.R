@@ -22,16 +22,27 @@ standardiseFlournGraisnNutsnLegumesW <- function(df) {
         !str_detect(Ingredients, 'oil') ~ 'walnut',
 
       #Wheat flour
+      str_detect(Ingredients, 'rye') & str_detect(Ingredients, 'flour') &
+        str_detect(Ingredients, 'whole|coarse') ~ 'wheat flour rye wholemeal',
+      str_detect(Ingredients, 'emmer') &
+        str_detect(Ingredients, 'whole|coarse') ~ 'wheat flour emmer wholemeal',
+      str_detect(Ingredients, 'spelt|farro') & str_detect(Ingredients, 'flour') &
+        str_detect(Ingredients, 'whole|coarse') |
+        str_detect(Ingredients, 'farro') & str_detect(Ingredients, 'whole|coarse') ~ 'wheat flour spelt wholemeal',
       str_detect(Ingredients, 'spelt|farro') & str_detect(Ingredients, 'flour') |
         str_detect(Ingredients, 'farro') ~ 'wheat flour spelt',
       str_detect(Ingredients, 'wheat') & str_detect(Ingredients, 'bran') ~ 'wheat bran',
-      str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'wholemeal') |
-        str_detect(Ingredients, 'wheat') & str_detect(Ingredients, 'whole') & str_detect(Ingredients, 'flour') ~ 'wheat flour wholemeal',
       str_detect(Ingredients, 'rye') & str_detect(Ingredients, 'flour') ~ 'wheat flour rye',
-      str_detect(Ingredients, 'rye') & str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'whole') ~ 'wheat flour rye wholemeal',
+      str_detect(Ingredients, 'barley') & str_detect(Ingredients, 'flour') ~ 'wheat flour barley',
+      str_detect(Ingredients, '\\bemmer\\b') ~ 'wheat flour emmer',
       str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'pizza|tipo-00|tipo 00') ~ 'wheat flour tipo 00',
+
+      #Standard
+      str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'wholemeal|coarse') |
+        str_detect(Ingredients, 'wheat') & str_detect(Ingredients, 'whole|coarse') & str_detect(Ingredients, 'flour') ~ 'wheat flour wholemeal',
       (str_detect(Ingredients, 'wheat flour|all-purpose flour|plain flour|flour|durum wheat|self-raising') &
-        !str_detect(Ingredients, 'whole|gram|tortilla|potato|corn|spelt|almond|coconut|gluten~free') & !str_detect(Ingredients, 'bread')) |
+        !str_detect(Ingredients, 'whole|gram|tortilla|potato|corn|spelt|almond|coconut|gluten~free|semolina|chick|oat') &
+         !str_detect(Ingredients, 'bread')) |
         str_detect(Ingredients, 'breading flour') ~ 'wheat flour',
 
       TRUE ~ Ingredients_standardised))

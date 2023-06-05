@@ -9,16 +9,30 @@
 #'
 #' @export
 standardiseFlournGraisnNutsnLegumesB <- function(df) {
+
+  #Coarse
+  coarse <- 'brown|coarse|whole'
+
   df  %>%
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
       #Bagels and rolls
       str_detect(Ingredients, 'bagel') ~ 'rolls white bagel',
-      str_detect(Ingredients, 'rolls') & str_detect(Ingredients, 'coarse') ~ 'rolls coarse',
-      str_detect(Ingredients, 'rolls|poppyseed hot dog bun') ~ 'rolls white',
+      str_detect(Ingredients, 'rolls') & str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'coarse') ~ 'oat rolls coarse',
+      str_detect(Ingredients, 'rolls') & str_detect(Ingredients, 'oat') ~ 'oat rolls',
+      str_detect(Ingredients, 'rolls') & str_detect(Ingredients, coarse) ~ 'rolls coarse',
+      str_detect(Ingredients, 'rolls|poppyseed hot dog bun') & !str_detect(Ingredients, 'cinnamon') ~ 'rolls white',
+      str_detect(Ingredients, 'baguette') & str_detect(Ingredients, coarse) & str_detect(Ingredients, 'garlic') ~ 'rolls coarse baguette garlic',
+      str_detect(Ingredients, 'baguette') & str_detect(Ingredients, coarse) ~ 'rolls coarse baguette',
       str_detect(Ingredients, 'baguette') & str_detect(Ingredients, 'garlic') ~ 'rolls white baguette garlic',
+      str_detect(Ingredients, 'baguette') & str_detect(Ingredients, coarse) ~ 'rolls coarse baguette',
       str_detect(Ingredients, 'baguette') ~ 'rolls white baguette',
+
+      #Buns
+      str_detect(Ingredients, 'bun|roll') & str_detect(Ingredients, 'cinnamon') |
+        str_detect(Ingredients, 'gifflar') ~ 'bun cinnamon',
+      str_detect(Ingredients, '\\bbun\\b|\\bbuns\\b') & !str_detect(Ingredients, 'bao|steam|balls|coconut|hot dog|slider|fried|sausage') ~ 'bun',
 
       #Beans
       str_detect(Ingredients, 'canned chickpeas or mixed beans') | str_detect(Ingredients, 'chickpea|chick pea|garbanzo bean') & str_detect(Ingredients, 'drain') ~ 'chick pea canned', #Chickpeas are in the name of the recipe
@@ -42,6 +56,7 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'can') ~ "beans'n'pork canned",
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'in') ~ "beans chili canned",
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'can') ~ 'bean canned',
+      str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'mix') & !str_detect(Ingredients, 'stir-fry') ~ 'bean mixed',
 
       #Biscuits
       str_detect(Ingredients, 'biscuit') & str_detect(Ingredients, 'digestive') | Ingredients %in% c('wheat biscuits', 'tea biscuit') ~ 'biscuit digestive', #Digestive biscuits can be used as "tea biscuits" as a the bottom layer
@@ -61,20 +76,29 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'biscuit') & str_detect(Ingredients, 'chocolate chip|chocolate cover') ~ 'biscuit chocolate chip',
       str_detect(Ingredients, 'biscuit') & str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'chocolate') ~ 'biscuit ice cream chocolate',
 
+      #Crisp breads
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crisp') & str_detect(Ingredients, 'coarse') ~ 'crisp bread coarse',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crisp') & str_detect(Ingredients, 'oat') ~ 'crisp bread oat',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crisp') & str_detect(Ingredients, 'spelt') ~ 'crisp bread spelt',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crisp') & str_detect(Ingredients, 'rye') ~ 'crisp bread rye',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crisp') & str_detect(Ingredients, 'sour') ~ 'crisp bread sourdough',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crisp') ~ 'crisp bread',
+
       #Breads
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'rye') & str_detect(Ingredients, 'crumb') ~ 'bread crumb rye',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'rye') ~ 'bread rye',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'whole|coarse') ~ 'bread oat coarse',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'oat') ~ 'bread oat',
       str_detect(Ingredients, 'ontbijtkoek') ~ 'bread ontbijtkoek',
-      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'pumpernickel') ~ 'bread pumpernickel',
+      str_detect(Ingredients, 'pumpernickel') ~ 'bread pumpernickel',
       (str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crumb|grate') & str_detect(Ingredients, 'white')) | str_detect(Ingredients, 'grilling flour') & str_detect(Ingredients, 'white') ~ 'bread crumb white',
       (str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crumb|grate')) | str_detect(Ingredients, 'grilling flour') ~ 'bread crumb',
       str_detect(Ingredients, 'crouton') ~ 'bread crouton',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'stick') ~ 'breadstick',
-      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crisp') & str_detect(Ingredients, 'coarse') ~ 'crisp bread coarse',
-      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'crisp') ~ 'crisp bread',
-      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'coarse|whole wheat|whole-wheat|whole grain|whole-grain|wholegrain|brown') ~ 'bread coarse',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'coarse|whole wheat|whole-wheat|whole grain|whole-grain|wholegrain|brown|wholemeal') ~ 'bread coarse',
       str_detect(Ingredients, 'chapati') ~ 'bread brown chapati',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'white') & str_detect(Ingredients, 'mix') ~ 'white bread mix',
+      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'coarse|brown|whole') & str_detect(Ingredients, 'mix') ~ 'coarse bread mix',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'white|fine') | str_detect(Ingredients, 'loff') ~ 'bread white',
       str_detect(Ingredients, 'flatbread') ~ 'bread flat hard',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'nan|naan') ~ 'bread naan',
@@ -82,8 +106,9 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'pita') & str_detect(Ingredients, 'whole-wheat|whole wheat') ~ 'bread coarse pita',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'pocket|pita') ~ 'bread white pita',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'polar') ~ 'bread polar',
-      str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'sausage') ~ 'bread sausage',
+      str_detect(Ingredients, 'bread|bun') & str_detect(Ingredients, 'sausage|hot dog') ~ 'bread sausage',
       str_detect(Ingredients, 'bulgur|bulgar') ~ 'bulgur wheat',
+      str_detect(Ingredients, 'bao|steam') & str_detect(Ingredients, 'bun') & str_detect(Ingredients, 'fill') ~ 'bao bun filled',
       str_detect(Ingredients, 'bao|steam') & str_detect(Ingredients, 'bun') ~ 'bao bun',
       str_detect(Ingredients, 'focaccia') ~ 'bread white foccacia',
       str_detect(Ingredients, 'paratha') & str_detect(Ingredients, 'bread') ~ 'bread paratha',

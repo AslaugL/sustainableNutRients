@@ -16,8 +16,11 @@ standardiseFoodNames <- function(df) {
       Ingredients = Ingredients %>%
         stri_trans_tolower() %>%
         str_trim() %>%
-        str_remove_all(","),
-
+        str_remove_all(",") %>%
+        #Remove & sign
+        str_replace("&", "and") %>%
+        #Replace different ways to write salt
+        str_replace('sea salt|maldon salt|maldonsalt|seasalt|flaked salt|flake salt', 'salt'),
       #Create an ingredients_standardised column
       Ingredients_standardised = "") %>%
 
@@ -31,7 +34,8 @@ standardiseFoodNames <- function(df) {
     standardisePoultry() %>%
     standardiseRedMeatnSubs() %>%
     standardiseSeafood() %>%
-    standardiseSauces() %>%
+    standardiseCondiments() %>%
+    standardiseBeverages() %>%
     standardiseOthers() %>%
 
     #Rename

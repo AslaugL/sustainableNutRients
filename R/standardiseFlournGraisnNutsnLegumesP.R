@@ -9,25 +9,36 @@
 #'
 #' @export
 standardiseFlournGraisnNutsnLegumesP <- function(df) {
+
+  #Names of different types of pasta
+  pasta_types <- "pasta|spagetti|spaghetti|tagli|pens|macaroni|tortellini|fusili|\\bpenne\\b|rigatoni|bucatini"
+
   df  %>%
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'pancake') & str_detect(Ingredients, 'mix') ~ 'pancake dry mix',
       str_detect(Ingredients, 'pancake') & !str_detect(Ingredients, 'syrup') ~ 'pancake',
+      str_detect(Ingredients, 'papadam') ~ 'papadam',
 
       #Pasta
-      str_detect(Ingredients, 'pasta|paste|spagetti|spaghetti') & str_detect(Ingredients, 'whole') ~ 'pasta whole grain',
-      str_detect(Ingredients, 'lasagna|lasagne') & str_detect(Ingredients, 'plate|sheet') ~ 'lasagna plate pasta',
+      str_detect(Ingredients, 'pasta') & str_detect(Ingredients, 'lentil') ~ 'pasta lentils',
+      str_detect(Ingredients, 'pasta') & str_detect(Ingredients, 'bean') ~ 'pasta bean',
+      str_detect(Ingredients, 'pasta') & str_detect(Ingredients, 'pea') ~ 'pasta pea',
       str_detect(Ingredients, 'tortellini') ~ 'pasta filled',
-      str_detect(Ingredients, 'pasta|spagetti|spaghetti|tagli|pens|macaroni') & !str_detect(Ingredients, 'lasagna') & str_detect(Ingredients, '\\bcooked') ~ 'pasta cooked',
-      str_detect(Ingredients, 'pasta|spagetti|spaghetti|tagli|pens|macaroni|tortellini') & !str_detect(Ingredients, 'lasagna') & !str_detect(Ingredients, 'sauce') ~ 'pasta',
-      str_detect(Ingredients, 'lasagna noodles') ~ 'pasta',
+      str_detect(Ingredients, pasta_types) & str_detect(Ingredients, 'whole') ~ 'pasta whole grain',
+      str_detect(Ingredients, 'lasagna|lasagne') & str_detect(Ingredients, 'plate|sheet') ~ 'lasagna plate pasta',
+      str_detect(Ingredients, pasta_types) & !str_detect(Ingredients, 'lasagna') & str_detect(Ingredients, '\\bcooked') ~ 'pasta cooked',
+      str_detect(Ingredients, pasta_types) &
+        !str_detect(Ingredients, 'lasagna|seasoning') & !str_detect(Ingredients, 'sauce') | str_detect(Ingredients, 'lasagna noodles') ~ 'pasta',
 
       #Pearl barley
+      str_detect(Ingredients, 'barley') & str_detect(Ingredients, 'lunch|porridge') & str_detect(Ingredients, 'apple|banana|fruit') ~ 'pearl barley porridge fruit',
+      str_detect(Ingredients, 'barley') & str_detect(Ingredients, 'lunch|porridge') ~ 'pearl barley porridge',
       str_detect(Ingredients, 'barley') & !str_detect(Ingredients, 'salad') ~ 'pearl barley',
 
       #Nuts and seeds
+      str_detect(Ingredients, 'peanut') & str_detect(Ingredients, 'butter') & str_detect(Ingredients, 'without salt|unsalt') ~ 'peanut butter unsalted',
       str_detect(Ingredients, 'peanut') & str_detect(Ingredients, 'butter') ~ 'peanut butter',
       str_detect(Ingredients, 'peanut') & str_detect(Ingredients, 'salt') & !str_detect(Ingredients, 'unsalted') ~ 'peanut salt',
       str_detect(Ingredients, 'peanut') & !str_detect(Ingredients, 'oil') ~ 'peanut',

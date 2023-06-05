@@ -13,7 +13,8 @@ standardiseFlournGraisnNutsnLegumesR <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'rice') & str_detect(Ingredients, '\\bcooked|boiled') & !str_detect(Ingredients, 'par|pre|beef|potato|vinegar|wine|barley|broccoli|cauliflower|liquo') ~ 'rice cooked',
+      str_detect(Ingredients, 'rice') & str_detect(Ingredients, '\\bcooked|boiled') &
+        !str_detect(Ingredients, 'par|pre|beef|potato|vinegar|wine|barley|broccoli|cauliflower|liquo') ~ 'rice cooked',
       str_detect(Ingredients, 'rice|ris') & str_detect(Ingredients, 'basmati') ~ 'rice basmati',
       str_detect(Ingredients, 'rice|ris') & str_detect(Ingredients, 'risotto|arbori|paella') | str_detect(Ingredients, 'vialone nano') ~ 'rice risotto',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'jasmin') ~ 'rice jasmin',
@@ -26,7 +27,7 @@ standardiseFlournGraisnNutsnLegumesR <- function(df) {
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'noodle') ~ 'rice noodle',
       str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'porridge') ~ 'rice porridge',
       str_detect(Ingredients, 'porridge') & !str_detect(Ingredients, "oat|sour cream") ~ 'porridge',
-      str_detect(Ingredients, 'rice') & !str_detect(Ingredients, 'beef|potato|vinegar|wine|barley|broccoli|cauliflower|liquo') ~ 'rice white long grain',
+      str_detect(Ingredients, '\\brice') & !str_detect(Ingredients, 'beef|potato|vinegar|wine|barley|broccoli|cauliflower|liquo|drink|milk') ~ 'rice white long grain',
 
       TRUE ~ Ingredients_standardised))
 }

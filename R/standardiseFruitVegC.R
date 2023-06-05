@@ -13,6 +13,7 @@ standardiseFruitVegC <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'cabbage') & str_detect(Ingredients, 'black') | str_detect(Ingredients, 'cavolo nero') ~ 'kale tuscan',
       str_detect(Ingredients, 'cabbage') & str_detect(Ingredients, 'napa') ~ 'cabbage napa',
       str_detect(Ingredients, 'cabbage') & str_detect(Ingredients, 'oxheart|skewered') ~ 'cabbage oxheart',
       str_detect(Ingredients, 'cabbage') & str_detect(Ingredients, 'red') & !str_detect(Ingredients, 'shred') ~ 'cabbage red',
@@ -21,15 +22,17 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'cabbage') & !str_detect(Ingredients, 'meat|root') ~ 'cabbage',
       str_detect(Ingredients, 'cantaloupe') ~ 'melon cantaloupe',
       str_detect(Ingredients, 'bok choi|bok choy') ~ 'cabbage bok choi',
+      str_detect(Ingredients, 'carrot|raw yellow') & str_detect(Ingredients, 'juice') ~ 'carrot juice',
       str_detect(Ingredients, 'carrot|raw yellow') & !str_detect(Ingredients, 'paste|wok|mire') ~ 'carrot',
       str_detect(Ingredients, 'cauliflower') & !str_detect(Ingredients, 'butter') ~ 'cauliflower',
       str_detect(Ingredients, 'celery|cellery') & !str_detect(Ingredients, 'salt|soup|seed') | str_detect(Ingredients, 'celeriac') & str_detect(Ingredients, 'stilk|stalk|rib') ~ 'celery', #Use celery for stangselleri
       str_detect(Ingredients, 'celeriac') & !str_detect(Ingredients, 'mire') ~ 'celariac root',
       str_detect(Ingredients, 'chard') & !str_detect(Ingredients, 'wine') ~ 'mangold',
       str_detect(Ingredients, 'cherry tomato') & str_detect(Ingredients, 'can') ~ 'cherry tomato canned',
-      str_detect(Ingredients, 'cherry tomato') ~ 'cherry tomato',
+      str_detect(Ingredients, 'cherry') & str_detect(Ingredients, 'tomato') ~ 'cherry tomato',
       str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'can|in syrup') & !str_detect(Ingredients, 'tomato') ~ 'cherries canned', #Name used in SHARP and Matvaretabellen
       str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'compote') ~ 'cherries compote',
+      str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'jelly') ~ 'cherries jelly',
       str_detect(Ingredients, 'cherry|cherries') & !str_detect(Ingredients, 'tomato') ~ 'cherries', #Name used in SHARP and Matvaretabellen
       str_detect(Ingredients, 'chicory') & str_detect(Ingredients, 'white') ~ 'chicory white',
       str_detect(Ingredients, 'chicory') & str_detect(Ingredients, 'red') ~ 'chicory red',
@@ -37,7 +40,7 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'coleslaw') ~ 'coleslaw',
 
       str_detect(Ingredients, 'jalap') & str_detect(Ingredients, 'pickle') ~ 'chili pepper jalapeno pickled',
-      str_detect(Ingredients, 'jalap') ~ 'chili pepper jalapeno',
+      str_detect(Ingredients, 'jalap') & !str_detect(Ingredients, 'cheese|sauce|spread|nut') ~ 'chili pepper jalapeno',
       str_detect(Ingredients, 'chili|chilli|chile') & str_detect(Ingredients, 'green') ~ 'chili pepper green',
 
       ((str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'chili|chilli')) | (str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'red|r\u00f8d'))) & !str_detect(Ingredients, 'powder') |
@@ -61,6 +64,7 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'corn') & str_detect(unit, 'pcs') &
         !str_detect(Ingredients, 'pepper') | str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'cob') ~ 'corn cob',
       str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'jam') ~ 'cranberries jam',
+      str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'dried|dry') ~ 'cranberries dried',
       str_detect(Ingredients, 'cranberr') & !str_detect(Ingredients, 'sauce') ~ 'cranberries',
       str_detect(Ingredients, 'cucumber') & str_detect(Ingredients, 'snake') ~ 'cucumber snake',
       str_detect(Ingredients, 'cucumber') & str_detect(Ingredients, 'jam|pickle') ~ 'cucumber pickled',

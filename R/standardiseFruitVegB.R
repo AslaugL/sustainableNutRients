@@ -13,14 +13,17 @@ standardiseFruitVegB <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'bamboo shoot') ~ 'bamboo shoot',
       str_detect(Ingredients, 'banan') & !str_detect(Ingredients, 'shallot') ~ 'banana',
       str_detect(Ingredients, 'beet|better') & str_detect(Ingredients, 'yellow') ~ 'beetroot yellow',
       str_detect(Ingredients, 'beet') & str_detect(Ingredients, 'cooked|boiled') ~ 'beetroot cooked',
+      str_detect(Ingredients, 'beet') & str_detect(Ingredients, 'juice') ~ 'beetroot juice',
       str_detect(Ingredients, 'beet') & str_detect(Ingredients, 'root') & !str_detect(Ingredients, 'pickle') ~ 'beetroot',
       str_detect(Ingredients, '\\bbeet\\b') ~ "beetroot",
       str_detect(Ingredients, 'curran') & str_detect(Ingredients, 'jam') ~ 'jam currant',
       str_detect(Ingredients, 'curran') & str_detect(Ingredients, 'jelly') ~ 'jelly currant',
-      str_detect(Ingredients, 'black curran') & !str_detect(Ingredients, 'juice') ~ 'black currant',
+      str_detect(Ingredients, 'black curran') & str_detect(Ingredients, 'juice') ~ 'black currant juice',
+      str_detect(Ingredients, 'black curran') & str_detect(Ingredients, 'toddy') ~ 'black currant toddy',
       str_detect(Ingredients, 'currant') ~ 'black currant', #Use as default
       str_detect(Ingredients, 'blackberr') ~ 'blackberries',
       str_detect(Ingredients, 'blueberr') & str_detect(Ingredients, 'pie fill') ~ 'blueberries pie filling',

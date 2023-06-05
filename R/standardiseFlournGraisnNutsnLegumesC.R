@@ -14,13 +14,14 @@ standardiseFlournGraisnNutsnLegumesC <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       #nuts
-      str_detect(Ingredients, 'cashew') & str_detect(Ingredients, 'salt') & !str_detect(Ingredients, 'without') & str_detect(Ingredients, 'nut') ~ 'cashew nut salt',
+      str_detect(Ingredients, 'cashew') & str_detect(Ingredients, 'salt') & !str_detect(Ingredients, 'without|unsalted') & str_detect(Ingredients, 'nut') ~ 'cashew nut salt',
       str_detect(Ingredients, 'cashew') & str_detect(Ingredients, 'roast|toast') ~ 'cashew nut roasted',
+      str_detect(Ingredients, 'cashew') & str_detect(Ingredients, 'butter') ~ 'cashew nut butter',
       str_detect(Ingredients, 'cashew') ~ 'cashew nut',
       str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'chili') ~ 'chili nut',
       str_detect(Ingredients, 'coconut') & str_detect(Ingredients, 'mass') ~ 'coconut mass',
       str_detect(Ingredients, 'coconut') & str_detect(Ingredients, 'flake') ~ 'coconut flake',
-      str_detect(Ingredients, 'coconut') & !str_detect(Ingredients, 'milk|granola|oil|fat') ~ 'coconut',
+      str_detect(Ingredients, 'coconut') & !str_detect(Ingredients, 'milk|granola|oil|fat|drink|yoghurt|yogurt') ~ 'coconut',
 
       #Chia
       str_detect(Ingredients, 'chia seed') ~ 'chia seed',
@@ -30,10 +31,12 @@ standardiseFlournGraisnNutsnLegumesC <- function(df) {
         (str_detect(Ingredients, 'can|box|carton') | str_detect(Ingredients, 'drained') | str_detect(unit, 'can|box|stk|carton') ) ~ 'chick pea canned',
       str_detect(Ingredients, 'flour') & str_detect(Ingredients, 'chick|gram') ~ 'chick pea flour',
       str_detect(Ingredients, 'chickpea|chick pea') & str_detect(Ingredients, 'dry|dried') ~ 'chick pea dry',
-      str_detect(Ingredients, 'chickpea|chick pea') & !str_detect(Ingredients, 'lentil') ~ 'chick pea',
+      str_detect(Ingredients, 'chickpea|chick pea') & !str_detect(Ingredients, 'lentil|curry') ~ 'chick pea',
 
-      #Ciabatta
+      #C baked goods
+      str_detect(Ingredients, 'ciabatta|italian bread') & str_detect(Ingredients, 'brown|coarse') ~ 'ciabatta coarse',
       str_detect(Ingredients, 'ciabatta|italian bread') ~ 'ciabatta',
+      str_detect(Ingredients, 'croissant') ~ 'croissant',
 
       #Corn starch/meal
       (str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'starch')) |
@@ -46,7 +49,7 @@ standardiseFlournGraisnNutsnLegumesC <- function(df) {
 
       #Cookies, crackers and biscuits
       str_detect(Ingredients, 'cookie') & str_detect(Ingredients, 'amarettini') ~ 'cookies amarettini',
-      str_detect(Ingredients, 'cookie') & str_detect(Ingredients, 'cookie dough') ~ 'cookies cookie dough',
+      str_detect(Ingredients, 'cookie') & str_detect(Ingredients, 'cookie dough') & !str_detect(Ingredients, 'milk|litago|cream|yoghurt|yogurt') ~ 'cookies cookie dough',
       str_detect(Ingredients, 'cream cracker') ~ 'cracker cream',
       str_detect(Ingredients, 'cracker') & str_detect(Ingredients, 'saltine') ~ 'cracker saltine',
       str_detect(Ingredients, 'cracker') & str_detect(Ingredients, 'coarse') ~ 'cracker coarse',

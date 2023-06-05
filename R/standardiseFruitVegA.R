@@ -13,8 +13,9 @@ standardiseFruitVegA <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'assorted raw vegetables') ~ 'assorted raw vegetables',
+      str_detect(Ingredients, 'assorted raw vegetables|raw food mix') ~ 'assorted raw vegetables',
       str_detect(Ingredients, 'acorn squash') ~ 'winter squash acorn',
+      str_detect(Ingredients, 'acai bowl') ~ 'acai bowl',
       str_detect(Ingredients, 'apple') & !str_detect(Ingredients, 'juice|vinegar|butter|pine|wasabi|sauce|syrup|muesli') ~ 'apple',
       str_detect(Ingredients, 'apple') & str_detect(Ingredients, 'sauce') ~ 'apple sauce',
       str_detect(Ingredients, 'apple') & str_detect(Ingredients, 'juice') & !str_detect(Ingredients, 'pine') ~ 'apple juice',
@@ -22,6 +23,7 @@ standardiseFruitVegA <- function(df){
       str_detect(Ingredients, 'apricot') & str_detect(Ingredients, 'dried') ~ 'apricot dried',
       str_detect(Ingredients, 'apricot') & str_detect(Ingredients, 'jam') ~ 'apricot jam',
       str_detect(Ingredients, 'apricot') & str_detect(Ingredients, 'nectar') ~ 'apricot nectar',
+      str_detect(Ingredients, 'apricot') & str_detect(Ingredients, 'compot') ~ 'apricot compote',
       str_detect(Ingredients, 'apricot') & str_detect(Ingredients, 'preserve') ~ 'apricot preserve',
       str_detect(Ingredients, 'apricot') & str_detect(Ingredients, 'drained') ~ 'apricot canned',
       str_detect(Ingredients, 'apricot')  ~ 'apricot',

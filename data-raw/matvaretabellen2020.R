@@ -241,8 +241,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'peaches, canned, in syrup' ~ 'peach_canned',
 
   food_item == 'melon, cantaloupe, raw' ~ 'melon_cantaloupe',
-  food_item == 'melon, honeydew' ~ 'melon_honeydew',
-  food_item == 'melon, galia' ~ 'melon_galia',
+  food_item == 'melon, honeydew, raw' ~ 'melon_honeydew',
+  food_item == 'melon, galia, raw' ~ 'melon_galia',
 
   #Grains----
   food_item == 'almonds' ~ 'almond',
@@ -297,6 +297,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'linseeds, flax seeds, crushed' ~ 'flax_seed',
   food_item == 'pecan nuts' ~ 'pecan_nut',
   food_item == 'brazil nuts' ~ 'brazil_nut',
+  food_item == 'hazelnuts' ~ 'hazel_nut',
+  food_item == 'wheatbran' ~ 'wheat bran',
 
   str_detect(food_item, 'bread, semi-coarse') & str_detect(food_item, '25-50') & str_detect(food_item, 'industrially made') ~ 'bread',
   str_detect(food_item, 'bread, white') & str_detect(food_item, '0-25') & str_detect(food_item, 'industrially made') & !str_detect(food_item, 'spiral|square') ~ 'bread_white',
@@ -409,6 +411,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'chocolate, dark, 70 % cocoa' ~ 'chocolate_dark', #Not really, but darkest they have
   food_item == 'popcorn, air popped, industrially made' ~ 'popcorn',
   food_item == 'gelatin' ~ 'gelatin',
+  food_item == 'cloudberries, raw' ~ 'cloud_berr',
 
   #Keep the unspecified ingredients
   str_detect(food_item, ', unspecified, raw') ~ str_replace(food_item, ', unspecified, raw', ''),
@@ -433,7 +436,7 @@ clean_nutrients <- raw_data %>%
 
   mutate(Ingredients = case_when(
     #Turn seeds and nuts and some fruits into singular form
-    str_detect(food_item, 'nuts') & !str_detect(Ingredients, 'pecan|brazil') ~ str_replace(food_item, 'nuts', 'nut'),
+    str_detect(food_item, 'nuts') & !str_detect(Ingredients, 'pecan|brazil|hazel') ~ str_replace(food_item, 'nuts', 'nut'),
     #str_detect(food_item, 'seeds') ~ str_replace(food_item, 'seeds', 'seed'),
 
     #Some other fruits and vegetable
@@ -505,7 +508,7 @@ fromFoodDataCentral_foods <- read_csv(
     'Shortening, vegetable, household, composite', 'Pickle relish, sweet', 'Syrups, maple',
     'Sauce, ready-to-serve, pepper, TABASCO', 'Tapioca, pearl, dry', 'Molasses', 'Vital wheat gluten',
     'Horseradish, prepared', 'Oil, coconut', 'Fat, goose', 'Frostings, glaze, prepared-from-recipe',
-    'Vanilla extract')) %>%
+    'Vanilla extract', 'Leavening agents, baking soda', 'Leavening agents, baking powder, low-sodium')) %>%
 
   #Rename to fit ingredient names
   mutate(description = description %>%
@@ -562,7 +565,10 @@ fromFoodDataCentral_foods <- read_csv(
            str_replace('Figs, raw', 'fig') %>%
            str_replace('Seaweed, wakame, raw', 'wakame') %>%
            str_replace('Vanilla extract', 'vanilla_extract') %>%
-           str_replace('Cabbage, chinese \\(pak-choi\\), raw', 'cabbage_pak choi')
+           str_replace('Cabbage, chinese \\(pak-choi\\), raw', 'cabbage_pak choi') %>%
+           str_replace('Leavening agents, baking soda', 'baking_soda') %>%
+           str_replace('Leavening agents, baking powder, low-sodium', 'baking_powder') %>%
+           str_replace('Buckwheat', 'buckwheat')
          #'Tamarind nectar, canned'
   ) %>%
 
@@ -779,3 +785,4 @@ matvaretabellen2020_query_prep <- clean_nutrients %>%
 
 #Save the dataframe to use to create the queries
 saveRDS(matvaretabellen2020_query_prep, "./data-raw/matvaretabellen2020_query_prep.Rds")
+

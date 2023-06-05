@@ -14,7 +14,7 @@ standardiseHerbsnSpicesC <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'cajun') & str_detect(Ingredients, 'spice') ~ 'cajun spice',
-      str_detect(Ingredients, 'caraway') ~ 'caraway seed',
+      str_detect(Ingredients, 'caraway') & !str_detect(Ingredients, 'cheese') ~ 'caraway seed',
       str_detect(Ingredients, 'cardamom') & str_detect(Ingredients, 'fruit|pod|capsule') ~ 'cardamom pod',
       str_detect(Ingredients, 'cardamom') ~ 'cardamom',
       str_detect(Ingredients, 'celery') & str_detect(Ingredients, 'seed') ~ 'celery seed',
@@ -22,7 +22,8 @@ standardiseHerbsnSpicesC <- function(df) {
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'spice mix') ~ 'spice mix chicken',
       str_detect(Ingredients, 'chervil') &
         !str_detect(Ingredients, 'parsley|rosemary|thyme|mint|basil|oregano|dill|coriander|tarragon') ~ 'chervil fresh herb', #All chervils are fresh
-      str_detect(Ingredients, 'chives') ~ 'chives fresh herb', #Standard
+      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'seasoning|spice mix') ~ 'spice mix chicken',
+      str_detect(Ingredients, 'chives') & !str_detect(Ingredients, 'cheese|philadelphia|snow-fresh|potato|sandwich') ~ 'chives fresh herb', #Standard
       (str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'dried') & str_detect(Ingredients, 'flake')) |
         str_detect(Ingredients, 'red pepper flate|red pepper flake') |
         str_detect(Ingredients, 'chili flake|chilli flake') ~ 'chili flake dried',
@@ -32,8 +33,9 @@ standardiseHerbsnSpicesC <- function(df) {
       str_detect(Ingredients, 'chinese') & str_detect(Ingredients, 'spice') ~ 'chinese five spice',
       str_detect(Ingredients, 'cinnamon') & str_detect(Ingredients, 'bar|rod|stick') ~ 'cinnamon bar',
       str_detect(Ingredients, 'cinnamon') & !str_detect(Ingredients, 'muesli') ~ 'cinnamon',
-      str_detect(Ingredients, 'clove|carnation') & !str_detect(Ingredients, 'garlic') ~ 'cloves',
+      str_detect(Ingredients, 'clove|carnation') & !str_detect(Ingredients, 'garlic|sprout') ~ 'cloves',
       str_detect(Ingredients, 'coriander') & str_detect(Ingredients, 'seed') ~ 'coriander seed',
+      str_detect(Ingredients, 'coriander') & str_detect(Ingredients, 'paste') ~ 'coriander paste',
       str_detect(Ingredients, 'coriander|cilantro') & !str_detect(Ingredients, 'seed') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf|malt') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'coriander fresh herbs',
       str_detect(Ingredients, 'coriander|cilantro') ~ 'coriander dried', #Standard
       str_detect(Ingredients, 'cress') ~ 'cress fresh herbs',

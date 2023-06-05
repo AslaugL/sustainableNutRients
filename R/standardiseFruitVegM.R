@@ -13,8 +13,15 @@ standardiseFruitVegM <- function(df){
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'mango') & !str_detect(Ingredients, 'chutney') ~ 'mango',
+      str_detect(Ingredients, 'mango') & str_detect(Ingredients, 'dri|dry') ~ 'mango dried',
+      str_detect(Ingredients, 'mango') & str_detect(Ingredients, 'puree') ~ 'mango puree',
+      str_detect(Ingredients, 'mango') & str_detect(Ingredients, 'juice') ~ 'mango juice',
+      str_detect(Ingredients, 'mango') & !str_detect(Ingredients, 'chutney|sauce|yoghurt|yogurt') ~ 'mango',
+
+      #Melons
       str_detect(Ingredients, 'melon') & str_detect(Ingredients, 'honeydew') ~ 'melon honeydew',
+      str_detect(Ingredients, 'melon') & str_detect(Ingredients, 'piel de sapo') ~ 'melon piel de sapo',
+      str_detect(Ingredients, 'melon') & str_detect(Ingredients, 'mix') ~ 'melon mix',
 
       TRUE ~ Ingredients_standardised
     ))

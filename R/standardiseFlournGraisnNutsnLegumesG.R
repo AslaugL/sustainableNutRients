@@ -14,7 +14,7 @@ standardiseFlournGraisnNutsnLegumesG <- function(df) {
     #Standardise
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'granola') & str_detect(Ingredients, 'hazelnut') & str_detect(Ingredients, 'coconut') ~ 'granola hazelnut and coconut',
-      str_detect(Ingredients, 'granola') ~ 'granola',
+      str_detect(Ingredients, 'granola') & !str_detect(Ingredients, 'yoghurt|yogurt') ~ 'granola',
       str_detect(Ingredients, 'gluten-free|gluten free') & str_detect(Ingredients, 'flour') ~ 'gluten free flour',
 
       TRUE ~ Ingredients_standardised))

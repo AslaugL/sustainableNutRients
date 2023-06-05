@@ -15,7 +15,9 @@ standardiseFruitVegD <- function(df){
     mutate(Ingredients_standardised = case_when(
 
       str_detect(Ingredients, 'dates') ~ 'dates',
-      str_detect(Ingredients, 'dandelion') & str_detect(Ingredients, 'green') & !str_detect(Ingredients, 'pesto') ~ 'dandelion greens',
+      str_detect(Ingredients, 'dandelion') & str_detect(Ingredients, 'green') &
+        !str_detect(Ingredients, 'pesto') ~ 'dandelion greens',
+      str_detect(Ingredients, 'dragon fruit|dragonfruit') ~ 'dragon fruit',
 
       TRUE ~ Ingredients_standardised
     ))

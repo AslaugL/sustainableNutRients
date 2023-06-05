@@ -13,13 +13,21 @@ standardiseDairynSubsB <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+
+      #Biola
+      str_detect(Ingredients, 'biola') & str_detect(Ingredients, 'without added sugar|no added sugar') ~ 'biola yoghurt sugar free',
+      str_detect(Ingredients, 'biola') & str_detect(Ingredients, 'berry|berries') ~ 'biola yoghurt berry flavored',
+      str_detect(Ingredients, 'biola') & str_detect(Ingredients, 'melon|passion fruit|mango|apple|rhubarb') ~ 'biola yoghurt fruit flavored',
+      str_detect(Ingredients, 'biola') ~ 'biola yoghurt',
+
       #Butter
       str_detect(Ingredients, 'ghee|clarified butter') ~ 'butter clarified ghee',
       str_detect(Ingredients, 'buttercream') ~ 'buttercream',
       str_detect(Ingredients, 'spice') & str_detect(Ingredients, 'butter') ~ 'spice butter',
       str_detect(Ingredients, 'butter|sm\u00F8r') & str_detect(Ingredients, 'unsalted|usalted') ~ 'unsalted butter',
-      str_detect(Ingredients, 'butter|sm\u00F8r') & !str_detect(Ingredients, 'frying|dough|unsalted|browning|brushing|pepper|sour cream|roasting|butternut|pastry|greasing|milk|beans|peanut|vanilla aroma|nut|almond') ~ 'butter',
       str_detect(Ingredients, 'butter') & str_detect(Ingredients, 'frying|browning|roasting|greasing|brushing') ~ 'butter for cooking',
+      str_detect(Ingredients, 'butter|sm\u00F8r') &
+        !str_detect(Ingredients, 'dough|pepper|sour cream|butternut|pastry|milk|beans|peanut|vanilla aroma|nut|almond|salad') ~ 'butter',
       #Buttermilk
       str_detect(Ingredients, 'buttermilk') & !str_detect(Ingredients, 'dough') ~ 'buttermilk',
 

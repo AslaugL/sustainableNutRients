@@ -13,10 +13,11 @@ standardiseFlournGraisnNutsnLegumesN <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'nacho|tortilla chip') ~ 'nacho',
-      str_detect(Ingredients, 'taco') & str_detect(Ingredients, 'shell') ~ 'taco shell',
+      ((str_detect(Ingredients, 'nacho|nachips') | str_detect(Ingredients, 'tortilla') & str_detect(Ingredients, 'chip')) & !str_detect(Ingredients, 'burger|dip')) & str_detect(Ingredients, 'cheese|chili|garlic') ~ 'nacho flavored',
+      (str_detect(Ingredients, 'nacho|nachips') | str_detect(Ingredients, 'tortilla') & str_detect(Ingredients, 'chip')) & !str_detect(Ingredients, 'burger|dip') ~ 'nacho',
+      str_detect(Ingredients, 'taco') & str_detect(Ingredients, 'shell|tub|tray|bowl') ~ 'taco shell',
 
-      str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'mix') ~ 'nuts mixed',
+      str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'mix') & !str_detect(Ingredients, 'yoghurt|yogurt') ~ 'nuts mixed',
 
       TRUE ~ Ingredients_standardised))
 }

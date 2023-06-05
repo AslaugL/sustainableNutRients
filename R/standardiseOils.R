@@ -9,6 +9,10 @@
 #'
 #' @export
 standardiseOils <- function(df) {
+
+  #Oil with flavors
+  flavors <- 'lemon|garlic|basil|truffle|chili'
+
   df  %>%
 
     #Standardise
@@ -23,12 +27,15 @@ standardiseOils <- function(df) {
       str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'oil') & str_detect(Ingredients, 'deep fry') ~ 'oil corn for deep frying',
       str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'oil') ~ 'oil corn',
 
+      str_detect(Ingredients, 'flax|linseed') & str_detect(Ingredients, 'oil') ~ 'oil flaxseed',
+
       str_detect(Ingredients, 'garlic oil') ~ 'garlic oil',
 
       str_detect(Ingredients, 'hazelnut oil') ~ 'hazelnut oil',
 
       str_detect(Ingredients, 'olive') & str_detect(Ingredients, 'oil') & str_detect(Ingredients, 'deep fry') ~ 'olive oil for deep frying',
       str_detect(Ingredients, 'olive') & str_detect(Ingredients, 'oil') & str_detect(Ingredients, 'frying|browning|roasting|greasing|brushing') ~ 'olive oil for cooking',
+      str_detect(Ingredients, 'olive') & str_detect(Ingredients, 'oil') & str_detect(Ingredients, flavors) ~ 'olive oil flavored',
       str_detect(Ingredients, 'olive oil|olivenolje|extra-virgin olive|olive oil') ~ 'olive oil',
 
       str_detect(Ingredients, 'peanut') & str_detect(Ingredients, 'oil') & str_detect(Ingredients, 'deep fry') ~ 'peanut oil for deep frying',
