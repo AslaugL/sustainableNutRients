@@ -15,8 +15,9 @@ standardiseFruitVegR <- function(df){
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'radish') & str_detect(Ingredients, 'daikon') ~ 'radish daikon',
       str_detect(Ingredients, 'radish') & !str_detect(Ingredients, 'horse') ~ 'radish',
-      str_detect(Ingredients, 'raisin') & !str_detect(Ingredients, 'brais|flour') ~ 'raisin',
-      str_detect(Ingredients, 'raspberry') & str_detect(Ingredients, 'jam') ~ 'raspberries jam',
+      str_detect(Ingredients, 'raisin') & !str_detect(Ingredients, 'brais|flour|bun') ~ 'raisin',
+      str_detect(Ingredients, 'raspberr') & str_detect(Ingredients, 'jam') ~ 'raspberries jam',
+      str_detect(Ingredients, 'raspberr') & str_detect(Ingredients, 'juice') ~ 'raspberries juice',
       str_detect(Ingredients, 'raspbe') ~ 'raspberries',
       str_detect(Ingredients, "remulade") ~ "remulade",
       str_detect(Ingredients, 'rhubarb') & str_detect(Ingredients, 'juice') ~ 'rhubarb juice',

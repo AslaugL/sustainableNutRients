@@ -36,7 +36,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, '\\bsmash\\b') ~ 'candy smash',
       str_detect(Ingredients, 'snow bead') ~ 'candy filled chocolate balls',
 
-      (str_detect(Ingredients, 'chocolate milk|litago chocolate|milk low fat chocolate') & !str_detect(Ingredients, 'candy')) ~ 'milk beverage chocolate',
+      (str_detect(Ingredients, 'chocolate milk|litago chocolate|milk low fat chocolate|litago milk chocolate') & !str_detect(Ingredients, 'candy')) ~ 'milk beverage chocolate',
       str_detect(Ingredients, 'milk chocolate') & !str_detect(Ingredients, 'cheese|philadelphia') |
         str_detect(Ingredients, 'milk heart') | (str_detect(Ingredients, 'cooking chocolate') & str_detect(Ingredients, 'light')) ~ 'milk chocolate',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'fruit') | Ingredients == 'fruit nut' ~ 'milk chocolate fruit',
@@ -169,15 +169,15 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice|powder') & str_detect(Ingredients, 'beef|meat') ~ 'broth cube beef',
       str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'cube|dice|powder') & str_detect(Ingredients, 'chicken') ~ 'broth cube chicken',
       str_detect(Ingredients, 'stock|broth|bouillon|borth') & str_detect(Ingredients, 'cube|dice|powder') ~ 'broth cube',
-      str_detect(Ingredients, 'stock|broth|bouillon|power') & str_detect(Ingredients, 'chicken') ~ 'water broth chicken',
+      str_detect(Ingredients, 'stock|broth|bouillon|power\\b') & str_detect(Ingredients, 'chicken') ~ 'water broth chicken',
       str_detect(Ingredients, 'stock|broth|bouillon|bouilljon|consomme') & str_detect(Ingredients, 'beef|meat') ~ 'water broth beef',
       str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'shellfish') ~ 'water broth shellfish',
-      str_detect(Ingredients, 'stock|broth|bouillon|power') & str_detect(Ingredients, 'game|wild') ~ 'water broth game',
+      str_detect(Ingredients, 'stock|broth|bouillon|power\\b') & str_detect(Ingredients, 'game|wild') ~ 'water broth game',
       str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'turkey') ~ 'water broth turkey',
       str_detect(Ingredients, 'stock|broth|bouillon') & str_detect(Ingredients, 'vegetable') ~ 'water broth vegetable',
-      str_detect(Ingredients, 'stock|broth|bouillon|power') & str_detect(Ingredients, 'lamb') ~ 'water broth lamb',
-      str_detect(Ingredients, 'stock|broth|bouillon|power') & str_detect(Ingredients, 'fish') ~ 'water broth fish',
-      str_detect(Ingredients, 'stock|broth|bouillon|frying pan|power') ~ 'water broth',
+      str_detect(Ingredients, 'stock|broth|bouillon|power\\b') & str_detect(Ingredients, 'lamb') ~ 'water broth lamb',
+      str_detect(Ingredients, 'stock|broth|bouillon|power\\b') & str_detect(Ingredients, 'fish') ~ 'water broth fish',
+      str_detect(Ingredients, 'stock|broth|bouillon|frying pan|power\\b') ~ 'water broth',
 
       #Baking ingredients
       str_detect(Ingredients, 'agave') & str_detect(Ingredients, 'nectar') ~ 'agave nectar',
@@ -195,7 +195,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'sugar') & str_detect(Ingredients, 'brown\\b|castor') ~ 'sugar brown',
       str_detect(Ingredients, 'sugar') & str_detect(Ingredients, 'confect|icing|powder') ~ 'sugar confectioners',
       str_detect(Ingredients, 'sugar') & str_detect(Ingredients, 'vanilla') & !str_detect(Ingredients, 'milk|yogurt|yoghurt|kesam|without added sugar|without sugar|no added sugar|0% sugar|less sugar|low sugar|sugar free') ~ 'sugar vanilla',
-      str_detect(Ingredients, 'sugar') & !str_detect(Ingredients, 'asparagus|pea|cola|without added sugar|without sugar|no added sugar|0% sugar|yogurt|yoghurt|muesli|granola|biola|less sugar|low sugar|sugar free') ~ 'sugar',
+      str_detect(Ingredients, 'sugar') & !str_detect(Ingredients, 'asparagus|pea|cola|without added sugar|without sugar|no added sugar|0% sugar|0 % sugar|color liquid|yogurt|yoghurt|muesli|granola|biola|less sugar|low sugar|sugar free') ~ 'sugar',
       str_detect(Ingredients, 'syrup|sirup') & str_detect(Ingredients, 'date') ~ 'syrup date',
       str_detect(Ingredients, 'syrup|sirup') & str_detect(Ingredients, 'currant') ~ 'syrup currant',
       str_detect(Ingredients, 'syrup|sirup') & str_detect(Ingredients, 'maple') ~ 'syrup maple',
@@ -213,13 +213,14 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'color') & str_detect(Ingredients, 'sprinkles') ~ 'sprinkles colored',
       str_detect(Ingredients, 'sprinkles') & str_detect(Ingredients, 'christmas') ~ 'sprinkles christmas',
       str_detect(Ingredients, 'sprinkles') ~ 'sprinkles',
-      str_detect(Ingredients, 'gelatin') & str_detect(Ingredients, 'sheet') ~ 'gelatin sheet',
+      str_detect(Ingredients, 'gelatin') & str_detect(Ingredients, 'sheet|plate') ~ 'gelatin sheet',
       str_detect(Ingredients, '\\bgelatin\\b') ~ 'gelatin',
       str_detect(Ingredients, '\\bgel\\b') & str_detect(Ingredients, 'color') ~ 'gel coloring',
 
       #Pizza, and similar
       str_detect(Ingredients, 'pizza filling') ~ 'pizza filling',
-      str_detect(Ingredients, 'pizza') & !str_detect(Ingredients, 'sauce|base|topping|cheese|dressing') ~ 'pizza',
+      str_detect(Ingredients, 'pizza') & str_detect(Ingredients, 'dough') & !str_detect(Ingredients, 'meat dough') ~ 'pizza dough',
+      str_detect(Ingredients, 'pizza') & !str_detect(Ingredients, 'sauce|base|topping|cheese|dressing|dough|flour|for pizza') ~ 'pizza',
       str_detect(Ingredients, 'savory filled biscuits') ~ 'savory filled biscuits',
 
       # Others
@@ -264,7 +265,7 @@ standardiseOthers <- function(df) {
         !str_detect(Ingredients,
                     'chili|sweet|spice|bell|salad|sauce|mackerel|pepperoni|ham|red|hot|olive|cheddar|brie|cheese|crème|creme|with pepper|and pepper|steak|loin|salmon|salma|burger|sausage|pate|chicken|pâté|snack|spread|pasta|pesto')
       & !str_detect(Ingredients, 'salt') ~ 'black pepper',
-      str_detect(Ingredients, 'pickle') & !(str_detect(Ingredients, 'cucumber|ginger|sweet pepper|onion|beet|paprika|jalap')) | str_detect(Ingredients, 'gherkin') ~ 'cucumber pickled', #Standard
+      str_detect(Ingredients, 'pickle') & !(str_detect(Ingredients, 'cucumber|ginger|sweet pepper|onion|beet|paprika|jalap|herring')) | str_detect(Ingredients, 'gherkin') ~ 'cucumber pickled', #Standard
 
       str_detect(Ingredients, 'salt') & str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'oil') ~ 'salt and pepper and oil',
       str_detect(Ingredients, 'salt') & str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'butter') ~ 'salt and pepper and butter',

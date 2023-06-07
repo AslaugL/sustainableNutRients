@@ -12,13 +12,13 @@ standardiseDairynSubsY <- function(df) {
 
   #Yoghurt flavors
   #Fruit flavors
-  fruits <- 'apple|banana|coconut|lemon|lime|melon|mango|peach|prune|passion|rhubarb|tropical'
+  fruits <- 'apple|banana|coconut|lemon|lime|melon|mango|peach|prune|passion|rhubarb|tropical|orange|fruit'
   #Berries
-  berries <- 'berr'
+  berries <- 'berr|cherr'
   #Grains
-  with_grains_nuts <- 'korn|muesli|\\boat\\b|with nut|pecan'
+  with_grains_nuts <- 'korn|muesli|\\boat\\b|with nut|pecan|granola'
   #Other flavors
-  other_flavors <- 'vanilla|caramel|pannacotta|toffee|honey'
+  other_flavors <- 'vanilla|caramel|pannacotta|toffee|honey|chocolate'
 
   df  %>%
 
@@ -27,13 +27,13 @@ standardiseDairynSubsY <- function(df) {
 
       #Skyr
       (str_detect(Ingredients, 'yogurt|yoghurt') & str_detect(Ingredients, 'skyr') |
-        str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt')) & str_detect(Ingredients, berries) ~ 'yoghurt skyr berries flavored',
+        str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt|\\bskyr')) & str_detect(Ingredients, berries) ~ 'yoghurt skyr berries flavored',
       (str_detect(Ingredients, 'yogurt|yoghurt') & str_detect(Ingredients, 'skyr') |
-         str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt')) & str_detect(Ingredients, other_flavors) ~ 'yoghurt skyr flavored',
+         str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt|\\bskyr')) & str_detect(Ingredients, other_flavors) ~ 'yoghurt skyr flavored',
       (str_detect(Ingredients, 'yogurt|yoghurt') & str_detect(Ingredients, 'skyr') |
-         str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt')) & str_detect(Ingredients, fruits) ~ 'yoghurt skyr fruit flavored',
+         str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt|\\bskyr')) & str_detect(Ingredients, fruits) ~ 'yoghurt skyr fruit flavored',
       (str_detect(Ingredients, 'yogurt|yoghurt') & str_detect(Ingredients, 'skyr') |
-         str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt')) & str_detect(Ingredients, with_grains_nuts) ~ 'yoghurt skyr with grains',
+         str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt|\\bskyr')) & str_detect(Ingredients, with_grains_nuts) ~ 'yoghurt skyr with grains',
       str_detect(Ingredients, 'yogurt|yoghurt') & str_detect(Ingredients, 'skyr') |
         str_detect(Ingredients, 'icelandic yoghurt|icelandic yogurt|\\bskyr') ~ 'yoghurt plain skyr',
 
@@ -48,6 +48,8 @@ standardiseDairynSubsY <- function(df) {
         str_detect(Ingredients, 'greek') & str_detect(Ingredients, paste0(fruits, berries, other_flavors, collapse = "|")) ~ 'yoghurt greek flavored',
       str_detect(Ingredients, 'yogurt|yoghurt') &
         str_detect(Ingredients, 'greek') & str_detect(Ingredients, '2 %') ~ 'yoghurt plain greek low fat',
+        str_detect(Ingredients, 'yogurt|yoghurt') &
+          str_detect(Ingredients, 'greek') & str_detect(Ingredients, 'soy|vegan|plant-based|plant based') ~ 'yoghurt plain greek plant-based',
       str_detect(Ingredients, 'yogurt|yoghurt') &
         str_detect(Ingredients, 'greek') ~ 'yoghurt plain greek',
       str_detect(Ingredients, 'yogurt|yoghurt') &

@@ -17,6 +17,7 @@ standardiseHerbsnSpicesF <- function(df) {
       str_detect(Ingredients, 'fennel') & str_detect(Ingredients, 'seed') ~ 'fennel seed',
       str_detect(Ingredients, 'fenugreek leaf') & str_detect(Ingredients, 'dried') ~ 'fenugreek leaf dried',
       str_detect(Ingredients, 'fenugreek seed') ~ 'fenugreek seed',
+      str_detect(Ingredients, 'french fr') & str_detect(Ingredients, 'season') ~ 'french fries seasoning',
 
       TRUE ~ Ingredients_standardised))
 }

@@ -70,6 +70,9 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'cucumber') & str_detect(Ingredients, 'jam|pickle') ~ 'cucumber pickled',
       str_detect(Ingredients, 'cucumber') & str_detect(Ingredients, 'sandwichspread') ~ 'sandwichspread cucumber',
       str_detect(Ingredients, 'cucumber') ~ 'cucumber',
+      str_detect(Ingredients, 'currant') & !str_detect(Ingredients, 'black') & str_detect(Ingredients, 'juice') ~ 'currant juice',
+      str_detect(Ingredients, 'currant') & !str_detect(Ingredients, 'black') & str_detect(Ingredients, 'toddy') ~ 'currant toddy',
+      str_detect(Ingredients, 'currant') & !str_detect(Ingredients, 'black') ~ 'currant',
 
       TRUE ~ Ingredients_standardised
 

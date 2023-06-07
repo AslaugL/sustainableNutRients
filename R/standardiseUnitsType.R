@@ -105,9 +105,6 @@
 
 
    #Single types of ingredients that needs standardisation----
-   #Change the amount of lemon/orange/lime juice/zest from whole pieces of fruit to dl when applicable
-   standardised <- standardised %>% calculateCitrusJuiceZest()
-
    #Split rows with 'salt and pepper and oil' and similar
    standardised <- standardised %>%
       separate_rows(Ingredients, sep = '(?<=salt|pepper|oil) and ') %>%
@@ -126,9 +123,6 @@
       filter(!str_detect(Ingredients, 'water broth')) %>%
       #Add back with broth cues
       bind_rows(temp)
-
-   #Turn cooked products into their raw equivalents, using the convertion factors from Helsedirekttortatet Maal Vekt og Porsjonsstorrelser----
-   standardised <- standardised %>% cookedToRaw()
 
    standardised
  }

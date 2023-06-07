@@ -25,7 +25,7 @@ standardiseFruitVegO <- function(df){
       str_detect(Ingredients, 'pearl onion') & str_detect(Ingredients, 'pickle') ~ 'pearl onion pickled',
       str_detect(Ingredients, 'pearl onion') ~ 'pearl onion',
       str_detect(Ingredients, 'orange') & str_detect(Ingredients, 'juice|pressed') & str_detect(Ingredients, 'zest|peel|shell') ~ 'orange, the juice and zest',
-      str_detect(Ingredients, 'orange') & str_detect(Ingredients, 'shell|zest|peel') ~ 'orange, the zest',
+      str_detect(Ingredients, 'orange') & str_detect(Ingredients, 'shell|zest|peel') & !str_detect(Ingredients, 'marmelade|marmalade') ~ 'orange, the zest',
       str_detect(Ingredients, 'orange') & str_detect(Ingredients, 'juice') ~ 'orange juice',
       str_detect(Ingredients, 'orange') & !str_detect(Ingredients, 'jelly') ~ 'orange',
 

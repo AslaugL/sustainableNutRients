@@ -16,14 +16,17 @@ standardisePoultry <- function(df) {
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'breast|fillet|filet') &
         str_detect(Ingredients, 'without|skinless|no skin') &
-        str_detect(Ingredients, 'cooked') & !str_detect(unit, 'pcs') ~ 'chicken breast without skin cooked',
+        str_detect(Ingredients, 'cooked|fried') & !str_detect(unit, 'pcs') ~ 'chicken breast without skin cooked',
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'breast|fillet|filet') &
         str_detect(Ingredients, 'without|skinless|no skin') ~ 'chicken breast without skin',
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'breast|fillet|filet') &
-        str_detect(Ingredients, 'cooked') & !str_detect(unit, 'pcs') ~ 'chicken breast cooked',
-      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'breast|fillet|filet') & !str_detect(Ingredients, 'thigh|skewer') ~ 'chicken breast',
+        str_detect(Ingredients, 'cooked|fried') & !str_detect(unit, 'pcs') ~ 'chicken breast cooked',
+        str_detect(Ingredients, 'chicken') &
+          str_detect(Ingredients, 'breast|fillet|filet') &
+          str_detect(Ingredients, 'herb|garlic|pepper|paprika') & !str_detect(unit, 'pcs') ~ 'chicken breast seasoned',
+      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'breast|fillet|filet') & !str_detect(Ingredients, 'thigh|skewer|sandwich|casserole') ~ 'chicken breast',
       str_detect(Ingredients, 'chicken') &
         str_detect(Ingredients, 'thigh|leg') &
         str_detect(Ingredients, 'without|skinless|no skin') ~ 'chicken thigh without skin',
@@ -63,9 +66,11 @@ standardisePoultry <- function(df) {
       str_detect(Ingredients, 'grouse') ~ 'hen breast fillet grouse',
 
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'ground|dough') ~ 'turkey minced meat',
+      str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'breast|fillet') & str_detect(Ingredients, 'smoke') ~ 'turkey breast smoked',
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'breast|fillet') ~ 'turkey breast',
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'club') ~ 'turkey drumstick chicken', #Add chicken to use to calculate nutrition values
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'ham') ~ 'turkey ham canned',
+      str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'sausage') ~ 'turkey sausage',
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'grill') ~ 'sausage turkey chicken', #Prior turkey chicken grill sausage
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'cooked') ~ 'turkey meat cooked',
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'bacon') ~ 'bacon turkey',

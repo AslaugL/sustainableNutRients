@@ -95,7 +95,7 @@ standardiseCondiments <- function(df) {
 
     str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'base') ~ 'hollandaise base',
     str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'mix|powder|pack') ~ 'hollandaise powder mix',
-    str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'sauce') ~ 'sauce hollandaise',
+    str_detect(Ingredients, 'hollandaise') & str_detect(Ingredients, 'sauce') & !str_detect(Ingredients, 'with hollandaise') ~ 'sauce hollandaise',
 
     str_detect(Ingredients, 'pepper sauce') & str_detect(Ingredients, 'mix|powder|pack') ~ 'pepper sauce powder mix',
 
@@ -191,10 +191,10 @@ standardiseCondiments <- function(df) {
     str_detect(Ingredients, 'aioli') & str_detect(Ingredients, 'vegan|plant-based') ~ 'aioli plant-based',
     str_detect(Ingredients, 'aioli') & !str_detect(Ingredients, 'in aioli') ~ 'aioli',
     str_detect(Ingredients, 'mayo') & str_detect(Ingredients, 'vegan') ~ 'mayonnaise vegan',
-    str_detect(Ingredients, 'mayo') ~ 'mayonnaise',
+    str_detect(Ingredients, 'mayo') & !str_detect(Ingredients, 'prawn') ~ 'mayonnaise',
     str_detect(Ingredients, 'tabasco') ~ 'tabasco',
     str_detect(Ingredients, 'tzatziki') ~ 'tzatziki',
-    str_detect(Ingredients, 'wasabi') ~ 'wasabi',
+    str_detect(Ingredients, 'wasabi') & !str_detect(Ingredients, 'nut') ~ 'wasabi',
     str_detect(Ingredients, 'hummus') ~ 'hummus',
     str_detect(Ingredients, 'remoulade|remulade') ~ 'remulade',
     str_detect(Ingredients, 'sweet green pickle relish') ~ 'sweet green pickle relish',

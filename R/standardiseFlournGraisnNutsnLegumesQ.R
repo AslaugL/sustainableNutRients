@@ -13,7 +13,7 @@ standardiseFlournGraisnNutsnLegumesQ <- function(df) {
     
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'quinoa') ~ 'quinoa',
+      str_detect(Ingredients, 'quinoa') & !str_detect(Ingredients, 'granola') ~ 'quinoa',
       
       TRUE ~ Ingredients_standardised))
 }

@@ -13,7 +13,7 @@ standardiseFlournGraisnNutsnLegumesO <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'oatmeal|oat flour') & str_detect(Ingredients, 'porridge') ~ 'oatmeal porridge',
+      str_detect(Ingredients, 'oatmeal|oat flour|\\boat\\b') & str_detect(Ingredients, 'porridge') ~ 'oatmeal porridge',
       str_detect(Ingredients, 'oatmeal|oat flour') ~ 'oatmeal',
       str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'bran') ~ 'oat bran',
       str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'quick|porridge') ~ 'oat quick',

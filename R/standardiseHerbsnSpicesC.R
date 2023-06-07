@@ -40,7 +40,7 @@ standardiseHerbsnSpicesC <- function(df) {
       str_detect(Ingredients, 'coriander|cilantro') ~ 'coriander dried', #Standard
       str_detect(Ingredients, 'cress') ~ 'cress fresh herbs',
       str_detect(Ingredients, 'cumin') ~ 'cumin',
-      str_detect(Ingredients, 'curry') & !str_detect(Ingredients, 'paste') ~ 'curry powder',
+      str_detect(Ingredients, 'curry') & !str_detect(Ingredients, 'paste|chick|pizza|mango|wok') ~ 'curry powder',
 
       TRUE ~ Ingredients_standardised))
 }

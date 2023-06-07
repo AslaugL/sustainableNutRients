@@ -22,7 +22,7 @@ standardiseFruitVegT <- function(df){
       str_detect(Ingredients, 'tomat') & str_detect(Ingredients, 'dried') ~ 'tomato dried',
       str_detect(Ingredients, 'ketchup') ~ 'tomato ketchup',
       str_detect(Ingredients, 'tomat') &
-        !str_detect(Ingredients, 'canned|alsa|sauce|canned|cherry|can|box|pur\u00E9e|puree|paste|mackerel|tube|vegetable|sun|beans|cheese|taffel') ~ 'tomato',
+        !str_detect(Ingredients, 'canned|alsa|sauce|canned|cherry|can|box|pur\u00E9e|puree|paste|mackerel|tube|vegetable|sun|beans|cheese|taffel|sandwich|casserole') ~ 'tomato',
       str_detect(Ingredients, 'turnip') ~ 'turnip',
 
       TRUE ~ Ingredients_standardised

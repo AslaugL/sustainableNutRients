@@ -68,6 +68,7 @@ standardiseBeverages <- function(df) {
       str_detect(Ingredients, 'red bull') ~ 'energy drink red bull',
       str_detect(Ingredients, 'monster energy') ~ 'energy drink monster',
       str_detect(Ingredients, 'nocco energy') ~ 'energy drink nocco',
+      str_detect(Ingredients, 'powerade') ~ 'energy drink powerade',
 
       str_detect(Ingredients, 'fun light') & str_detect(Ingredients, 'raspberr') ~ 'fruit drink fun light raspberries',
       str_detect(Ingredients, 'fun light') & str_detect(Ingredients, 'ice tea') ~ 'fruit drink fun light ice tea',

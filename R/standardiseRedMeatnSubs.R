@@ -9,6 +9,9 @@
 #'
 #' @export
 standardiseRedMeatnSubs <- function(df) {
+    
+  plant_based <- 'vegan|plant based|plant-based|substitute'
+    
   df  %>%
 
     #Standardise
@@ -37,7 +40,9 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'hanger steak|flank steak') ~ 'beef flank steak', #Cut from the same are of the animal
       str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'flat') & !str_detect(Ingredients, 'elk|deer') ~ 'beef topside', #Also some veal meat
       str_detect(Ingredients, 'beef|angus|cattle') & str_detect(Ingredients, 'outer') ~ 'beef striploin',
-      str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'ground|mince|meat patty') & str_detect(Ingredients, 'lean|5%') ~ 'beef minced meat 6 %',
+      str_detect(Ingredients, 'meat patty') & str_detect(Ingredients, 'lean|5%|5 %') & !str_detect(Ingredients, 'pork|chicken|elk|moose|deer') ~ 'meat patty lean beef',
+      str_detect(Ingredients, 'meat patty') & !str_detect(Ingredients, 'pork|chicken|elk|moose|deer') ~ 'meat patty beef', # Standard
+      str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'ground|mince') & str_detect(Ingredients, 'lean|5%|5 %') ~ 'beef minced meat 6 %',
       str_detect(Ingredients, 'beef') &
         str_detect(Ingredients, 'ground|mince|all-beef hot dog|all-beef patty') |
         str_detect(Ingredients, 'ground|mince') & str_detect(Ingredients, 'meat') &
@@ -68,14 +73,14 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'ham') & str_detect(Ingredients, 'vegan|plant based|plant-based') ~ 'ham plant-based',
       str_detect(Ingredients, 'ham') & !str_detect(Ingredients, 'bacon|tenderloin|hamburger|champignon|pork from|turkey|steak|bone|cheese|graham|cham|pizza|with ham') ~ 'ham',
       str_detect(Ingredients, 'burger') & str_detect(Ingredients, 'vegetarian|vegan|bean|soy|plant-based|plant based') & !str_detect(Ingredients, 'bread') ~ 'hamburger plant-based',
-      str_detect(Ingredients, 'burger') & !str_detect(Ingredients, 'bun|bread|dressing|chicken') ~ 'hamburger beef patty',
+      str_detect(Ingredients, 'burger') & !str_detect(Ingredients, 'bun|bread|dressing|chicken|cheese') ~ 'hamburger beef patty',
 
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'shoulder|in slice|neck|with bone') ~ 'lamb shoulder', #Shoulder and neck meat can be interchanged
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'breast and skirt') ~ 'lamb breast skirt',
-      str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'ground|mince') ~ 'lamb minced meat',
+      str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'ground|mince|dough') ~ 'lamb minced meat',
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'tenderloin') ~ 'lamb tenderloin',
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'sirloib') ~ 'lamb sirloin',
-      str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'stick meat|cured rib') ~ 'lamb cured rib',
+      str_detect(Ingredients, 'lamb') & (str_detect(Ingredients, 'stick meat') | str_detect(Ingredients, 'cured') & str_detect(Ingredients, 'rib')) ~ 'lamb cured rib',
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'leg|thigh') & str_detect(Ingredients, 'smoke') ~ 'lamb leg smoked',
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'leg|thigh') & str_detect(Ingredients, 'cured') ~ 'lamb leg cured',
       str_detect(Ingredients, 'lamb') & str_detect(Ingredients, 'leg|thigh') ~ 'lamb leg roast',
@@ -95,9 +100,8 @@ standardiseRedMeatnSubs <- function(df) {
 
       str_detect(Ingredients, 'nugget') & str_detect(Ingredients, 'plant|vegan') ~ 'nugget plant-based',
 
-      str_detect(Ingredients, 'pepperoni') & !str_detect(Ingredients, 'pizza') ~ 'sausage pepperoni',
+      str_detect(Ingredients, 'pepperoni') & !str_detect(Ingredients, 'pizza|calzone') ~ 'sausage pepperoni',
       str_detect(Ingredients, 'plant-based|plant based|vegan|vegetarian|substitute') & str_detect(Ingredients, 'mince|ground|dough') ~ 'plant-based minced meat',
-      str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'butt') ~ 'pork shoulder',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'ground|mince') & str_detect(Ingredients, 'medister|high fat|25') ~ 'pork minced meat 25%',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'ground|mince') ~ 'pork minced meat',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'patty|patties') & str_detect(Ingredients, 'medister') ~ 'pork patty medister',
@@ -110,7 +114,7 @@ standardiseRedMeatnSubs <- function(df) {
       Ingredients == 'cold roast pork loin' ~ 'pork tenderloin cooked',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'shred') | Ingredients == 'pork steak, cut into strips' ~ 'pork inside round', #What is used to create shredded pork in Norway, also why it says inside round in Satay of pigs with honey and ginger
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'hock') ~ 'pork hock',
-      str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'stew|shoulder') ~ 'pork shoulder',
+      str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'stew|shoulder|butt') ~ 'pork shoulder',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'pulled') ~ 'pork shoulder cooked',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'salt') ~ 'pork shoulder salt',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'kidney') ~ 'pork kidney',
@@ -120,7 +124,7 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'ham') | str_detect(Ingredients, 'ham steak') ~ 'pork ham roast',
       str_detect(Ingredients, 'bone-in ham') ~ 'pork ham roast bone in',
       str_detect(Ingredients, 'spare rib|baby back rib|sparerib') & !str_detect(Ingredients, 'beef') ~ 'pork spare rib',
-      str_detect(Ingredients, 'pork') & !str_detect(Ingredients, 'sausage|bratwurst') ~ 'pork shoulder', #Default
+      str_detect(Ingredients, 'pork') & !str_detect(Ingredients, 'sausage|bratwurst|bun|with raisin') ~ 'pork shoulder', #Default
 
       str_detect(Ingredients, 'rabbit') ~ 'rabbit',
       str_detect(Ingredients, 'rib roll') & str_detect(Ingredients, 'beef') ~ 'rib roll beef',
@@ -132,11 +136,14 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'reindeer') & str_detect(Ingredients, 'flat') ~ 'reindeer inside round',
       str_detect(Ingredients, 'reindeer') ~ 'reindeer',
 
+      str_detect(Ingredients, 'salami') & str_detect(Ingredients, plant_based) ~ 'salami plant-based',
       str_detect(Ingredients, 'salami') & !str_detect(Ingredients, 'fennel') ~ 'salami',
       str_detect(Ingredients, 'sausage') & str_detect(Ingredients, 'chorizo') | str_detect(Ingredients, 'chorizo') ~ 'sausage chorizo',
       str_detect(Ingredients, 'sausage') & str_detect(Ingredients, 'vossa') ~ 'sausage vossa',
       str_detect(Ingredients, 'sausage') & str_detect(Ingredients, 'chipolata') ~ 'sausage chipolata',
       str_detect(Ingredients, 'sausage|bratwurst') & str_detect(Ingredients, 'pork') ~ 'sausage pork',
+      str_detect(Ingredients, 'sausage|bratwurst') & str_detect(Ingredients, plant_based) ~ 'sausage plant-based',
+      str_detect(Ingredients, 'sausage|bratwurst') & str_detect(Ingredients, 'cured') ~ 'sausage cured',
       str_detect(Ingredients, 'sausage') & !str_detect(Ingredients, 'mustard|sauce|bread|casserole|stew') ~ 'sausage',
 
       str_detect(Ingredients, 'vegetable|plant-based|plant based|vegan') & str_detect(Ingredients, 'pate|paste|spread|pâté') ~ 'vegetable spread',
