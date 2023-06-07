@@ -9,7 +9,7 @@
 #'
 #' @export
 standardiseFoodNames <- function(df) {
-  df  %>%
+  df %>%
 
     mutate(
       #Turn Ingredients lowercase, remove commas etc and trim Ingredients column of whitespace
