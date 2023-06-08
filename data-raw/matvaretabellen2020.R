@@ -299,6 +299,11 @@ clean_nutrients <- raw_data %>%
   food_item == 'brazil nuts' ~ 'brazil_nut',
   food_item == 'hazelnuts' ~ 'hazel_nut',
   food_item == 'wheatbran' ~ 'wheat bran',
+  food_item == 'walnuts' ~ "walnut",
+  food_item == "cashew nuts" ~ "cashew_nut",
+  food_item == "pine nuts" ~ "pine_nut",
+  food_item == "puffed rice" ~ "rice_puffed",
+  food_item == "puffed oats" ~ "oat_puffed",
 
   str_detect(food_item, 'bread, semi-coarse') & str_detect(food_item, '25-50') & str_detect(food_item, 'industrially made') ~ 'bread',
   str_detect(food_item, 'bread, white') & str_detect(food_item, '0-25') & str_detect(food_item, 'industrially made') & !str_detect(food_item, 'spiral|square') ~ 'bread_white',
@@ -369,6 +374,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'ice cream, dairy' ~ 'ice cream',
   food_item == 'cultured milk, with flavour, skyr' ~ 'skyr_flavored',
   food_item == 'cultured milk, plain, skyr' ~ 'skyr',
+  food_item == "almond beverage" ~ "dairy imitate_almond milk",
 
 
   #Mushrooms----
@@ -568,7 +574,8 @@ fromFoodDataCentral_foods <- read_csv(
            str_replace('Cabbage, chinese \\(pak-choi\\), raw', 'cabbage_pak choi') %>%
            str_replace('Leavening agents, baking soda', 'baking_soda') %>%
            str_replace('Leavening agents, baking powder, low-sodium', 'baking_powder') %>%
-           str_replace('Buckwheat', 'buckwheat')
+           str_replace('Buckwheat', 'buckwheat') %>%
+           str_replace("Tempeh", "tempeh")
          #'Tamarind nectar, canned'
   ) %>%
 
@@ -664,7 +671,7 @@ clean_nutrients <- bind_rows(clean_nutrients %>% mutate(from = 'Matvaretabellen_
 
 #Add composite ingredients----
 various$component_ingredients_nutrients <- readRDS(
-  system.file("extdata", "composite_ingredients_nutrient_content.Rds", package = "nutRients")) %>%
+  system.file("extdata", "composite_ingredients_nutrient_content.Rds", package = "sustainableNutRients")) %>%
   #Create an database_ID column
   group_by(Ingredients) %>%
   mutate(database_ID = cur_group_id()) %>%
