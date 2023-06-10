@@ -425,7 +425,6 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'cheese mascarpone' ~ fixFoodMappingError(database = reference, 'mascarpone'),
           Ingredients == 'tine light 2 \u0025 a good alternative to sour cream' ~ fixFoodMappingError(database = reference, 'quark', '1'), #Closest in nutritional value
           Ingredients == 'milk evaporated' ~ fixFoodMappingError(database = reference, 'milk evaporated'),
-          Ingredients == 'yoghurt greek' ~ fixFoodMappingError(database = reference, 'yogurt', 'greek'),
           Ingredients == 'buttermilk' ~ fixFoodMappingError(database = reference, 'buttermilk'),
           #Milk with cocoa powder
           str_detect(Ingredients, 'milk beverage chocolate') ~ fixFoodMappingError(database = reference, 'milk beverage', 'chocolate'),
@@ -464,7 +463,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients %in% c('crisp bread', 'crisp bread coarse') ~ fixFoodMappingError(database = reference, 'crisp bread', 'coarse'),
           Ingredients %in% c('rolls white baguette garlic', 'bread sausage', 'hamburger bread') ~ fixFoodMappingError(database = reference, 'bread', 'white'),
           Ingredients == 'lentil' ~ fixFoodMappingError(database = reference, 'lentil', 'green'), #Use as standard
-          Ingredients %in% c('bread brown chapati', 'tortilla coarse', 'rolls coarse') ~ fixFoodMappingError(database = reference, 'bread', 'coarse'),
+          Ingredients %in% c('bread brown chapati', 'tortilla coarse', 'rolls coarse', 'rolls coarse baguette') ~ fixFoodMappingError(database = reference, 'bread', 'coarse'),
           Ingredients == 'bean canned' ~ fixFoodMappingError(database = reference, 'bean', 'kidney canned'), #Standard
           Ingredients == 'pearl barley' ~ fixFoodMappingError(database = reference, 'pearl barley'),
           Ingredients == 'peanut' ~ fixFoodMappingError(database = reference, 'peanut'),
@@ -534,7 +533,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                              '20 pound pack high quality charcoal briquettes', 'wine rice', 'trout caviar', 'vanillin', 'cream sauce base',
                              'vanilla pod', 'butter-vanilla aroma', 'paste vanilla bean', 'blueberries pie filling',
                              'milk powder nonfat', 'apricot nectar', 'apricot preserve', 'apple sauce', 'oil chili sichuan',
-                             'frozen vegetable mix') |
+                             'frozen vegetable mix', 'syrup currant', 'sauce curry', 'gingerbread house') |
               str_detect(Ingredients, 'spice mix(?! taco)')
             )  &
             #If user have added these ingredients, keep
@@ -666,10 +665,9 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           str_detect(Ingredients, 'halloumi|manchego|havarti|swiss|monterey jack|pepperjack|asiago|mozzarella|goat brown cheese|jarlsberg|cheese semi-hard|provolone|norvegia|emmentaler|cheese garlic') ~ fixFoodMappingError(database = reference, 'hard to semi-hard cheese'),
           str_detect(Ingredients, 'ricotta|cheese blue|camembert|chevre|neufchatel|port salut|brie|mascarpone|gorgonzola|cheese soft') | Ingredients %in% c('cheese goat') ~ fixFoodMappingError(database = reference, 'soft-ripened cheese'),
           Ingredients == 'cheese american' ~ fixFoodMappingError(database = reference, 'processed cheese and spreads'),
-          Ingredients == 'yogurt greek' |
+          Ingredients == 'yoghurt greek' |
             Ingredients == 'kefir' |
-            str_detect(Ingredients, 'quark') |
-            str_detect(Ingredients, 'yoghurt skyr') ~ fixFoodMappingError(database = reference, 'yoghurt'),
+            str_detect(Ingredients, 'quark|biola|yoghurt skyr') ~ fixFoodMappingError(database = reference, 'yoghurt'),
           #Milk with cocoa powder
           str_detect(Ingredients, 'milk beverage chocolate') ~ fixFoodMappingError(database = reference, 'milk'),
 
@@ -696,7 +694,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                              'fish scraps for broth', 'fish soup base', 'paste garlic', 'vanillin', 'vanilla extract', 'toenjang soybean paste',
                              'pomegranate kernel', 'sauce white', 'celery seed', 'trout caviar', 'vanilla pod', 'condensed tomato soup', 'cream sauce base',
                              'sauce bearnaise', 'wine rice', 'soup onion instant', 'whip it stabilizer', 'butter-vanilla aroma', 'shake mixed spice',
-                             'vanilla bean') &
+                             'vanilla bean', 'syrup currant', 'sauce curry', 'gingerbread house') &
             #If user have added these ingredients, keep
             !str_detect(database_ID, ".999")) ~ 0,
 
