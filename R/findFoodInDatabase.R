@@ -173,10 +173,10 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
     if(is.null(additional_entries)) {
 
       #Database query words
-      reference <- matvaretabellen2020_query
+      reference <- matvaretabellen2022_query
 
       #The database
-      db <- matvaretabellen2020
+      db <- matvaretabellen2022
 
     } else if(!is.null(additional_entries)){
 
@@ -188,14 +188,14 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
       ) {
 
         #Database query words
-        reference <- matvaretabellen2020_query %>%
+        reference <- matvaretabellen2022_query %>%
           #Add user entries
           bind_rows(additional_entries$query_words) %>%
           #Arrange so it is still the first work in alphabetical order that is found first
           arrange(first_word, second_word)
 
         #The database
-        db <- matvaretabellen2020 %>% bind_rows(additional_entries$db) #Add user entries
+        db <- matvaretabellen2022 %>% bind_rows(additional_entries$db) #Add user entries
 
       } else {
         #Ask user to check additional entries formatting
@@ -405,7 +405,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'cheese cottage low fat' ~ fixFoodMappingError(database = reference, 'cottage cheese', 'low fat'),
           Ingredients == 'cheese cottage' ~ fixFoodMappingError(database = reference, 'cottage cheese'),
           Ingredients %in% c('cheese asiago', 'cheese cotjia', 'cheese pecorino', 'cheese romano', 'cheese gruyere') ~  fixFoodMappingError(database = reference, 'parmesan'), #Can be substituted for eachother in recipes
-          Ingredients %in% c('cheese blue', 'cheese blue stilton', 'cheese gorgonzola', '"cheese blue roquefort"') ~ fixFoodMappingError(database = reference, 'gorgonzola', 'blue cheese'), #Use as standard for time being
+          Ingredients %in% c('cheese blue', 'cheese blue stilton', 'cheese gorgonzola', 'cheese blue roquefort') ~ fixFoodMappingError(database = reference, 'gorgonzola', 'blue cheese'), #Use as standard for time being
           Ingredients %in% c('cheese goat chevre white', 'cheese goat') ~ fixFoodMappingError(database = reference, 'chevre'), #Goat cheese
           Ingredients %in% c('cheese cream', 'cheese soft') ~ fixFoodMappingError(database = reference, 'cream cheese'),
           Ingredients == 'cheese hard goat' ~ fixFoodMappingError(database = reference, 'hard goat cheese', 'kvitlin'), #Use as standard for time being
@@ -464,7 +464,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients %in% c('crisp bread', 'crisp bread coarse') ~ fixFoodMappingError(database = reference, 'crisp bread', 'coarse'),
           Ingredients %in% c('rolls white baguette garlic', 'bread sausage', 'hamburger bread') ~ fixFoodMappingError(database = reference, 'bread', 'white'),
           Ingredients == 'lentil' ~ fixFoodMappingError(database = reference, 'lentil', 'green'), #Use as standard
-          Ingredients %in% c('bread brown chapati', 'tortilla coarse') ~ fixFoodMappingError(database = reference, 'bread', 'coarse'),
+          Ingredients %in% c('bread brown chapati', 'tortilla coarse', 'rolls coarse') ~ fixFoodMappingError(database = reference, 'bread', 'coarse'),
           Ingredients == 'bean canned' ~ fixFoodMappingError(database = reference, 'bean', 'kidney canned'), #Standard
           Ingredients == 'pearl barley' ~ fixFoodMappingError(database = reference, 'pearl barley'),
           Ingredients == 'peanut' ~ fixFoodMappingError(database = reference, 'peanut'),
@@ -534,7 +534,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                              '20 pound pack high quality charcoal briquettes', 'wine rice', 'trout caviar', 'vanillin', 'cream sauce base',
                              'vanilla pod', 'butter-vanilla aroma', 'paste vanilla bean', 'blueberries pie filling',
                              'milk powder nonfat', 'apricot nectar', 'apricot preserve', 'apple sauce', 'oil chili sichuan',
-                             'frozen vegetable mix') |
+                             'frozen vegetable mix', 'cheese plant-based') |
               str_detect(Ingredients, 'spice mix(?! taco)')
             )  &
             #If user have added these ingredients, keep

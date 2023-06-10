@@ -6,6 +6,9 @@ unit_weights_query <- readRDS("./data-raw/unit_weights_query.Rds")
 matvaretabellen2020 <- readRDS("./data-raw/matvaretabellen2020.Rds")
 matvaretabellen2020_query <- readRDS("./data-raw/matvaretabellen2020_query.Rds")
 
+matvaretabellen2022 <- readRDS("./data-raw/matvaretabellen2022.Rds")
+matvaretabellen2022_query <- readRDS("./data-raw/matvaretabellen2022_query.Rds")
+
 SHARP2018 <- readRDS("./data-raw/SHARP2018.Rds")
 SHARP2018_query <- readRDS("./data-raw/SHARP2018_query.Rds")
 

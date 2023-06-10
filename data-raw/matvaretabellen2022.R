@@ -3,12 +3,24 @@
 various <- list()
 
 #Load raw data from Matvaretabellen
-raw_data <- read_xlsx(
+raw_data2020 <- read_xlsx(
   system.file("extdata", "matvaretabellen2020.xlsx", package = "sustainableNutRients")
 )
+raw_data2022 <- read_xlsx(
+  system.file("extdata", "matvaretabellen2022.xlsx", package = "sustainableNutRients")
+)
+
+#Foods removed from the 2022 edition
+various$removed_from_2022 <- raw_data2020 %>%
+  filter(!FoodID %in% raw_data2022$FoodID)
+
+#Join 2020 and 2022, for foods in both use nutrient data from 2022
+raw_data <- bind_rows(
+  raw_data2022, various$removed_from_2022) %>%
+  distinct()
 
 #Clean it up and use means for items with more than one addition (such as vegetables with both Norwegian and Imported values)----
-clean_nutrients <- raw_data %>%
+clean_nutrients <- raw_data2020 %>%
 
   #Remove empty rows
   drop_na(Foodgroup) %>%
@@ -82,6 +94,10 @@ clean_nutrients <- raw_data %>%
   food_item == 'sausage, chorizo' ~ 'sausage_chorizo',
   food_item == 'sausage, swedish, falukorv' ~ 'sausage_vossa', #Similar in nutrients
   food_item == 'sausage, meat, gilde' ~ 'sausage', #Standard
+  food_item == 'plant-based minced' ~ 'minced meat_plant-based',
+  food_item == 'plant-based burger' ~ 'hamburger_plant-based',
+  food_item == 'plant-based balls' ~ 'meatball_plant-based',
+  food_item == 'plant-based grill sausage' ~ 'sausage_plant-based',
 
   #Poultry----
   food_item == 'chicken, leg (thigh and drumstick), with skin, raw' ~ 'chicken_thigh',
@@ -369,13 +385,14 @@ clean_nutrients <- raw_data %>%
   food_item == 'milk, cultured, skimmed, skummet kulturmelk' ~ 'buttermilk', #Similar in nutrient content
   food_item == 'yoghurt, whole milk, plain' ~ 'yoghurt plain',
   food_item == 'milk, condensed, sweetened' ~ 'milk evaporated',
-  food_item == 'soy beverage, unsweetened' ~ 'milk_soy',
+  food_item == 'soy beverage, unsweetened' ~ 'dairy imitate_soy milk',
+  food_item == 'rice beverage' ~ 'dairy imitate_rice milk',
   food_item == 'oat beverage, with calcium and vitamins' ~ 'dairy imitate_oatmilk',
   food_item == 'ice cream, dairy' ~ 'ice cream',
   food_item == 'cultured milk, with flavour, skyr' ~ 'skyr_flavored',
   food_item == 'cultured milk, plain, skyr' ~ 'skyr',
   food_item == "almond beverage" ~ "dairy imitate_almond milk",
-
+  food_item == 'plant-based product, used as cheese' ~ 'cheese_plant-based',
 
   #Mushrooms----
   food_item == 'mushroom, chantherelle, raw' ~ 'mushroom_chanterelle',
@@ -770,26 +787,30 @@ nutrients_to_use <- nutrients_to_use %>%
   rename(from = from.y)
 
 #Turn long
-matvaretabellen2020 <- nutrients_to_use %>% select(-c(food_item, Foodgroup)) %>%
+matvaretabellen2022 <- nutrients_to_use %>% select(-c(food_item, Foodgroup)) %>%
   pivot_longer(.,
                cols = -c(database_ID, from),
                names_to = 'nutrient',
                values_to = 'nutrient_content_per_hektogram')
 
 #Save matvaretabellen dataframe
-saveRDS(matvaretabellen2020, "./data-raw/matvaretabellen2020.Rds")
+saveRDS(matvaretabellen2022, "./data-raw/matvaretabellen2022.Rds")
 
 #Save foodgroups info
-matvaretabellenFoodgroups <- nutrients_to_use %>%
+matvaretabellen2022_foodgroups <- nutrients_to_use %>%
   select(database_ID, Foodgroup) %>%
   rename(foodgroup = Foodgroup)
 
-saveRDS(matvaretabellenFoodgroups, "./data-raw/matvaretabellen2020_foodgroups.Rds")
+saveRDS(matvaretabellen2022_foodgroups, "./data-raw/matvaretabellen2022_foodgroups.Rds")
 
 #Save database_ID and food_item columns to create a query dataframe
-matvaretabellen2020_query_prep <- clean_nutrients %>%
+matvaretabellen2022_query_prep <- clean_nutrients %>%
   select(Ingredients, database_ID)
 
 #Save the dataframe to use to create the queries
-saveRDS(matvaretabellen2020_query_prep, "./data-raw/matvaretabellen2020_query_prep.Rds")
+saveRDS(matvaretabellen2022_query_prep, "./data-raw/matvaretabellen2022_query_prep.Rds")
 
+
+#For the data folder
+usethis::use_data(matvaretabellen2022)
+usethis::use_data(matvaretabellen2022_foodgroups, overwrite = TRUE)
