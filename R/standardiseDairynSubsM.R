@@ -21,15 +21,15 @@ standardiseDairynSubsM <- function(df) {
       #Milk and substitutes
       #Plant milks
       str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'milk|drink') &
-        str_detect(Ingredients, 'unsweetened') ~ 'almond milk unsweetened',
+        str_detect(Ingredients, 'unsweetened') ~ 'dairy imitate almond milk unsweetened',
       str_detect(Ingredients, 'sproud|pea') & str_detect(Ingredients, 'milk|drink') &
         str_detect(Ingredients, 'unsweetened') ~ 'pea protein milk unsweetened',
       str_detect(Ingredients, 'sproud|pea') & str_detect(Ingredients, 'milk|drink') &
         str_detect(Ingredients, 'chocolate') ~ 'pea protein milk chocolate',
       str_detect(Ingredients, 'sproud|pea') & str_detect(Ingredients, 'milk|drink') | str_detect(Ingredients, '\\bsproud\\b') ~ 'pea protein milk',
-      str_detect(Ingredients, 'almond cream') ~ 'almond milk cream',
-      str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'milk|drink') ~ 'almond milk',
-      str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'milk|drink') ~ 'rice milk',
+      str_detect(Ingredients, 'almond cream') ~ 'dairy imitate almond milk cream',
+      str_detect(Ingredients, 'almond') & str_detect(Ingredients, 'milk|drink') ~ 'dairy imitate almond milk',
+      str_detect(Ingredients, 'rice') & str_detect(Ingredients, 'milk|drink') ~ 'dairy imitate rice milk',
       str_detect(Ingredients, 'oat|mylk') & str_detect(Ingredients, 'barista|rich|cream') & !str_detect(Ingredients, 'goat') ~ 'dairy imitate oatmilk full fat',
       ((str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'milk|drink')) | str_detect(Ingredients, 'mylk')) &
         str_detect(Ingredients, 'chocolate|dumle') ~ 'dairy imitate oatmilk chocolate',

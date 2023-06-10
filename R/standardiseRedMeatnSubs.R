@@ -9,9 +9,9 @@
 #'
 #' @export
 standardiseRedMeatnSubs <- function(df) {
-    
+
   plant_based <- 'vegan|plant based|plant-based|substitute'
-    
+
   df  %>%
 
     #Standardise
@@ -40,8 +40,8 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'hanger steak|flank steak') ~ 'beef flank steak', #Cut from the same are of the animal
       str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'flat') & !str_detect(Ingredients, 'elk|deer') ~ 'beef topside', #Also some veal meat
       str_detect(Ingredients, 'beef|angus|cattle') & str_detect(Ingredients, 'outer') ~ 'beef striploin',
-      str_detect(Ingredients, 'meat patty') & str_detect(Ingredients, 'lean|5%|5 %') & !str_detect(Ingredients, 'pork|chicken|elk|moose|deer') ~ 'meat patty lean beef',
-      str_detect(Ingredients, 'meat patty') & !str_detect(Ingredients, 'pork|chicken|elk|moose|deer') ~ 'meat patty beef', # Standard
+      str_detect(Ingredients, 'meat patty') & str_detect(Ingredients, 'lean|5%|5 %') & !str_detect(Ingredients, 'pork|chicken|elk|moose|deer') ~ 'beef patty lean',
+      str_detect(Ingredients, 'meat patty') & !str_detect(Ingredients, 'pork|chicken|elk|moose|deer') ~ 'beef patty', # Standard
       str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'ground|mince') & str_detect(Ingredients, 'lean|5%|5 %') ~ 'beef minced meat 6 %',
       str_detect(Ingredients, 'beef') &
         str_detect(Ingredients, 'ground|mince|all-beef hot dog|all-beef patty') |
