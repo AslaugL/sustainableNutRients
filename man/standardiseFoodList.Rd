@@ -4,10 +4,21 @@
 \alias{standardiseFoodList}
 \title{standardiseFoodList}
 \usage{
-standardiseFoodList(df)
+standardiseFoodList(
+  df,
+  convertCitrusPeelAndJuice = TRUE,
+  convertFreshHerbsToDried = TRUE,
+  cookedToRaw = TRUE
+)
 }
 \arguments{
 \item{df}{A dataframe with an Ingredients column.}
+
+\item{convertCitrusPeelAndJuice}{Should citrus juice and peel be converted to their equivalent whole fruits? TRUE or FALSE. Default TRUE.}
+
+\item{convertFreshHerbsToDried}{Should fresh herbs (those not found in Matvaretabellen) be converted to dried? TRUE or FALSE. Default TRUE.}
+
+\item{cookedToRaw}{Should cooked ingredients be converted to their raw equivalents? TRUE or FALSE. Default TRUE.}
 }
 \value{
 A dataframe with the amounts and standardised units of foods in their own column, a new Ingredients column with standardised
