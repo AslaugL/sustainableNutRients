@@ -534,7 +534,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                              '20 pound pack high quality charcoal briquettes', 'wine rice', 'trout caviar', 'vanillin', 'cream sauce base',
                              'vanilla pod', 'butter-vanilla aroma', 'paste vanilla bean', 'blueberries pie filling',
                              'milk powder nonfat', 'apricot nectar', 'apricot preserve', 'apple sauce', 'oil chili sichuan',
-                             'frozen vegetable mix', 'cheese plant-based') |
+                             'frozen vegetable mix') |
               str_detect(Ingredients, 'spice mix(?! taco)')
             )  &
             #If user have added these ingredients, keep
