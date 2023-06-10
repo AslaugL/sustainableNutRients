@@ -32,4 +32,4 @@ matvaretabellen2022_query <- readRDS("./data-raw/matvaretabellen2022_query_prep.
 
 #Save
 saveRDS(matvaretabellen2022_query, "./data-raw/matvaretabellen2022_query.Rds")
-usethis::use_data(matvaretabellen2022_query)
+usethis::use_data(matvaretabellen2022_query, overwrite = TRUE)

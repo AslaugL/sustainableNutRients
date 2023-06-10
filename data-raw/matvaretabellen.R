@@ -20,7 +20,7 @@ raw_data <- bind_rows(
   distinct()
 
 #Clean it up and use means for items with more than one addition (such as vegetables with both Norwegian and Imported values)----
-clean_nutrients <- raw_data2020 %>%
+clean_nutrients <- raw_data %>%
 
   #Remove empty rows
   drop_na(Foodgroup) %>%
@@ -812,5 +812,5 @@ saveRDS(matvaretabellen2022_query_prep, "./data-raw/matvaretabellen2022_query_pr
 
 
 #For the data folder
-usethis::use_data(matvaretabellen2022)
+usethis::use_data(matvaretabellen2022, overwrite = TRUE)
 usethis::use_data(matvaretabellen2022_foodgroups, overwrite = TRUE)
