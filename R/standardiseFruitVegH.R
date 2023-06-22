@@ -15,6 +15,7 @@ standardiseFruitVegH <- function(df){
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, "hash") & str_detect(Ingredients, "brown") ~ "hashbrown",
       str_detect(Ingredients, 'horseradish|horse raddish') & !str_detect(Ingredients, 'sauce') ~ 'horseradish',
+      str_detect(Ingredients, 'hokkaido') & str_detect(Ingredients, 'pumpkin|squash') ~ 'winter squash hokkaido',
 
       TRUE ~ Ingredients_standardised
     ))

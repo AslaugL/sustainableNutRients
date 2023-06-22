@@ -17,7 +17,7 @@ pcs <- readRDS("./data-raw/pcs.Rds")
 type_of_units <- readRDS("./data-raw/type-of-units.Rds")
 
 #Foodgroups from matvaretabellen and SHARP
-matvaretabellen2020_foodgroups <- readRDS("./data-raw/matvaretabellen2020_foodgroups.Rds")
+matvaretabellen2020_foodgroups <- readRDS("./data-raw/matvaretabellen2022_foodgroups.Rds")
 SHARP2018_foodgroups <- readRDS("./data-raw/SHARP2018_foodgroups.Rds")
 
 #units for matvaretabellen
@@ -30,6 +30,7 @@ composite_ingredients_oda <- readRDS("./data-raw/composite_ingredients_oda.Rds")
 #Save for export
 usethis::use_data(unit_weights, unit_weights_query,
                   matvaretabellen2020, matvaretabellen2020_query,
+                  matvaretabellen2022, matvaretabellen2022_query,
                   SHARP2018, SHARP2018_query,
                   pcs, type_of_units,
                   matvaretabellen2020_foodgroups, SHARP2018_foodgroups,
@@ -41,6 +42,7 @@ usethis::use_data(unit_weights, unit_weights_query,
 #Save in sysdata
 usethis::use_data(unit_weights, unit_weights_query,
                   matvaretabellen2020, matvaretabellen2020_query,
+                  matvaretabellen2022, matvaretabellen2022_query,
                   SHARP2018, SHARP2018_query,
                   pcs, type_of_units,
                   matvaretabellen2020_foodgroups, SHARP2018_foodgroups,

@@ -43,11 +43,12 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'jalap') & !str_detect(Ingredients, 'cheese|sauce|spread|nut') ~ 'chili pepper jalapeno',
       str_detect(Ingredients, 'chili|chilli|chile') & str_detect(Ingredients, 'green') ~ 'chili pepper green',
 
+      str_detect(Ingredients, 'habanero') ~ 'chili pepper red habanero',
       ((str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'chili|chilli')) | (str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'red|r\u00f8d'))) & !str_detect(Ingredients, 'powder') |
         str_detect(Ingredients, 'mild chili|mild chilli') & !str_detect(Ingredients, 'sauce') | str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'chop') |
         str_detect(Ingredients, 'chili|chilli') & str_detect(unit, 'pcs') |
         str_detect(Ingredients, 'red') & str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'hot') & str_detect(Ingredients, 'slice') |
-        str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'seed') ~ 'chili pepper red',
+        str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'seed') | str_detect(Ingredients, 'red mini pepper') ~ 'chili pepper red',
       (str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'dried') & !str_detect(Ingredients, 'flake')) ~ 'chili pepper dried',
       str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'pickle') ~ 'chili pepper pickled',
 

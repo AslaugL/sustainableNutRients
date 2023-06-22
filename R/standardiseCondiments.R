@@ -174,7 +174,7 @@ standardiseCondiments <- function(df) {
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'oyster') ~ 'sauce oyster',
 
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'white') &
-      str_detect(Ingredients, 'powder|mix') ~ 'sauce white mix powder',
+      str_detect(Ingredients, 'powder|mix') ~ 'sauce white powder mix',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'white') ~ 'sauce white',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'wok') ~ 'sauce wok',
     str_detect(Ingredients, 'sauce') & str_detect(Ingredients, 'worcestershire') ~ 'sauce worcestershire',

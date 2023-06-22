@@ -42,12 +42,15 @@ standardiseFruitVegP <- function(df){
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'starch') ~ 'potato starch',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'chip') ~ 'potato chip',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'cream') ~ 'potato cream',
+      str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'fries') ~ 'french fries',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'boat') ~ 'potato boat',
+      str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'blue') ~ 'potato blue',
       str_detect(Ingredients, 'potato') & !str_detect(Ingredients, 'rice|bread|sweet|mash|flour|mash') ~ 'potato',
       str_detect(Ingredients, 'buttery') & str_detect(Ingredients, 'mash') ~ 'potato mash buttery',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'mash') & !str_detect(Ingredients, 'cook|boil') ~ 'potato mash',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'cook|boil') ~ 'potato boiled',
-      str_detect(Ingredients, 'pumpkin') & !str_detect(Ingredients, 'seed|butternut') ~ 'winter squash pumpkin',
+      str_detect(Ingredients, 'pumpkin') & !str_detect(Ingredients, 'seed|butternut|hokkaido') ~ 'winter squash pumpkin',
+      str_detect(Ingredients, 'prune') & str_detect(Ingredients, 'compote') ~ 'prune compote',
       str_detect(Ingredients, 'prune') ~ 'prune',
 
       TRUE ~ Ingredients_standardised

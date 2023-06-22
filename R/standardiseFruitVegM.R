@@ -18,6 +18,8 @@ standardiseFruitVegM <- function(df){
       str_detect(Ingredients, 'mango') & str_detect(Ingredients, 'juice') ~ 'mango juice',
       str_detect(Ingredients, 'mango') & !str_detect(Ingredients, 'chutney|sauce|yoghurt|yogurt') ~ 'mango',
 
+      str_detect(Ingredients, 'mulberr') & str_detect(Ingredients, 'white') ~ 'mulberries white',
+
       #Melons
       str_detect(Ingredients, 'melon') & str_detect(Ingredients, 'honeydew') ~ 'melon honeydew',
       str_detect(Ingredients, 'melon') & str_detect(Ingredients, 'piel de sapo') ~ 'melon piel de sapo',

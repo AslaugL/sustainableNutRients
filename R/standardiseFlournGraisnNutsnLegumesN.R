@@ -17,6 +17,8 @@ standardiseFlournGraisnNutsnLegumesN <- function(df) {
       (str_detect(Ingredients, 'nacho|nachips') | str_detect(Ingredients, 'tortilla') & str_detect(Ingredients, 'chip')) & !str_detect(Ingredients, 'burger|dip') ~ 'nacho',
       str_detect(Ingredients, 'taco') & str_detect(Ingredients, 'shell|tub|tray|bowl') ~ 'taco shell',
 
+      str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'mix') & str_detect(Ingredients, 'fruit|berr') & !str_detect(Ingredients, 'yoghurt|yogurt') ~ 'nuts mixed fruit berries',
+      str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'mix') & str_detect(Ingredients, 'chocolate') & !str_detect(Ingredients, 'yoghurt|yogurt') ~ 'nuts mixed with chocolate',
       str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'mix') & !str_detect(Ingredients, 'yoghurt|yogurt') ~ 'nuts mixed',
 
       TRUE ~ Ingredients_standardised))

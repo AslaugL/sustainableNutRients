@@ -37,8 +37,8 @@ clean_nutrients <- raw_data %>%
          Foodgroup = str_to_lower(Foodgroup)) %>%
   #Keep some ingredients
   filter((food_item %in% c(
-    'chocolate bar, milk', 'chocolate, white', 'chocolate, cooking, plain, minimum 35 % cocoa',
-    'chocolate, snickers', 'ice cream, dairy', 'chocolate, dark, 70 % cocoa', 'tart shell, no filling')) |
+    'chocolate bar, milk', 'chocolate, white', 'chocolate, cooking, plain, minimum 35 % cocoa', 'pizza, industrially made',
+    'chocolate, snickers', 'ice cream, dairy', 'chocolate, dark, 70 % cocoa', 'tart shell, no filling', 'puffed oats', 'puffed wheat', 'puffed rice')) |
            !str_detect(Foodgroup,
                        'dessert|other meat products, prepared|other meats, minced, offal, prepared|egg, prepared|cookies|cod liver oil|homemade|chocolate|instant|cake|breakfast cereals|porridge|pizza')) %>%
 
@@ -242,7 +242,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'raisins' ~ 'raisin',
   food_item == 'salad, rocket, raw' ~ 'salad_rocket',
   food_item == 'romaine lettuce' ~ 'salad_romaine',
-  food_item == 'lettuce leaves, norwegian, raw' ~ 'salad_lettuce',
+  food_item == 'lettuce leaves, norwegian, raw' ~ 'salad', #Standard
   food_item == 'squash, zucchini, raw' ~ 'summer squash_zucchini',
   food_item == 'sweet pepper, red, raw' ~ 'sweet pepper_red',
   food_item == 'sweet pepper, yellow/orange, raw' ~ 'sweet pepper_yellow',
@@ -252,6 +252,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'melon, water, raw' ~ 'watermelon',
   food_item == 'pumpkin, raw' ~ 'winter squash_pumpkin',
   food_item == 'pumpkin, butternut, raw' ~ 'winter squash_butternut',
+  food_item == 'orange juice, from concentrate' ~ 'orange_juice', #Use as standard
+  food_item =='passion fruit juice' ~ 'passion fruit_juice',
   food_item %in% c('apple juice', 'pineapple juice', 'cranberry juice', 'grape juice',
                    'grapefruit juice', 'orange juice', 'tomato juice', 'tomato ketchup') ~ str_replace(food_item, ' ', '_'),
   food_item == 'sweet corn, canned' ~ 'sweet corn_canned',
@@ -347,10 +349,11 @@ clean_nutrients <- raw_data %>%
   #Dairy and substitutes----
   food_item == 'butter' ~ 'butter',
   food_item == 'butter, unsalted' ~ 'butter_unsalted',
-  food_item == 'cheese, blue mold, norzola' ~ 'norzola_blue cheese',
-  food_item == 'cheese, blue mold, normanna' ~ 'normanna_blue cheese',
-  food_item == 'cheese, blue mold, gorgonzola' ~ 'gorgonzola_blue cheese',
-  food_item == 'cheese, blue mold, roquefort' ~ 'roquefort_blue cheese',
+  food_item == 'cheese, blue mold, norzola' ~ 'norzola_cheese blue',
+  food_item == 'cheese, blue mold, normanna' ~ 'normanna_cheese blue',
+  food_item == 'cheese, blue mold, gorgonzola' ~ 'gorgonzola_cheese blue',
+  food_item == 'cheese, blue mold, roquefort' ~ 'roquefort_cheese blue',
+  food_item == 'cheese, blue mold, selbu blå' ~ 'selbu_cheese blue',
   food_item == 'cheese, ripened, brie' ~ 'brie',
   food_item == 'cheese, whey, goat milk' ~ 'cheese brown_goat',
   food_item == 'cheese, whey, cow milk' ~ 'cheese brown',
@@ -710,6 +713,7 @@ clean_nutrients <- bind_rows(clean_nutrients, various$component_ingredients_nutr
   #Add a shellfish row
   add_row(database_ID = 10000, Ingredients = 'shellfish', from = 'Shellfish in Matvaretabellen')
 
+#Ingredient groups consiting of more than one ingredient
 #Create the nutrient content of the shellfish ingredient by taking the mean of the shellfish in the db
 various$shellfish <- raw_data %>%
 
@@ -750,10 +754,11 @@ various$shellfish <- raw_data %>%
   #Turn wide
   pivot_wider(.,
               names_from = 'feature',
-              values_from = 'value')
+              values_from = 'value') %>%
+  mutate(Foodgroup = "shellfish, fish offal")
 
-#Flavored yoghurts
-various$flavored_yoghurt <- raw_data %>%
+#Dairy grouped ingredients
+various$dairy_ingredients<- raw_data %>%
   #Remove columns and nutrients not needed
   select(!contains(c('ref', 'Edible', 'Water', ':0', ' sum', '2n', '3n', '4n', 'Foodgroup'))) %>%
   #Rename to fit
@@ -762,16 +767,24 @@ various$flavored_yoghurt <- raw_data %>%
     EPA = `C20:5n-3 (EPA)`,
     DPA = `C22:5n-3 (DPA)`,
     DHA = `C22:6n-3 (DHA)`) %>%
-  #Filter out flavored yoghurt
-  filter(str_detect(`Food Item`, 'Yoghurt') &
-           str_detect(`Food Item`, 'anilla|berr') &
-           !str_detect(`Food Item`, 'granola|muesli|grain|fruit')) %>%
+  #FFilter out foods to create a composite from
+  filter(
+    #Yoghurts
+    str_detect(`Food Item`, 'Yoghurt') &
+      str_detect(`Food Item`, 'anilla|berr|fruit') &
+      !str_detect(`Food Item`, 'granola|muesli|grain') |
+    #Blue cheese
+      str_detect(`Food Item`, 'Cheese, blue mold')) %>%
   mutate(`Food Item` = `Food Item` %>%
            str_replace('Yoghurt, blueberries, 0 % fat, Yoplait', 'yoghurt low fat_berries flavored') %>% #Only low fat berry flavored in dataset
            str_replace('Yoghurt, vanilla, 0 % fat, Yoplait', 'yoghurt low fat_flavored') %>%
            str_replace('Yoghurt, skimmed, 0,1 % fat, fruit, Yoplait', 'yoghurt low fat_fruit flavored') %>%
            str_replace('Yoghurt, vanilla, lactose free|Yoghurt, vanilla', 'yoghurt_flavored') %>%
-           str_replace('Yoghurt, strawberry, Q-meieriene|Yoghurt, with strawberry, Tine', 'yoghurt_berries flavored')
+           str_replace('Yoghurt, strawberry, Q-meieriene|Yoghurt, with strawberry, Tine', 'yoghurt_berries flavored'),
+         `Food Item` = case_when(
+           str_detect(`Food Item`, 'Cheese, blue mold') ~ 'cheese blue',
+           TRUE ~ `Food Item`
+         )
   ) %>%
   #rename
   rename(Ingredients = `Food Item`) %>%
@@ -788,9 +801,22 @@ various$flavored_yoghurt <- raw_data %>%
   mutate_at(c('database_ID', 'value'), ~as.numeric(.)) %>%
   #Get the mean values o each nutrient
   group_by(Ingredients, database_ID, feature) %>%
-  summarise(value = mean(value, na.rm = TRUE)) %>% ungroup()
+  summarise(value = mean(value, na.rm = TRUE)) %>% ungroup() %>%
+  #Turn wide
+  pivot_wider(.,
+              names_from = 'feature',
+              values_from = 'value') %>%
+  mutate(Foodgroup = case_when(
+    str_detect(Ingredients, "yoghurt") ~ "yoghurt",
+    str_detect(Ingredients, "cheese blue") ~ "cheese, extra fat"
+  ))
 
-
+#Add to the clean_nutrients
+clean_nutrients <- bind_rows(clean_nutrients,
+                             various$dairy_ingredients %>%
+                               select(database_ID, Ingredients, Foodgroup) %>%
+                               mutate(food_item = "",
+                                      from = "Composite of Matvaretabellen ingredients"))
 
 #Create a full nutrient database----
 #Nutrients of interest
@@ -826,11 +852,11 @@ nutrients_to_use <- nutrients_to_use %>%
   bind_rows(., fromFoodDataCentral_foods) %>%
   bind_rows(., various$component_ingredients_nutrients) %>%
   bind_rows(., various$shellfish) %>%
-  full_join(., clean_nutrients, by = 'database_ID') %>%
+  bind_rows(., various$dairy_ingredients) %>%
+  full_join(., clean_nutrients, by = c('database_ID', 'Foodgroup')) %>%
   #Give sour cream, crème fraîche and veal liver individual database_IDs, while keeping the nutrition information rows
   mutate(database_ID = case_when(
     str_detect(Ingredients.y, 'crème fraîche|veal_liver') ~ database_ID + 300,
-
     TRUE ~ database_ID
   )) %>%
   #Remove and rename some columns
@@ -860,8 +886,3 @@ matvaretabellen2022_query_prep <- clean_nutrients %>%
 
 #Save the dataframe to use to create the queries
 saveRDS(matvaretabellen2022_query_prep, "./data-raw/matvaretabellen2022_query_prep.Rds")
-
-
-#For the data folder
-usethis::use_data(matvaretabellen2022, overwrite = TRUE)
-usethis::use_data(matvaretabellen2022_foodgroups, overwrite = TRUE)

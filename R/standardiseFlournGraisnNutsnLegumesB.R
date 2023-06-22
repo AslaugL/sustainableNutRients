@@ -54,7 +54,7 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'horse|broad|fava|brew') ~ 'bean broad',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'tomat') & !str_detect(Ingredients, 'chili sin carne') ~ 'bean white tomato',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'can') ~ "beans'n'pork canned",
-      str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'in') | str_detect(Ingredients, 'bean|beans chili canned') ~ "beans chili canned",
+      str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'chili') & str_detect(Ingredients, 'in') | str_detect(Ingredients, 'beans chili canned') ~ "beans chili canned",
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'can') ~ 'bean canned',
       str_detect(Ingredients, 'bean') & str_detect(Ingredients, 'mix') & !str_detect(Ingredients, 'stir-fry') ~ 'bean mixed',
 

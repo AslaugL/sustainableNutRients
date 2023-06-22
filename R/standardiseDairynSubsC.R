@@ -19,15 +19,19 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'norman') ~ 'cheese blue normanna', #Tine cheese
     str_detect(Ingredients, 'burrata') ~ "cheese burrata mozzarella",
     str_detect(Ingredients, 'norzola') ~ 'cheese blue norzola',
-    str_detect(Ingredients, 'gorgonzola') ~ 'cheese gorgonzola',
+    str_detect(Ingredients, 'gorgonzola') ~ 'cheese blue gorgonzola',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'cotija') ~ 'cheese cotjia',
     str_detect(Ingredients, 'castello') & str_detect(Ingredients, 'blue') ~ 'cheese blue castello',
+    str_detect(Ingredients, 'selbu') & str_detect(Ingredients, 'cheese') ~ 'cheese blue selbu',
     str_detect(Ingredients, 'stilton') & str_detect(Ingredients, 'cheese') ~ 'cheese blue stilton',
-    str_detect(Ingredients, 'cheese|selbu') & str_detect(Ingredients, 'blue') ~ 'cheese blue',
+    str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'blue') ~ 'cheese blue',
     str_detect(Ingredients, 'brie') & !str_detect(Ingredients, 'marmelade|marmalade') ~ 'cheese brie',
     str_detect(Ingredients, 'camembert') & str_detect(Ingredients, 'vegan|plant based|plant-based') ~ 'cheese plant-based camembert',
     str_detect(Ingredients, 'camembert') & !str_detect(Ingredients, 'marmelade|marmalade') ~ 'cheese camembert',
     str_detect(Ingredients, 'real goat cheese') ~ 'goat brown cheese',
+    (str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'brown') |
+       (str_detect(Ingredients, 'gudbrandsdal|grandmother') & str_detect(Ingredients, 'cheese') )     ) &
+      str_detect(Ingredients, "low fat|light") ~ 'cheese brown low fat',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'brown') | (str_detect(Ingredients, 'gudbrandsdal|grandmother') & str_detect(Ingredients, 'cheese') ) ~ 'cheese brown',
     str_detect(Ingredients, 'cheddar') & str_detect(Ingredients, 'vegan|plant based|plant-based')  ~ 'cheese plant-based cheddar',
     str_detect(Ingredients, 'cheddar') ~ 'cheese cheddar',

@@ -13,6 +13,8 @@ standardiseFlournGraisnNutsnLegumesM <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
+      str_detect(Ingredients, 'macademia') & str_detect(Ingredients, 'nut') & str_detect(Ingredients, 'salt') ~ "macademia nut salted",
+      str_detect(Ingredients, 'macademia') & str_detect(Ingredients, 'nut') ~ "macademia nut",
       str_detect(Ingredients, '\\bmillet\\b') ~ 'millet',
 
       #Muesli
