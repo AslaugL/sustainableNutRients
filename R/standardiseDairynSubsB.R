@@ -27,7 +27,7 @@ standardiseDairynSubsB <- function(df) {
       str_detect(Ingredients, 'butter|sm\u00F8r') & str_detect(Ingredients, 'unsalted|usalted') ~ 'unsalted butter',
       str_detect(Ingredients, 'butter') & str_detect(Ingredients, 'frying|browning|roasting|greasing|brushing') ~ 'butter for cooking',
       str_detect(Ingredients, 'butter|sm\u00F8r') &
-        !str_detect(Ingredients, 'dough|pepper|sour cream|butternut|pastry|milk|beans|peanut|vanilla aroma|nut|almond|salad') ~ 'butter',
+        !str_detect(Ingredients, 'dough|pepper|sour cream|butternut|pastry|milk|beans|peanut|vanilla aroma|nut|almond|salad|chicken') ~ 'butter',
       #Buttermilk
       str_detect(Ingredients, 'buttermilk') & !str_detect(Ingredients, 'dough') ~ 'buttermilk',
 

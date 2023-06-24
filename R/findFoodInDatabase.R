@@ -344,6 +344,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'mangold' ~ fixFoodMappingError(database = reference, 'celery', 'stalk'), #Similar
           str_detect(Ingredients, "quark") ~ fixFoodMappingError(database = reference, 'cottage', 'cheese'),
           Ingredients == "garlic powder" ~ fixFoodMappingError(database = reference, 'onion', 'powder'),
+          Ingredients == "remulade" ~ fixFoodMappingError(database = reference, "mayonnaise"),
 
           #Ingredients with no references
           ((Ingredients %in% c('mustard powder', 'chinese five spice', 'dip mix', 'asafoetida powder',
