@@ -5,7 +5,7 @@
 #'
 #' @param df
 #' \itemize{
-#'  \item{For volume_weight, a dataframe three columns: either an identifier (default recipe_name) and Ingredients or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"}
+#'  \item{For volume_weight, a dataframe three columns: an identifier (default recipe_name), "unit" and "grams_per_unit"}
 #'  \item{For "nutrients", the output from calculateNutrientContentOfFoodlist with option "per 100 g" selected or a three column dataframe with
 #'  an "Ingredients" column with food name, same as what can be found in the recipes or food list, a "nutrient" column with nutrient
 #'  names similar to what is found in Matvaretabellen and "nutrient_content_per_100g" of the food.}
@@ -59,7 +59,7 @@ createNewDatabaseEntry <- function(df, database, identifier = 'recipe_name') {
     if(isTRUE(all.equal(names(df), c(identifier, 'unit', 'grams_per_unit')))) {
 
       #Find existing IDs from entries already in db, create new ones for completely new entries
-      new_entries <- list(
+      tmp <- list(
 
         'query_words' = df %>%
           #Only use identifier to query against database
@@ -79,16 +79,23 @@ createNewDatabaseEntry <- function(df, database, identifier = 'recipe_name') {
         )
 
       #Get the databse_IDs and connect them to the new database entries
-      new_entries$db <- df %>%
+      tmp$db <- df %>%
         select(contains(identifier), unit, grams_per_unit) %>%
-        left_join(new_entries$query_words %>% select(contains(identifier), database_ID)) %>%
+        left_join(tmp$query_words %>% select(contains(identifier), database_ID)) %>%
         select(unit, grams_per_unit, database_ID)
 
-      new_entries$query_words <- new_entries$query_words %>%
+      tmp$query_words <- tmp$query_words %>%
         select(-contains(identifier))
 
+      new_entries <- list(
+
+        db = tmp$db,
+        query_words = tmp$query_words
+
+      )
+
     }else{
-      stop("To create database entries for the volume_weight database, df must include the columns identifier, unit and grams_per_unit.")
+      stop("To create database entries for the volume_weight database, df must include the columns identifier, unit and grams_per_unit in this order.")
     }
 
 
@@ -99,7 +106,7 @@ createNewDatabaseEntry <- function(df, database, identifier = 'recipe_name') {
       new_entries <- supportFunction(df2 = df)
 
     } else {
-      stop("To create database entries for the nutrients database, df must only include the columns identifier, nutrient and nutrients_per_hektogram")
+      stop("To create database entries for the nutrients database, df must only include the columns identifier, nutrient and nutrients_per_hektogram in this order.")
     }
 
 
@@ -110,7 +117,7 @@ createNewDatabaseEntry <- function(df, database, identifier = 'recipe_name') {
       new_entries <- supportFunction(df2 = df)
 
     } else {
-      stop("To create database entries for the sustainability database, df must include only the columns identifier, environmental_impact_indicator and environmental_impact_per_hektogram.")
+      stop("To create database entries for the sustainability database, df must include only the columns identifier, environmental_impact_indicator and environmental_impact_per_hektogram in this order.")
     }
 
   }else{

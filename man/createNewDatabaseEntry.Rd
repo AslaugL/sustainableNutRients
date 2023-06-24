@@ -8,7 +8,7 @@ createNewDatabaseEntry(df, database, identifier = "recipe_name")
 }
 \arguments{
 \item{df}{\itemize{
-\item{For volume_weight, a dataframe three columns: either an identifier (default recipe_name) and Ingredients or "database_ID" depending on if Ingredient is new or already in database, "unit" and "grams_per_unit"}
+\item{For volume_weight, a dataframe three columns: an identifier (default recipe_name), "unit" and "grams_per_unit"}
 \item{For "nutrients", the output from calculateNutrientContentOfFoodlist with option "per 100 g" selected or a three column dataframe with
 an "Ingredients" column with food name, same as what can be found in the recipes or food list, a "nutrient" column with nutrient
 names similar to what is found in Matvaretabellen and "nutrient_content_per_100g" of the food.}
