@@ -84,14 +84,14 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'boat') ~ 'ice cream boat',
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'sandwich') ~ 'ice cream sandwich',
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'lollipop') ~ 'ice cream lollipop',
-    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'ice') & str_detect(Ingredients, 'vegan|plant-based|plant based') ~ 'ice cream plant-based',
-    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'ice') ~ 'ice cream',
-    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'vegan|plant-based|plant based') ~ 'cream plant-based',
-    str_detect(Ingredients, 'cream') & (str_detect(Ingredients, 'coffee') | str_detect(Ingredients, '10 \u0025')) ~ 'cream coffee 10 \u0025',
+    str_detect(Ingredients, 'cream') & str_detect(Ingredients, '\\bice') & str_detect(Ingredients, 'vegan|plant-based|plant based') ~ 'ice cream plant-based',
+    str_detect(Ingredients, 'cream') & str_detect(Ingredients, '\\bice') ~ 'ice cream',
+    str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'vegan|plant-based|plant based|rice') ~ 'cream plant-based',
+    str_detect(Ingredients, 'cream') & (str_detect(Ingredients, 'coffee|cooking') | str_detect(Ingredients, '10 \u0025')) ~ 'cream coffee 10 \u0025',
     str_detect(Ingredients, 'cream') &
-      ((str_detect(Ingredients, 'food') |
+      ((str_detect(Ingredients, 'food|cooking') |
           !str_detect(Ingredients,
-                      'cheese|sour|cracker|sauce|coconut|light|condensed|ice|balsamic|potato|vegan|plant|\\boat\\b|castello|cake|vanilla'))
+                      'cheese|sour|cracker|sauce|coconut|light|condensed|ice|balsamic|potato|vegan|plant|\\boat\\b|castello|cake|vanilla|and cream|with cream'))
        ) ~ 'cream household 18 \u0025', #Standard
     str_detect(Ingredients, 'cr\u00E8me fra\u00EEche 18 \u0025') | str_detect(Ingredients, 'cr\u00E8me fra\u00EEche') & str_detect(Ingredients, 'light|18') ~ 'cr\u00E8me fra\u00EEche 18 \u0025',
     str_detect(Ingredients, 'cr\u00E8me fra\u00EEche 10 \u0025') ~ 'cr\u00E8me fra\u00EEche 10 \u0025',

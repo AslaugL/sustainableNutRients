@@ -19,6 +19,8 @@ standardiseHerbsnSpicesP <- function(df) {
       str_detect(Ingredients, 'parsley|mug') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'parsley fresh herbs',
       str_detect(Ingredients, 'parsley|parlsey') & !str_detect(Ingredients, 'root') ~ 'parsley dried', #Standard
 
+      str_detect(Ingredients, 'pizza') & str_detect(Ingredients, 'seasoning') ~ 'pizza seasoning',
+
       TRUE ~ Ingredients_standardised))
 }
 

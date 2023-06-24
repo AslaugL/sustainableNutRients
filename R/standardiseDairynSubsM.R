@@ -57,7 +57,7 @@ standardiseDairynSubsM <- function(df) {
       str_detect(Ingredients, 'milk|tinemelk') &
         !str_detect(Ingredients,
                     'coconut|butter|extra|condensed|chocolate|cultured|cheese') &
-        (!str_detect(Ingredients, 'without') & str_detect(Ingredients, 'milk')) ~ 'milk 1 %', #Standard
+        (!str_detect(Ingredients, 'without|potatoes|chives') & str_detect(Ingredients, 'milk')) ~ 'milk 1 %', #Standard
 
       TRUE ~ Ingredients_standardised)
       )

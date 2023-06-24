@@ -40,7 +40,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'milk chocolate') & !str_detect(Ingredients, 'cheese|philadelphia') |
         str_detect(Ingredients, 'milk heart') | (str_detect(Ingredients, 'cooking chocolate') & str_detect(Ingredients, 'light')) ~ 'milk chocolate',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'fruit') | Ingredients == 'fruit nut' ~ 'milk chocolate fruit',
-      str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'semi|dark') ~ 'chocolate semi-sweet',
+      str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'semi|dark') & !str_detect(Ingredients, 'with dark chocolate|with semi-dark chocolate|chocolate flavor') ~ 'chocolate semi-sweet',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'unsweetened') ~ 'chocolate unsweetened',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'white') ~ 'chocolate white',
       str_detect(Ingredients, 'chocolate') & str_detect(Ingredients, 'sauce') ~ 'chocolate sauce',
@@ -219,8 +219,8 @@ standardiseOthers <- function(df) {
 
       #Pizza, and similar
       str_detect(Ingredients, 'pizza filling') ~ 'pizza filling',
-      str_detect(Ingredients, 'pizza') & str_detect(Ingredients, 'dough') & !str_detect(Ingredients, 'meat dough') ~ 'pizza dough',
-      str_detect(Ingredients, 'pizza') & !str_detect(Ingredients, 'sauce|base|topping|cheese|dressing|dough|flour|for pizza') ~ 'pizza',
+      str_detect(Ingredients, 'pizza') & str_detect(Ingredients, 'dough| \\bcm\\b|fresh|fried|square') & !str_detect(Ingredients, 'meat dough') ~ 'pizza dough',
+      str_detect(Ingredients, 'pizza') & !str_detect(Ingredients, 'sauce|base|topping|cheese|dressing|dough|flour|for pizza|seasoning') ~ 'pizza',
       str_detect(Ingredients, 'savory filled biscuits') ~ 'savory filled biscuits',
 
       # Others
