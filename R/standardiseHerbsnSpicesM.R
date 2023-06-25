@@ -17,6 +17,7 @@ standardiseHerbsnSpicesM <- function(df) {
       str_detect(Ingredients, 'mint') & (str_detect(Ingredients, 'fresh|chop|crush|neve|twig|leaf') | str_detect(unit, 'twig|bunch|leaf|neve|dl')) ~ 'mint fresh herbs',
       str_detect(Ingredients, 'mint') & str_detect(Ingredients, 'jelly') ~ 'mint jelly', #Standard
       str_detect(Ingredients, 'mint') ~ 'mint dried', #Standard
+      str_detect(Ingredients, 'muscat') ~ 'muscat spice',
 
       TRUE ~ Ingredients_standardised))
 }

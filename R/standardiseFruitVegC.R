@@ -65,6 +65,7 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'corn') & str_detect(unit, 'pcs') &
         !str_detect(Ingredients, 'pepper') | str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'cob') ~ 'corn cob',
       str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'jam') ~ 'cranberries jam',
+      str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'juice') ~ 'cranberries juice',
       str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'dried|dry') ~ 'cranberries dried',
       str_detect(Ingredients, 'cranberr') & !str_detect(Ingredients, 'sauce') ~ 'cranberries',
       str_detect(Ingredients, 'cucumber') & str_detect(Ingredients, 'snake') ~ 'cucumber snake',

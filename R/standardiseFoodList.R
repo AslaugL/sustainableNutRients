@@ -27,8 +27,10 @@ standardiseFoodList <- function(df, convertCitrusPeelAndJuice = TRUE, convertFre
    #Convert citrus zest/juice to the equivalent of whole fruit
     if(isTRUE(convertCitrusPeelAndJuice)) {
 
+      #Option to convert citrus fruit from weight to pcs not supported here as this option should only be used after the foodlist amounts has been standardised
+      #so the amounts in kg are calculated first as else the number of pcs can be calculated separately for juice and zest of the same fruit causing duplications.
       standardised <- standardised %>%
-        calculateCitrusJuiceZest()
+        convertCitrusJuiceZest()
 
     } else if(isFALSE(convertCitrusPeelAndJuice)) {
       standardised <- standardised

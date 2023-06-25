@@ -47,7 +47,7 @@ standardiseRedMeatnSubs <- function(df) {
         str_detect(Ingredients, 'ground|mince|all-beef hot dog|all-beef patty') |
         str_detect(Ingredients, 'ground|mince') & str_detect(Ingredients, 'meat') &
         !str_detect(Ingredients, 'pork|turkey|deer|tofu|chicken|lamb|plant-based|plant based|vegan|vegetarian|moose|elk|pizza|substitute') |
-        str_detect(Ingredients, 'meat dough|chop dough|beef dough') & !str_detect(Ingredients, 'moose|elk') ~ 'beef minced meat', #Standard
+        str_detect(Ingredients, 'meat dough|chop dough|beef dough') & !str_detect(Ingredients, 'moose|elk|pizza') ~ 'beef minced meat', #Standard
       str_detect(Ingredients, 'beef') & str_detect(Ingredients, 'shredded|steak strip|sirloin butt') ~ 'beef sirloin butt', #Also used in Beef quesedillas and Steak Strips On Spaghetti With Parsley Pesto
       str_detect(Ingredients, 'calf') & str_detect(Ingredients, 'liver') ~ 'beef calf liver',
       str_detect(Ingredients, 'calf') & str_detect(Ingredients, 'leg') ~ 'beef calf shoulder', #Actually hind leg but not in database,

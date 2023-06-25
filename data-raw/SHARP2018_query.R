@@ -91,6 +91,9 @@ SHARP2018_query <- readRDS("./data-raw/SHARP2018_query_prep.Rds") %>%
       Ingredients == 'wheat flour semolina' ~ 'wheat flour',
       Ingredients == 'white bread mix' ~ 'white bread',
       Ingredients == 'coffee ground, roasted' ~ 'coffee ground',
+      Ingredients == 'wheat bran' ~ 'wheat bran',
+      Ingredients == 'Celariac root' ~ 'celariac',
+      Ingredients == 'Coconut oil' ~ 'coconut',
       TRUE ~ first_word),
 
     second_word = case_when(
@@ -164,6 +167,7 @@ SHARP2018_query <- readRDS("./data-raw/SHARP2018_query_prep.Rds") %>%
       Ingredients == 'wheat flour semolina' ~ 'semolina',
       Ingredients == 'white bread mix' ~ 'mix',
       Ingredients == 'coffee ground, roasted' ~ '\\',
+      Ingredients == 'wheat bran' ~ '\\',
       TRUE ~ second_word
     )
   ) %>%
@@ -172,7 +176,6 @@ SHARP2018_query <- readRDS("./data-raw/SHARP2018_query_prep.Rds") %>%
   distinct(., first_word, second_word, .keep_all = TRUE) %>% #Remove duplicates. Due to splitting up rows with '/', certain ingredients occur multiple times
   #Arrange columns
   select(first_word, second_word, database_ID) %>% arrange(first_word, second_word)
-#Is the maize flour in SHARP the same as corn starch?
 
 #Save
 saveRDS(SHARP2018_query, "./data-raw/SHARP2018_query.Rds")

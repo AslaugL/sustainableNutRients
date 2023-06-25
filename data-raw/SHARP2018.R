@@ -24,7 +24,8 @@ various$sharp_to_remove <- SHARP %>%
                    'Alcoholic beverages', 'Seasoning, sauces and condiments',
                    'Water and water-based beverages') |
            str_detect(Ingredients, 'rice|other wine-like fruit drinks|soft')) %>%
-  #Remove ingredients in these categories that should be kept
+  # This variable is a list of food items from the above categories to remove from the SHARP DB
+  # The food items listed below are from these categories but will be kept in the db
   filter(!Ingredients %in% tolower(c('White sugar', 'Honey', 'Syrups',
 
                                      #Cheeses
@@ -45,7 +46,7 @@ various$sharp_to_remove <- SHARP %>%
                                      'breadcrumbs', 'buns', 'wheat bread and rolls, brown or wholemeal', 'wheat flour', 'maize flour',
                                      'wheat wholemeal flour', 'dried pasta', 'pasta wholemeal', 'oat grain', 'bulgur', 'barley grain, pearled',
                                      'oat rolled grains', 'processed oat-based flakes', 'rye flour, light', 'rye flour, wholemeal',
-                                     'wheat semolina',
+                                     'wheat semolina', 'wheat bran',
                                      #Alcoholic beverages
                                      'beer', 'wine', 'whisky', 'fortified and liqueur wines', 'cider', 'brandy', 'vodka and vodka-like spirits',
                                      'rum',
@@ -304,7 +305,7 @@ various$shellfish <- SHARP %>%
 SHARP <- full_join(SHARP, various$shellfish)
 #Add composite ingredients
 various$composite_ingredients_sharp <- readRDS(
-  system.file("extdata", "composite_ingredients_sustainability_markers.Rds", package = "nutRients")
+  system.file("extdata", "composite_ingredients_sustainability_markers.Rds", package = "sustainableNutRients")
   )
 
 #Add to SHARP

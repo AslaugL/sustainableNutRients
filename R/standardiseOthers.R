@@ -64,8 +64,8 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'tenacious men') ~ 'jelly candy seigmenn',
       str_detect(Ingredients, '\\bgel\\b') & str_detect(Ingredients, 'top') ~ 'jelly candy gel tops',
 
-      str_detect(Ingredients, 'liquorice') & str_detect(Ingredients, 'powder') ~ 'liquorice powder',
-      str_detect(Ingredients, 'liquorice') ~ 'liquorice',
+      str_detect(Ingredients, 'liquorice|licorice') & str_detect(Ingredients, 'powder') ~ 'liquorice powder',
+      str_detect(Ingredients, 'liquorice|licorice') ~ 'liquorice',
       str_detect(Ingredients, 'marzipan') & str_detect(Ingredients, 'chocolate') ~ 'marzipan chocolate',
       str_detect(Ingredients, 'marzipan') ~ 'marzipan',
       str_detect(Ingredients, 'marshmallow') & str_detect(Ingredients, 'cream') ~ 'marshmallow cream',
@@ -182,14 +182,23 @@ standardiseOthers <- function(df) {
       #Baking ingredients
       str_detect(Ingredients, 'agave') & str_detect(Ingredients, 'nectar') ~ 'agave nectar',
       str_detect(Ingredients, 'agave') & str_detect(Ingredients, 'syrup') ~ 'agave syrup',
+
       str_detect(Ingredients, 'baking powder') ~ 'baking powder',
       str_detect(Ingredients, 'baking soda|bicarbonate of soda') ~ 'baking soda',
       str_detect(Ingredients, "blackstrap") & str_detect(Ingredients, "molass") ~ "molasses blackstrap",
       str_detect(Ingredients, 'molass') ~ "molasses blackstrap",
+
+      str_detect(Ingredients, 'citric acid') & str_detect(Ingredients, 'powder') ~ 'citric acid powder',
+
       str_detect(Ingredients, 'decorative glaze') ~ 'decorative glaze',
+
       str_detect(Ingredients, 'erythriol') ~ 'erythriol',
+
       str_detect(Ingredients, 'fondant') & str_detect(Ingredients, 'white') ~ 'fondant white',
       str_detect(Ingredients, 'food') & str_detect(Ingredients, 'coloring|colouring') ~ 'food coloring',
+
+      str_detect(Ingredients, 'pectin') ~ 'pectin',
+
       str_detect(Ingredients, 'shortening') & str_detect(Ingredients, 'vegetable') ~ 'shortening vegetable',
       str_detect(Ingredients, 'shortening') ~ 'shortening',
       str_detect(Ingredients, 'sugar') & str_detect(Ingredients, 'brown\\b|castor') ~ 'sugar brown',
@@ -242,6 +251,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'cucumber mix') ~ 'cucumber mix pickled',
       str_detect(Ingredients, 'custard') & str_detect(Ingredients, 'hot') ~ 'custard hot',
       str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'custard') ~ 'custard vanilla',
+      str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'cream') & !str_detect(Ingredients, "ice|flavor|drink") ~ 'vanilla cream',
 
       str_detect(Ingredients, 'fig tart') ~ 'fig tart',
 

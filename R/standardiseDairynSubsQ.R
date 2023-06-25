@@ -13,8 +13,8 @@ standardiseDairynSubsQ <- function(df) {
 
     #Standardise
     mutate(Ingredients_standardised = case_when(
-      str_detect(Ingredients, 'kesam|tine light 2%') & str_detect(Ingredients, 'low fat|1 %') ~ 'quark, 1 %',
-      str_detect(Ingredients, 'kesam') ~ 'quark, 7 %',
+      str_detect(Ingredients, 'kesam|tine light 2%|quark') & str_detect(Ingredients, 'low fat|1 %') ~ 'quark, 1 %',
+      str_detect(Ingredients, 'kesam|quark') ~ 'quark 7 %',
 
       TRUE ~ Ingredients_standardised))
 }

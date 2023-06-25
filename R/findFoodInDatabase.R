@@ -521,6 +521,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'chocolate unsweetened' ~ fixFoodMappingError(database = reference, 'chocolate', 'dark'), #Highes cocoa percentage in database
           Ingredients == 'aioli' ~ fixFoodMappingError(database = reference, 'mayonnaise'), #Similar
           Ingredients == 'trout smoked' ~ fixFoodMappingError(database = reference, 'salmon', 'smoked'),
+          Ingredients == 'fresh herbs ginger' ~ fixFoodMappingError(database = reference, 'ginger'),
 
           #Not in reference
           ((Ingredients %in% c('duck or goose fat for confit', 'lime leaf', 'cranberries jam', "beans'n'pork canned", 'onion seed',

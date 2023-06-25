@@ -700,7 +700,7 @@ old <- readRDS("./data-raw/unit_weights.Rds")
 
 #Ingredients with IDs already
 new <- tibble(
-  temp = c(
+  temporary = c(
 
     "chocolate spread, nut spread;dl;100;",
     "gelatin;pcs;2;", #Same as leaf
@@ -710,11 +710,11 @@ new <- tibble(
     "sauce barbeque;dl;120.89;FoodData Central",
     "granola;dl;50;Same as muesli from Helsedir",
     "granola;portion;100;Same as muesli from Helsedir",
-    "lemon balm_fresh;dl_bunch_neve;20;Lemon balm is in the mint family, so same as mint"
+    "lemon balm fresh;dl_bunch_neve;20;Lemon balm is in the mint family, so same as mint"
   )
 ) %>%
-  separate_rows(., temp, sep = "_") %>%
-  separate(., temp, into = c("Ingredients", "unit_enhet", "grams_per_unit", "reference"), sep = ";") %>%
+  separate(., col = temporary, into = c("Ingredients", "unit_enhet", "grams_per_unit", "reference"), sep = ";") %>%
+  separate_rows(., unit_enhet, sep = "_") %>%
   #Add IDs
   left_join(., old %>% select(Ingredients, database_ID) %>% unique()) %>%
   mutate(language = "english",

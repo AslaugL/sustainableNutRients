@@ -15,7 +15,8 @@ standardiseHerbsnSpicesF <- function(df) {
     mutate(Ingredients_standardised = case_when(
       str_detect(Ingredients, 'fajita') & str_detect(Ingredients, 'spice') ~ 'spice mix fajita',
       str_detect(Ingredients, 'fennel') & str_detect(Ingredients, 'seed') ~ 'fennel seed',
-      str_detect(Ingredients, 'fenugreek leaf') & str_detect(Ingredients, 'dried') ~ 'fenugreek leaf dried',
+      str_detect(Ingredients, 'fenugreek lea') & str_detect(Ingredients, 'fresh') ~ 'fenugreek leaf fresh herbs',
+      str_detect(Ingredients, 'fenugreek lea') ~ 'fenugreek leaf dried', #Use as standard
       str_detect(Ingredients, 'fenugreek seed') ~ 'fenugreek seed',
       str_detect(Ingredients, 'french fr') & str_detect(Ingredients, 'season') ~ 'french fries seasoning',
 

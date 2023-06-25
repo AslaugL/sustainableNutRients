@@ -40,5 +40,5 @@ calculateWeightOfIngredients <- function(df, weight_in = "hektograms") {
 
   new_amounts %>%
     select(-c(database_reference, database_ID, grams_per_unit, .data$tmp))%>%
-    select(Original_ingredients, Ingredients, Amounts, unit, everything())
+    select(Ingredients, Amounts, unit, everything())
 }

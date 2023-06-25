@@ -45,7 +45,9 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
       Ingredients == 'tomato sun dried' ~ "tomato",
       Ingredients == 'tomato sun dried in oil' ~ "tomato",
       Ingredients == "cloudberries" ~ "cloud",
-      Ingredients == 'lemon balm_fresh' ~ 'lemon balm',
+      Ingredients == 'lemon balm fresh' ~ 'lemon balm',
+      Ingredients == 'oatbran' ~ 'oat bran',
+      Ingredients == 'wheatbran' ~ 'wheat bran',
       TRUE ~ first_word),
 
     second_word = case_when(
@@ -95,7 +97,9 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
       Ingredients == 'tomato sun dried' ~ "sun dried",
       Ingredients == 'tomato sun dried in oil' ~ "sun dried in oil",
       Ingredients == "cloudberries" ~ "berr",
-      Ingredients == 'lemon balm_fresh' ~ 'fresh',
+      Ingredients == 'lemon balm fresh' ~ 'fresh',
+      Ingredients == 'oatbran' ~ '\\',
+      Ingredients == 'wheatbran' ~ '\\',
       TRUE ~ second_word
     )
   ) %>%
