@@ -171,7 +171,7 @@ SHARP <- SHARP %>%
            str_replace('dried prunes', 'prune dried') %>%
            str_replace('dried figs', 'fig dried') %>%
            str_replace('dried fruit', 'fruit dried') %>%
-           str_replace('dried dates', 'date dried') %>%
+           str_replace('dried dates', 'dates dried') %>%
            str_replace('dried bananas', 'banana dried') %>%
            str_replace('dried apricots', 'apricot dried') %>%
            str_replace('dried mushrooms', 'mushroom dried') %>%
@@ -225,6 +225,7 @@ SHARP <- SHARP %>%
            str_replace('rye flour, wholemeal', 'wheat flour rye wholemeal') %>%
            str_replace('passionfruits', 'passion fruit') %>%
            str_replace('almonds sweet', 'almond') %>%
+           str_replace('berries and small fruits', 'berries') %>%
 
            #Meat
            str_replace('beef tallow including processed suet', 'tallow') %>%
@@ -307,6 +308,13 @@ SHARP <- full_join(SHARP, various$shellfish)
 various$composite_ingredients_sharp <- readRDS(
   system.file("extdata", "composite_ingredients_sustainability_markers.Rds", package = "sustainableNutRients")
   )
+#Use "lettuce and similar" as a default for salad leaves not in SHARP
+various$salad <- SHARP %>%
+  filter(Ingredients == "lettuces other") %>%
+  mutate(Ingredients = str_replace(Ingredients, "lettuces other", "salad"),
+         FoodEx2 = NA)
+#Add to SHARP
+SHARP <- bind_rows(SHARP,various$salad)
 
 #Add to SHARP
 SHARP <- full_join(SHARP, various$composite_ingredients_sharp)

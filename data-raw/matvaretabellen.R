@@ -854,15 +854,17 @@ nutrients_to_use <- nutrients_to_use %>%
   bind_rows(., various$component_ingredients_nutrients) %>%
   bind_rows(., various$shellfish) %>%
   bind_rows(., various$dairy_ingredients) %>%
-  full_join(., clean_nutrients, by = c('database_ID', 'Foodgroup')) %>%
+  full_join(., clean_nutrients, by = c('database_ID')) %>%
   #Give sour cream, crème fraîche and veal liver individual database_IDs, while keeping the nutrition information rows
   mutate(database_ID = case_when(
     str_detect(Ingredients.y, 'crème fraîche|veal_liver') ~ database_ID + 300,
     TRUE ~ database_ID
   )) %>%
   #Remove and rename some columns
-  select(-c(Ingredients.x, Ingredients.y, from.x)) %>%
-  rename(from = from.y)
+  select(-c(Ingredients.x, Ingredients.y, from.x, Foodgroup.x)) %>%
+  rename(from = from.y,
+         Foodgroup = Foodgroup.y)
+
 
 #Turn long
 matvaretabellen2022 <- nutrients_to_use %>% select(-c(food_item, Foodgroup)) %>%

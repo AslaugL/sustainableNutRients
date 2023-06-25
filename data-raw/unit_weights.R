@@ -710,7 +710,8 @@ new <- tibble(
     "sauce barbeque;dl;120.89;FoodData Central",
     "granola;dl;50;Same as muesli from Helsedir",
     "granola;portion;100;Same as muesli from Helsedir",
-    "lemon balm fresh;dl_bunch_neve;20;Lemon balm is in the mint family, so same as mint"
+    "lemon balm fresh;dl_bunch_neve;20;Lemon balm is in the mint family, so same as mint",
+    "vanilla pod;pcs;3;Oda online store"
   )
 ) %>%
   separate(., col = temporary, into = c("Ingredients", "unit_enhet", "grams_per_unit", "reference"), sep = ";") %>%

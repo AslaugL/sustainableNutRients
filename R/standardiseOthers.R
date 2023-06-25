@@ -212,9 +212,6 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'syrup') & str_detect(Ingredients, 'chocolate') ~ 'syrup chocolate',
       str_detect(Ingredients, 'syrup') ~ 'syrup',
 
-      str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'extract') ~ 'vanilla extract',
-      str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'bean') ~ 'vanilla bean',
-
       str_detect(Ingredients, 'yeast') & str_detect(Ingredients, 'dry|dried') ~ 'yeast dry',
       str_detect(Ingredients, 'yeast') & str_detect(Ingredients, 'nutritional') ~ 'yeast nutritional',
       str_detect(Ingredients, 'yeast') ~ 'yeast',
@@ -229,7 +226,7 @@ standardiseOthers <- function(df) {
       #Pizza, and similar
       str_detect(Ingredients, 'pizza filling') ~ 'pizza filling',
       str_detect(Ingredients, 'pizza') & str_detect(Ingredients, 'dough| \\bcm\\b|fresh|fried|square') & !str_detect(Ingredients, 'meat dough') ~ 'pizza dough',
-      str_detect(Ingredients, 'pizza') & !str_detect(Ingredients, 'sauce|base|topping|cheese|dressing|dough|flour|for pizza|seasoning') ~ 'pizza',
+      str_detect(Ingredients, 'pizza') & !str_detect(Ingredients, 'sauce|base|topping|cheese|dressing|dough|flour|for pizza|seasoning|spice') ~ 'pizza',
       str_detect(Ingredients, 'savory filled biscuits') ~ 'savory filled biscuits',
 
       # Others
