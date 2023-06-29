@@ -43,7 +43,7 @@ standardiseFruitVegP <- function(df){
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'chip') ~ 'potato chip',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'cream') ~ 'potato cream',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'fries') ~ 'french fries',
-      str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'boat') ~ 'potato boat',
+      str_detect(Ingredients, 'potato') & str_detect(Ingredients, '(?<!in )boat') ~ 'potato boat',
       str_detect(Ingredients, 'potato') & str_detect(Ingredients, 'blue') ~ 'potato blue',
       str_detect(Ingredients, 'potato') & !str_detect(Ingredients, 'rice|bread|sweet|mash|flour|mash') ~ 'potato',
       str_detect(Ingredients, 'buttery') & str_detect(Ingredients, 'mash') ~ 'potato mash buttery',

@@ -144,7 +144,9 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'sausage|bratwurst') & str_detect(Ingredients, 'pork') ~ 'sausage pork',
       str_detect(Ingredients, 'sausage|bratwurst') & str_detect(Ingredients, plant_based) ~ 'sausage plant-based',
       str_detect(Ingredients, 'sausage|bratwurst') & str_detect(Ingredients, 'cured') ~ 'sausage cured',
-      str_detect(Ingredients, 'sausage') & !str_detect(Ingredients, 'mustard|sauce|bread|casserole|stew') ~ 'sausage',
+      str_detect(Ingredients, 'sausage') & str_detect(Ingredients, 'wiener') ~ 'sausage wiener',
+      str_detect(Ingredients, 'sausage') & str_detect(Ingredients, 'grill') ~ 'sausage grill',
+      str_detect(Ingredients, 'sausage') & !str_detect(Ingredients, 'mustard|sauce|bread|casserole|stew') ~ 'sausage grill', #Standard
 
       str_detect(Ingredients, 'vegetable|plant-based|plant based|vegan') & str_detect(Ingredients, 'pate|paste|spread|pâté') ~ 'vegetable spread',
       str_detect(Ingredients, 'vegisterkake') ~ 'vegisterkake',

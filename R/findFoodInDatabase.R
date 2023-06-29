@@ -337,7 +337,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'spread speculaas' ~ fixFoodMappingError(database = reference, 'peanut', 'butter'),
           Ingredients == 'onion pickled' ~ fixFoodMappingError(database = reference, 'beetroot', 'pickled'),
           Ingredients == 'pizza sauce red' ~ fixFoodMappingError(database = reference, 'tomato', 'canned'),
-          Ingredients %in% c('bread sausage', 'bread polar', "bread paratha") ~ fixFoodMappingError(database = reference, 'pita', 'bread'), #Similar
+          Ingredients %in% c('bread polar', "bread paratha") ~ fixFoodMappingError(database = reference, 'pita', 'bread'), #Similar
           Ingredients %in% c("margarine", "lard pork fat", "bacon fat") ~ fixFoodMappingError(database = reference, 'butter'), #Similar
           str_detect(Ingredients, 'spice mix') & unit == 'pack' ~ fixFoodMappingError(database = reference, 'taco', 'spice'),
           str_detect(Ingredients, 'plantain') & unit == 'dl' ~ fixFoodMappingError(database = reference, 'banana'), #Similar

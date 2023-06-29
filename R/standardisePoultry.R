@@ -49,7 +49,9 @@ standardisePoultry <- function(df) {
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'burger') & str_detect(Ingredients, 'cheese') ~ 'chicken burger cheese',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'burger') ~ 'chicken burger',
       str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'sweet') & str_detect(Ingredients, 'sour') ~ 'chicken sweet and sour',
-      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'mince|ground') ~ 'chicken minced meat',
+      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'mince|ground') ~ 'chicken minced meat',
+      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'wiener') ~ 'chicken sausage wiener',
+      str_detect(Ingredients, 'chicken') & str_detect(Ingredients, 'sausage') ~ 'chicken sausage grill', #Standard
       str_detect(Ingredients, 'chicken') &
         !str_detect(Ingredients, 'power|condensed|broth|stock|sauce|salad|spice mix|soup|egg|tube|taco|servelat|sausage|wiener|tandoori|pizza|season|with chicken|sandwich|toast|tapast|ball|pastrami|bbq|barbecue|butter') ~ 'chicken whole',
 
@@ -71,7 +73,7 @@ standardisePoultry <- function(df) {
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'club') ~ 'turkey drumstick chicken', #Add chicken to use to calculate nutrition values
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'ham') ~ 'turkey ham canned',
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'sausage') ~ 'turkey sausage',
-      str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'grill') ~ 'sausage turkey chicken', #Prior turkey chicken grill sausage
+      str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'grill') ~ 'sausage grill turkey chicken', #Prior turkey chicken grill sausage
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'cooked') ~ 'turkey meat cooked',
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'bacon') ~ 'bacon turkey',
       str_detect(Ingredients, 'turkey') & !str_detect(Ingredients, 'broth|stock|fund|escalope') ~ 'whole turkey',

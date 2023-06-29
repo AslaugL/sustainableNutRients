@@ -567,7 +567,8 @@ various$not_needed <- unit_weights %>%
                               'cream substitute, vegetable fat', 'whipped cream, canned', 'instant coffee creamer', 'coffee creamer',
                               'kaffemelk', 'krem/topping på boks', 'melkepulver', 'syrnet melk, kulturmelk, kefir', 'cultured milk, kefir milk',
                               'gammelost', 'traditional norwegian cheese, matured, gammelost', 'gomme', 'traditional norwegian cheese, gomme',
-                              'bread, white, spirally shaped', 'loff, spiral', 'grapes, without seeds', 'beans, green, frozen'
+                              'bread, white, spirally shaped', 'loff, spiral', 'grapes, without seeds', 'beans, green, frozen',
+                              'grill sausage, lean', 'grill sausage, with cheese', 'meat sausage, lean'
            )) %>%
 
   #Any ingredient of the above that should be kept
@@ -609,6 +610,8 @@ unit_weights <- unit_weights %>%
            str_replace('tomatoes, sun-dried, in oil', 'tomato sun dried in oil') %>%
            str_replace('tomatoes, sun-dried', 'tomato sun dried') %>%
            str_replace('desiccated coconut', 'coconut mass') %>%
+           str_replace('grill sausage, hot dogs', 'sausage grill') %>%
+           str_replace("potato soft flatbread", "potato flatbread lompe") %>%
 
            #Change all plural forms to singular
            str_replace('anchovies', 'anchovy') %>%
@@ -711,7 +714,9 @@ new <- tibble(
     "granola;dl;50;Same as muesli from Helsedir",
     "granola;portion;100;Same as muesli from Helsedir",
     "lemon balm fresh;dl_bunch_neve;20;Lemon balm is in the mint family, so same as mint",
-    "vanilla pod;pcs;3;Oda online store"
+    "vanilla pod;pcs;3;Oda online store",
+    "sausage wiener;pcs;65;Gilde wiener sausages 8 per 520g"
+
   )
 ) %>%
   separate(., col = temporary, into = c("Ingredients", "unit_enhet", "grams_per_unit", "reference"), sep = ";") %>%

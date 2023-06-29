@@ -48,6 +48,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
       Ingredients == 'lemon balm fresh' ~ 'lemon balm',
       Ingredients == 'oatbran' ~ 'oat bran',
       Ingredients == 'wheatbran' ~ 'wheat bran',
+      Ingredients == "potato flatbread lompe" ~ "potato flatbread",
       TRUE ~ first_word),
 
     second_word = case_when(
@@ -100,6 +101,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
       Ingredients == 'lemon balm fresh' ~ 'fresh',
       Ingredients == 'oatbran' ~ '\\',
       Ingredients == 'wheatbran' ~ '\\',
+      Ingredients == "potato flatbread lompe" ~ "lompe",
       TRUE ~ second_word
     )
   ) %>%
