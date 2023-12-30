@@ -4,7 +4,13 @@
 \alias{findFoodInDatabase}
 \title{findFoodInDatabase}
 \usage{
-findFoodInDatabase(df, database, additional_entries = NULL, fix_errors = TRUE)
+findFoodInDatabase(
+  df,
+  database,
+  additional_entries = NULL,
+  fix_errors = TRUE,
+  include_water = FALSE
+)
 }
 \arguments{
 \item{df}{A dataframe with an Ingredients column to be checked against the reference database, and a unit column. For best accuracy units should be standardised.}
@@ -14,6 +20,8 @@ findFoodInDatabase(df, database, additional_entries = NULL, fix_errors = TRUE)
 \item{additional_entries}{Additional entries to the databases that foods can found in. Must be formatted same as the output from "createNewDatabaseEntry".}
 
 \item{fix_errors}{Fix known errors automatically? Default TRUE.}
+
+\item{include_water}{Some front of pack labels or other nutrient calculations use the dry weight of ingredients. Should the \% of water in an ingredient be included in the nutrient calculations? TRUE or FALSE. Default FALSE.}
 }
 \value{
 A dataframe with the ingredient name and the reference database_ID of the first hit in the database.

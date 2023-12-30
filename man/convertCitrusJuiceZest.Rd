@@ -7,7 +7,7 @@
 convertCitrusJuiceZest(
   df,
   whole_fruit_to_volume_units = TRUE,
-  weight_to_whole_fruits
+  weight_to_whole_fruits = FALSE
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ convertCitrusJuiceZest(
 The dataframe with the amounts of citrus juice/zest from whole foods in actual amounts of juice/zest
 }
 \description{
-Convert volume amounts of citrus juice and zest when recipe says to use t.ex "juice of one lemon" from whole fruits to volume. Or from kilograms to while fruits.
+Convert volume amounts of citrus juice and zest when recipe says to use t.ex "juice of one lemon" from whole fruits to volume. Or from kilograms to kilogram of whole fruits.
 }
 \details{
 Calculate the amounts of citrus juice and zest when recipe says to use t.ex "juice of one lemon".
