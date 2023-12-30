@@ -12,7 +12,7 @@
 splitBrothtoWaterBrotchcubes <- function(df){
 
   df %>%
-    filter(str_detect(Ingredients, 'water broth')) %>%
+    filter(str_detect(Ingredients, 'water broth') & !is.na(Amounts)) %>%
     #Add / to split the rows into two separate ingredients, and add "cube" to broth
     mutate(Ingredients = str_replace(Ingredients, 'water broth', 'water/broth cube')) %>%
     separate_rows(Ingredients, sep = '/') %>%
