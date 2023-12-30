@@ -177,6 +177,7 @@ temp <- list(
   c('biscuit oreo', 'pack', '154', 'OREO original', 'english'),
 
   #Vegetables/plant based
+  c('almond flour', 'dl', '47.34', 'FoodData Central', 'english'),
   c('Asparagus', 'bunch', '250', 'Meny', 'english'),
   c('asparagus white', 'dl', '35.93', 'FoodData Central', 'english'),
   c('Asparagus beans', 'dl', '80', 'Assumed similar to other beans in database', 'english'),
@@ -328,6 +329,7 @@ temp <- list(
   c('toenjang', 'dl', '202.88', 'FoodData Central', 'english'),
   c('broccoli', 'dl', '47.9', 'FoodData Central', 'english'),
   c('vanilla extract', 'dl', '87.92', 'FoodData Central', 'english'),
+  c('vanilla powder', 'dl', '89.23', 'FoodData Central', 'english'),
   c('kale', 'bunch', '150', 'Meny', 'english'),
   c('spinach, raw', 'neve', '12', 'same as dl', 'english'),
 
@@ -337,7 +339,7 @@ temp <- list(
   c('crab', 'pcs', '500', 'Meny, portion sizes seafood', 'english'),
   c('crab shell', 'pcs', '150', 'Meny, Lerøy seafood', 'english'),
   c('crab claw', 'portion', '500', 'Meny, portion sizes seafood', 'english'),
-  c('crab claw', 'pcs', '400', 'Kolonial', 'english'),
+  c('crab claw', 'pcs', '83', 'Domstein', 'english'),
   c('fish burger', 'pcs', '125', 'Lofoten fiskeprodukter', 'english'),
   c('fish cake', 'pcs', '65', 'Lofoten fiskeprodukter', 'english'),
   c('lobster', 'portion', '500', 'Meny, portion sizes seafood', 'english'),
@@ -576,7 +578,7 @@ various$not_needed <- unit_weights %>%
                              'sukker hvitt', 'anchovies, canned', 'anchovy fillets, canned', 'salmon, smoked, dry salted',
                              'mackerel fillet, in tomato sauce, canned', 'cod roe', 'tuna canned', 'ground meat, raw', 'bread, semi-coarse', 'bread, white',
                              'cream cracker', 'salami', 'rice parboiled', 'caramels', 'marshmallows', 'ice cream', 'pancakes',
-                             'biscuit, with oats, digestive', 'biscuit, marie', 'biscuit, for childen', 'muesli'))
+                             'biscuit, with oats, digestive', 'biscuit, marie', 'biscuit, for childen', 'muesli', 'roast beef'))
 
 #Remove the not needed ingredients
 unit_weights <- unit_weights %>%

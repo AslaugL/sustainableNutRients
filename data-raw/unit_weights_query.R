@@ -14,6 +14,8 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
   #Clean up some of them that's not right, always have the most generic name in the first column, then a specification in second column if present
   mutate(
     first_word = case_when(
+      Ingredients == "fruit coctail canned" ~ "coctail",
+      Ingredients == "passion fruit" ~ "passion fruit",
       Ingredients == 'white or yellow hard to semi-hard cheese' ~ 'hard to semi-hard cheese',
       Ingredients == 'egg noodle cooked' ~ 'egg noodle',
       Ingredients == 'horse-radish' ~ 'horseradish',
@@ -22,6 +24,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
       Ingredients == 'sugar snap peas' ~ 'sugar snap peas',
       Ingredients %in% c('black pepper whole','black pepper grounded') ~ 'pepper',
       Ingredients == 'black chokeberries' ~ 'chokeberries',
+      Ingredients == "chick pea dry" ~ "chick pea",
       Ingredients == 'chick pea flour' ~ 'chick pea',
       Ingredients == 'chick pea canned' ~ 'chick pea',
       Ingredients == 'sugar snap pea' ~ 'pea',
@@ -49,9 +52,12 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
       Ingredients == 'oatbran' ~ 'oat bran',
       Ingredients == 'wheatbran' ~ 'wheat bran',
       Ingredients == "potato flatbread lompe" ~ "potato flatbread",
+      Ingredients == "pita bread" ~ "pita bread",
       TRUE ~ first_word),
 
     second_word = case_when(
+      Ingredients == "fruit coctail canned" ~ "fruit",
+      Ingredients == "passion fruit" ~ '\\',
       Ingredients == 'white or yellow hard to semi-hard cheese' ~ '\\',
       Ingredients == 'chicken with skin' ~ 'whole',
       Ingredients == 'chili pepper red' ~ 'red',
@@ -69,6 +75,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
       Ingredients %in% c('olives black in oil canned', 'oliven, svarte, i olje, hermetisk') ~ 'black',
       Ingredients == 'black pepper whole' ~ 'whole',
       Ingredients == 'black pepper grounded' ~ 'ground',
+      Ingredients == 'chick pea dry' ~ '\\',
       Ingredients == 'chick pea flour' ~ 'flour',
       Ingredients == 'chick pea canned' ~ 'canned',
       Ingredients == 'mackerel fillet, in tomato sauce, canned' ~ 'tomato',
@@ -102,6 +109,7 @@ unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(gram
       Ingredients == 'oatbran' ~ '\\',
       Ingredients == 'wheatbran' ~ '\\',
       Ingredients == "potato flatbread lompe" ~ "lompe",
+      Ingredients == "pita bread" ~ "\\",
       TRUE ~ second_word
     )
   ) %>%

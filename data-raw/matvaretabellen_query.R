@@ -14,21 +14,28 @@ matvaretabellen2022_query <- readRDS("./data-raw/matvaretabellen2022_query_prep.
 
   #Fix some
   mutate(first_word = case_when(
-    Ingredients == 'alfalfa seed, sprouted, raw' ~ 'alfalfa',
-    Ingredients == 'cashew nut, salted' ~ 'cashew',
+    Ingredients == "fish_sauce" ~ 'sauce',
     Ingredients == 'cashew nut' ~ 'cashew',
     TRUE ~ first_word),
 
     second_word = case_when(
-      Ingredients == 'alfalfa seed, sprouted, raw' ~ 'sprout',
-      Ingredients == 'cashew nut, salted' ~ 'salt',
+      Ingredients == "fish_sauce" ~ 'fish',
       Ingredients == 'cashew nut' ~ 'nut',
       TRUE ~ second_word)
   ) %>%
 
-  #Arrange in lexogographical order
-  arrange(first_word, second_word) %>%
-  select(-Ingredients)
+  #Arrange by lexogographical order and number of words in the first search term
+  mutate(
+    number_of_words1 = str_count(first_word, "\\b\\w+\\b"),
+    number_of_words2 = str_count(second_word, "\\b\\w+\\b"),
+    number_of_words2 = case_when(
+
+      second_word == "\\" ~ 10,
+      TRUE ~ number_of_words2
+
+    )) %>%
+  arrange(desc(number_of_words1), desc(number_of_words2), first_word, second_word) %>%
+  select(-c(Ingredients, starts_with("number_of_words")))
 
 #Save
 saveRDS(matvaretabellen2022_query, "./data-raw/matvaretabellen2022_query.Rds")

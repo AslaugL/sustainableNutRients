@@ -37,8 +37,10 @@ clean_nutrients <- raw_data %>%
          Foodgroup = str_to_lower(Foodgroup)) %>%
   #Keep some ingredients
   filter((food_item %in% c(
-    'chocolate bar, milk', 'chocolate, white', 'chocolate, cooking, plain, minimum 35 % cocoa', 'pizza, industrially made',
-    'chocolate, snickers', 'ice cream, dairy', 'chocolate, dark, 70 % cocoa', 'tart shell, no filling', 'puffed oats', 'puffed wheat', 'puffed rice')) |
+    'chocolate bar, milk', 'chocolate, white', 'chocolate, cooking, plain, minimum 35 % cocoa',
+    'pizza, industrially made', 'breakfast cereal, wheat, barley, rye, oat, no sugar, 4-korn',
+    'chocolate, snickers', 'ice cream, dairy', 'chocolate, dark, 70 % cocoa', 'tart shell, no filling',
+    'puffed oats', 'puffed wheat', 'puffed rice', 'corn flakes, Kelloggs')) |
            !str_detect(Foodgroup,
                        'dessert|other meat products, prepared|other meats, minced, offal, prepared|egg, prepared|cookies|cod liver oil|homemade|chocolate|instant|cake|breakfast cereals|porridge|pizza')) %>%
 
@@ -56,7 +58,7 @@ clean_nutrients <- raw_data %>%
   str_detect(food_item, 'beef') & str_detect(food_item, 'rib-eye steak, raw') ~ 'beef_rib-eye steak',
   str_detect(food_item, 'beef') & str_detect(food_item, 'liver') ~ 'beef_liver/veal_liver',
   str_detect(food_item, 'beef') & str_detect(food_item, 'minced meat') & str_detect(food_item, '6 %') ~ 'beef minced meat_6',
-  food_item == 'beef, minced meat, without salt and water, raw' ~ 'beef_minced meat',
+  food_item == 'beef, minced meat, without salt and water, raw' ~ 'beef minced meat',
   food_item == 'veal, for roast, raw' ~ 'beef_veal for roast',
   food_item == 'beef, roast of nuckle, raw' ~ 'beef_roast of knuckle',
   food_item == 'veal, chops, raw' ~ 'beef_veal chops',
@@ -68,8 +70,11 @@ clean_nutrients <- raw_data %>%
   food_item == 'lamb, for mutton and cabbage stew (fårikål), raw' ~ 'lamb_cabbage stew meat',
   food_item == 'lamb, chops, with fat, raw' ~ 'lamb_chop',
   food_item == 'lamb, leg, for roast, raw' ~ 'lamb_leg roast',
-  food_item == 'lamb, leg, cured, dried, smoked' ~ 'lamb_leg smoked',
+  food_item == 'lamb, leg, cured, dried, smoked' ~ 'lamb_leg smoked/lamb_cured leg',
   food_item == 'lamb, rib, cured, dried, smoked, raw' ~ 'lamb_cured rib',
+  food_item == 'lamb, tenderloin, raw' ~ 'lamb_tenderloin',
+  food_item == 'lamb striploin, raw' ~ 'lamb_striploin',
+  food_item == 'liver, lamb, raw' ~ 'lamb_liver',
   food_item == 'lamb, chops, cutlet, hind saddle, lean, fat trimmed, raw' ~ 'lamb_hind saddle',
 
   #Pork----
@@ -87,6 +92,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'pork, grillbones, spare ribs, raw' ~ 'pork_spare rib',
   food_item == 'pork, tenderloin, raw' ~ 'pork_tenderloin',
   food_item == 'pork, trimmed fat, raw' ~ 'pork_lard',
+  food_item == 'pork scratchings' ~ 'bacon_crisp',
   food_item == 'ham, cured' ~ 'ham_cured',
   food_item == 'ham, smoke-cured' ~ 'ham_smoked',
   food_item == 'ham, boiled' ~ 'ham',
@@ -94,6 +100,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'sausage, chorizo' ~ 'sausage_chorizo',
   food_item == 'sausage, swedish, falukorv' ~ 'sausage_vossa', #Similar in nutrients
   food_item == 'sausage, meat, gilde' ~ 'sausage', #Standard
+  food_item == 'sausage, frankfurter/wiener' ~ 'sausage_wiener',
+  food_item == 'pepperoni' ~ 'sausage_pepperoni',
   food_item == 'plant-based minced' ~ 'minced meat_plant-based',
   food_item == 'plant-based burger' ~ 'hamburger_plant-based',
   food_item == 'plant-based balls' ~ 'meatball_plant-based',
@@ -104,6 +112,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'chicken, with skin, raw' ~ 'chicken_whole',
   food_item == 'chicken, fillet, without skin, raw' ~ 'chicken_breast',
   food_item == 'chicken, drumstick, with skin, raw' ~ 'chicken_drumstick',
+  food_item == 'liver, chicken, raw' ~ 'chicken_liver',
   food_item == 'chicken, minced meat, raw' ~ 'chicken_minced meat',
   food_item == 'egg white, raw' ~ 'egg_white',
   food_item == 'egg yolk, raw' ~ 'egg_yolk',
@@ -154,6 +163,10 @@ clean_nutrients <- raw_data %>%
   food_item == 'mackerel, warm smoked' ~ 'mackerel_smoked',
   food_item == 'cusk, tusk, raw' ~ 'cusk_tusk',
   food_item == "dover sole, raw" ~ 'sole_dover',
+  food_item == 'cod roe, raw' ~ 'cod_roe',
+  food_item == 'cod liver, raw' ~ 'cod_liver',
+  food_item == 'herring, pickled, drained' ~ "herring_pickled",
+  food_item == 'lemon sole, raw' ~ 'flounder',
 
   #Herbs and spices----
   food_item == 'anise seeds' ~ 'anise',
@@ -176,19 +189,24 @@ clean_nutrients <- raw_data %>%
   food_item %in% c('coriander seeds', 'fennel seeds', 'mustard seeds', 'caraway seeds') ~ str_replace(food_item, ' seeds', '_seed'),
   food_item == 'chili powder' ~ 'chili_powder',
   food_item == 'curry powder' ~ 'curry_powder',
+  food_item == 'poppy seeds' ~ 'seed_poppy',
 
   #Fruit and vegetables----
   database_ID == '06.114' ~ 'sprout_alfalfa',
   food_item == 'apricots, dried' ~ 'apricot_dried',
   food_item == 'beans, green, french, raw' ~ 'bean_green',
   food_item == 'beetroot, norwegian, raw' ~ 'beetroot',
-  food_item == 'blackcurrants, raw' ~ 'currant_black',
+  food_item == 'blackcurrants, raw' ~ 'black currant',
+  food_item == 'redcurrants, raw' ~ 'currant',
   food_item == 'brussel sprouts, norwegian, raw' ~ 'brussel_sprout',
 
   food_item == 'cabbage, white, raw' ~ 'cabbage', #Standard
   food_item == 'cabbage, pak-choi, bok choy, raw' ~ 'cabbage_bok choi',
   food_item == 'cabbage, red, raw' ~ 'cabbage_red',
+  food_item == 'cabbage, spring green, raw' ~ 'cabbage_spring green',
   food_item == 'cabbage, chinese, norwegian, raw' ~ 'cabbage_chinese',
+  food_item == 'cape gooseberries, raw' ~ 'physalis',
+  food_item == 'carambola, raw' ~ 'starfruit',
 
   food_item == 'cauliflower, norwegian, raw' ~ 'cauliflower',
   food_item == 'celariac root, norwegian, raw' ~ 'celariac_root',
@@ -207,7 +225,6 @@ clean_nutrients <- raw_data %>%
   food_item == 'horse-radish, raw' ~ 'horseradish',
 
   food_item == 'kiwi fruit, raw' ~ 'kiwi',
-
   food_item == 'kohlrabi, raw' ~ 'swede',
 
   food_item == 'baby corn, canned' ~ 'corn_baby',
@@ -216,6 +233,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'cucumber, pickled' ~ 'cucumber_pickled',
 
   food_item == 'figs, dried' ~ 'fig_dried',
+  food_item == "potatoes, french fries, frozen" ~ "french fries",
 
   food_item == 'tomato purée' ~ 'tomato_puree',
   food_item == 'tomato, small, cherry, imported, raw' ~ 'cherry_tomato',
@@ -227,6 +245,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'lemon juice, bottled' ~ 'lemon_juice',
   food_item == 'lemon peel' ~ 'lemon_zest',
   food_item == 'leaf beet, mangold, raw' ~ 'mangold',
+  food_item == 'cherries, sweet, raw' ~ 'morel',
+  food_item == 'lingonberries, cowberries, raw' ~ 'lingonberry',
   food_item == 'olives, black, in oil, canned' ~ 'olive_black',
   food_item == 'olives, green, pickled' ~ 'olive_green', #Standard
   food_item == 'onion, norwegian, raw' ~ 'onion',
@@ -234,6 +254,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'parsley root, norwegian, raw' ~ 'parsley_root',
   food_item == 'peas, sugar-snap, norwegian, raw' ~ 'pea_sugar snap',
   food_item == 'peas, frozen' ~ 'pea',
+  food_item == 'persimmon, kaki fruit, raw' ~ 'persimmon',
   food_item == 'pineapple, canned, in natural juice' ~ 'pineapple_canned',
   food_item == 'potato flatbread, soft, lompe' ~ 'potato flatbread lompe',
   food_item == 'potatoes, storage, raw' ~ 'potato',
@@ -250,31 +271,38 @@ clean_nutrients <- raw_data %>%
   food_item == 'turnip, norwegian, raw' ~ 'turnip',
   food_item == 'water chestnut, raw' ~ 'chestnut_water',
   food_item == 'melon, water, raw' ~ 'watermelon',
-  food_item == 'pumpkin, raw' ~ 'winter squash_pumpkin',
+  food_item == 'pumpkin, raw' ~ 'winter squash', #Standard
   food_item == 'pumpkin, butternut, raw' ~ 'winter squash_butternut',
+  food_item == 'pumpkin, hokkaido, raw' ~ 'winter squash_hokkaido',
   food_item == 'orange juice, from concentrate' ~ 'orange_juice', #Use as standard
   food_item =='passion fruit juice' ~ 'passion fruit_juice',
-  food_item %in% c('apple juice', 'pineapple juice', 'cranberry juice', 'grape juice',
+  food_item == 'cranberry juice' ~ 'cranberry_juice',
+  food_item %in% c('apple juice', 'pineapple juice', 'grape juice',
                    'grapefruit juice', 'orange juice', 'tomato juice', 'tomato ketchup') ~ str_replace(food_item, ' ', '_'),
   food_item == 'sweet corn, canned' ~ 'sweet corn_canned',
   food_item == 'grapes, unspecified, raw' ~ 'grape',
   food_item == 'peaches, canned, in syrup' ~ 'peach_canned',
+  food_item == 'cranberries, dried, sweetened' ~ 'cranberries_dried',
+  food_item == 'fruit juice drink, blackcurrant, ready-to-drink' ~ 'black currant_juice',
+  food_item == 'onion, roasted' ~ 'onion_fried',
 
   food_item == 'melon, cantaloupe, raw' ~ 'melon_cantaloupe',
   food_item == 'melon, honeydew, raw' ~ 'melon_honeydew',
   food_item == 'melon, galia, raw' ~ 'melon_galia',
+  food_item == 'nashi, asian pear, raw' ~ 'pear_asian',
 
   #Grains----
   food_item == 'almonds' ~ 'almond',
-  food_item == 'pearled barley' ~ 'pearl barley',
   food_item == 'broad beans, uncooked' ~ 'bean_broad',
   food_item == 'beans, black, canned'  ~ 'bean_black canned',
   food_item == 'beans, red (kidney), canned' ~ 'bean_kidney canned',
   food_item == 'beans, red (kidney), uncooked' ~ 'bean_kidney',
+  food_item == 'millet, grain' ~ 'millet',
   food_item == 'mung beans, sprouted, raw' ~ 'bean_sprout', #Standard
   food_item == 'beans, white, large, canned' ~ 'bean_white canned',
   food_item == 'beans, white, uncooked' ~ 'bean_white',
   food_item == 'beans, soya, uncooked' ~ 'bean_soya',
+  food_item == 'breakfast cereal, wheat, barley, rye, oat, no sugar, 4-korn' ~ 'firkorn',
   food_item == 'flatbread, hard' ~ 'bread flat hard',
   food_item == 'bulgur, uncooked' ~ 'bulgur_wheat',
   food_item == 'cashew nuts, salted' ~ 'cashew nut salt',
@@ -283,17 +311,23 @@ clean_nutrients <- raw_data %>%
   food_item == 'peas, chick peas, uncooked' ~ 'chick pea',
   food_item == 'peas, chick peas, canned' ~ 'chick pea_canned',
   food_item == 'corn starch' ~ 'corn_starch',
-  food_item == 'cornmeal, polenta' ~ 'corn flour_polenta',
+  food_item == 'cornmeal' ~ 'corn_flour',
+  food_item == 'corn flakes, kelloggs' ~ 'cornflakes',
   food_item == 'couscous, uncooked' ~ 'couscous',
+  food_item == 'couscous, cooked' ~ 'couscous_cooked',
   food_item == 'cracker, cream cracker' ~ 'cracker_cream',
   food_item == 'crisp bread, wholemeal flour, rye, husman' ~ 'crisp bread_coarse',
   food_item == 'noodles, with egg, uncooked' ~ 'noodle_egg',
+  food_item == 'noodles, cellophane, uncooked' ~ 'noodle_glass',
   food_item == 'pasta, plain, macaroni, spaghetti etc., uncooked' ~ 'pasta',
   food_item == 'pasta, whole-grain, uncooked' ~ 'pasta_whole grain',
+  food_item == 'pasta, plain, fresh, uncooked' ~ 'pasta_fresh',
   food_item == 'rice, jasmin, uncooked' ~ 'rice_jasmin',
-  food_item == 'lentils, green and brown, uncooked' ~ 'lentil_green',
-  food_item == 'lentils, red/pink, uncooked' ~ 'lentil_red',
-  food_item == 'lentils, green, canned' ~ 'lentil_canned',
+  food_item == 'lentils, green and brown, uncooked' ~ 'lentils dried_green',
+  food_item == 'lentils, red/pink, uncooked' ~ 'lentils dried_red',
+  food_item == 'lentils, green, canned' ~ 'lentils canned_green',
+  food_item == 'lentils, red, canned' ~ 'lentils canned_red',
+  food_item == 'lentils, green, canned' ~ 'lentils canned', # default
   food_item == 'squash seeds, pumpkin seeds' ~ 'pumpkin_seed',
   food_item == 'quinoa, white, uncooked' ~ 'quinoa',
   food_item == 'noodles, rice, uncooked' ~ 'noodle_rice',
@@ -319,7 +353,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'brazil nuts' ~ 'brazil_nut',
   food_item == 'hazelnuts' ~ 'hazelnut',
   food_item == 'wheat bran, regal' ~ 'wheat bran',
-  food_item == "oatbran" ~ 'oatbran',
+  food_item == "oatbran" ~ 'oat_bran',
   food_item == 'walnuts' ~ "walnut",
   food_item == "cashew nuts" ~ "cashew nut",
   food_item == "pine nuts" ~ "pine nut",
@@ -328,6 +362,11 @@ clean_nutrients <- raw_data %>%
   food_item == 'tart shell, no filling' ~ 'tart shell',
   food_item == 'pistachio nuts' ~ 'pistachio nut',
   food_item == 'pistachio nuts, roasted, with salt' ~ 'pistachio nut_salt',
+  food_item == 'barley flour' ~ 'wheat flour_barley',
+  food_item == 'barley, uncooked' ~ 'barley',
+  food_item == 'pearled barley' ~ 'barley_pearl',
+  food_item == 'barley, cooked' ~ 'barley_cooked',
+  food_item == 'psyllium husk' ~ 'psyllium husk',
 
   str_detect(food_item, 'bread, semi-coarse') & str_detect(food_item, '25-50') & str_detect(food_item, 'industrially made') ~ 'bread',
   str_detect(food_item, 'bread, white') & str_detect(food_item, '0-25') & str_detect(food_item, 'industrially made') & !str_detect(food_item, 'spiral|square') ~ 'bread_white',
@@ -346,35 +385,36 @@ clean_nutrients <- raw_data %>%
   food_item == 'oil, sunflower' ~ 'sunflower_oil',
   food_item == 'oil, rapeseed, cold pressed, odelia' ~ 'vegetable_oil', #Standard
   food_item == 'oil, walnut' ~ 'walnut_oil',
+  food_item == 'cocoa butter' ~ 'cocoa_butter',
 
   #Dairy and substitutes----
   food_item == 'butter' ~ 'butter',
   food_item == 'butter, unsalted' ~ 'butter_unsalted',
-  food_item == 'cheese, blue mold, norzola' ~ 'norzola_cheese blue',
-  food_item == 'cheese, blue mold, normanna' ~ 'normanna_cheese blue',
-  food_item == 'cheese, blue mold, gorgonzola' ~ 'gorgonzola_cheese blue',
-  food_item == 'cheese, blue mold, roquefort' ~ 'roquefort_cheese blue',
-  food_item == 'cheese, blue mold, selbu blå' ~ 'selbu_cheese blue',
-  food_item == 'cheese, ripened, brie' ~ 'brie',
+  food_item == 'cheese, blue mold, norzola' ~ 'cheese blue_norzola',
+  food_item == 'cheese, blue mold, normanna' ~ 'cheese blue_normanna',
+  food_item == 'cheese, blue mold, gorgonzola' ~ 'cheese blue_gorgonzola',
+  food_item == 'cheese, blue mold, roquefort' ~ 'cheese blue_roquefort',
+  food_item == 'cheese, blue mold, selbu blå' ~ 'cheese blue_selbu',
+  food_item == 'cheese, ripened, brie' ~ 'cheese_brie',
   food_item == 'cheese, whey, goat milk' ~ 'cheese brown_goat',
   food_item == 'cheese, whey, cow milk' ~ 'cheese brown',
-  food_item == 'cheese, ripened, camembert' ~ 'camembert',
-  food_item == 'cheese, hard, cheddar' ~ 'cheddar',
-  food_item == 'cottage cheese' ~ 'cottage cheese',
-  food_item == 'cream cheese, plain' ~ 'cream cheese',
-  food_item == 'cheese, goat milk, feta' ~ 'feta_cheese',
-  food_item == 'goat cheese, chevre, naturell' ~ 'chevre',
-  food_item == 'goat cheese, hard, white, balsfjord' ~ 'hard goat cheese_balsfjord',
-  food_item == 'goat cheese, hard, white, kvitlin' ~ 'hard goat cheese_kvitlin',
-  food_item == 'cream cheese, goat milk, snøfrisk' ~ 'snøfrisk_goat cream cheese',
-  food_item == 'cheese, halloumi' ~ 'halloumi_cheese',
-  food_item == 'cheese, hard, jarlsberg' ~ 'jarlsberg',
-  food_item == 'cheese, mascarpone' ~ 'mascarpone',
-  food_item == 'cheese, mozarella, semi-hard, norwegian' ~ 'mozzarella',
-  food_item == 'cheese, hard, norvegia' ~ 'norvegia',
-  food_item == 'cheese, hard, parmesan' ~ 'parmesan',
-  food_item == 'cheese, semihard, port salut' ~ 'port salut',
-  food_item == 'cheese, ricotta' ~ 'ricotta salata',
+  food_item == 'cheese, ripened, camembert' ~ 'cheese_camembert',
+  food_item == 'cheese, hard, cheddar' ~ 'cheese_cheddar',
+  food_item == 'cottage cheese' ~ 'cheese cottage',
+  food_item == 'cream cheese, plain' ~ 'cheese cream',
+  food_item == 'cheese, goat milk, feta' ~ 'cheese_feta',
+  food_item == 'goat cheese, chevre, naturell' ~ 'cheese_chevre',
+  food_item == 'goat cheese, hard, white, balsfjord' ~ 'cheese hard goat_balsfjord',
+  food_item == 'goat cheese, hard, white, kvitlin' ~ 'cheese hard goat_kvitlin',
+  food_item == 'cream cheese, goat milk, snøfrisk' ~ 'cheese cream_goat snøfrisk',
+  food_item == 'cheese, halloumi' ~ 'cheese_halloumi',
+  food_item == 'cheese, hard, jarlsberg' ~ 'cheese_jarlsberg',
+  food_item == 'cheese, mascarpone' ~ 'cheese_mascarpone',
+  food_item == 'cheese, mozarella, semi-hard, norwegian' ~ 'cheese_mozzarella',
+  food_item == 'cheese, hard, norvegia' ~ 'cheese_norvegia',
+  food_item == 'cheese, hard, parmesan' ~ 'cheese_parmesan',
+  food_item == 'cheese, semi-hard, port salut' ~ 'cheese_port salut',
+  food_item == 'cheese, ricotta' ~ 'cheese_ricotta salata',
   food_item == 'cheese, hard, sveitser' ~ 'swiss_cheese',
   food_item == 'cheese, white, unspecified' ~ 'semi-hard to hard cheese',
   food_item == 'cream, household, 18 % fat' ~ 'cream household_18',
@@ -398,9 +438,10 @@ clean_nutrients <- raw_data %>%
   food_item == 'yoghurt, with muesli and berries' ~ 'yoghurt_with grains',
   food_item == 'cultured, thickened oat product' ~ 'yoghurt_plant-based oat',
   food_item == 'milk, condensed, sweetened' ~ 'milk evaporated',
-  food_item == 'soy based beverage' ~ 'dairy imitate_soy milk',
+  food_item == 'soy based beverage' ~ 'dairy imitate_soymilk',
   food_item == 'rice based beverage' ~ 'dairy imitate_rice milk',
-  food_item == 'oat based beverage' ~ 'dairy imitate_oatmilk',
+  food_item == 'oat based beverage' ~ 'dairy imitate oatmilk',
+  food_item == 'cultured oat product, for food preparation, 15 % fat' ~ 'dairy imitate oatmilk_full fat',
   food_item == 'ice cream, dairy' ~ 'ice cream',
   food_item == 'cultured milk, with flavour, skyr' ~ 'skyr_flavored',
   food_item == 'cultured milk, plain, skyr' ~ 'skyr',
@@ -409,6 +450,8 @@ clean_nutrients <- raw_data %>%
 
   #Mushrooms----
   food_item == 'mushroom, chantherelle, raw' ~ 'mushroom_chanterelle',
+  food_item == 'mushroom, trumpet chanterelle, funnel chanterelle, raw' ~ 'mushroom_trumpet chanterelle',
+  food_item == 'mushroom, king boletus, yellow boletus, raw' ~ 'mushroom_boletus',
   food_item == 'mushroom, common, raw' ~ 'mushroom',
   food_item == 'mushroom, oyster, raw' ~ 'mushroom_oyster',
   food_item == 'mushroom, portabello' ~ 'mushroom_portebello',
@@ -450,6 +493,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'cloudberries, raw' ~ 'cloud_berr',
   food_item == 'remoulade' ~ 'remulade',
   food_item == 'pizza, industrially made' ~ 'pizza',
+  food_item == 'nut spread, nugatti' ~ 'nugatti',
 
   #Keep the unspecified ingredients
   str_detect(food_item, ', unspecified, raw') ~ str_replace(food_item, ', unspecified, raw', ''),
@@ -513,16 +557,18 @@ fromFoodDataCentral_foods <- read_csv(
   filter(description %in% c(
 
     #Grains
-    'Tempeh', 'Seeds, chia seeds, dried', 'Buckwheat', 'Edamame, frozen, unprepared',
+    'Tempeh', 'Seeds, chia seeds, dried', 'Buckwheat', 'Edamame, frozen, unprepared', "Nuts, macadamia nuts, raw",
 
     #Meat products
     'Beef, variety meats and by-products, tongue, raw', 'Pork, fresh, variety meats and by-products, kidneys, raw',
-    'Beef, New Zealand, imported, flank, separable lean and fat, raw',
+    'Beef, New Zealand, imported, flank, separable lean and fat, raw', 'Lamb, New Zealand, imported, fore-shank, separable lean and fat, raw',
+    'Lamb, Australian, ground,  85% lean / 15% fat, raw',
 
     #Fruit and veg
     'Jams and preserves, apricot', 'Artichokes, (globe or french), raw', 'Plantains, yellow, raw', 'Sauerkraut, canned, solids and liquids',
-    "Tomato products, canned, paste, without salt added (Includes foods for USDA's Food Distribution Program)",
-    'Lime juice, raw', 'Figs, raw', 'Cabbage, chinese (pak-choi), raw',
+    "Tomato products, canned, paste, without salt added (Includes foods for USDA's Food Distribution Program)", 'Peppers, hot chili, red, canned, excluding seeds, solids and liquids',
+    'Lime juice, raw', 'Figs, raw', 'Cabbage, chinese (pak-choi), raw', "Blueberries, dried, sweetened", "Bananas, dehydrated, or banana powder",
+    'Beets, pickled, canned, solids and liquids', 'Peppers, hot pickled, canned', 'Pomegranate juice, bottled', 'Radish seeds, sprouted, raw',
     #Sorrel
     'Sourdock, young leaves (Alaska Native)',
 
@@ -539,7 +585,7 @@ fromFoodDataCentral_foods <- read_csv(
 
     #Seafood
     'Mollusks, clam, mixed species, raw', 'Fish, grouper, mixed species, raw', 'Fish, sea bass, mixed species, raw',
-    'Seaweed, wakame, raw',
+    'Seaweed, wakame, raw', 'Cockles, raw (Alaska Native)', 'Crustaceans, crayfish, mixed species, farmed, raw',
 
     #Div
     'Seaweed, agar, dried', 'Soup, onion, dry, mix', 'Alcoholic beverage, rice (sake)',
@@ -571,9 +617,9 @@ fromFoodDataCentral_foods <- read_csv(
            str_replace('Spices, onion powder', 'onion_powder') %>%
            str_replace('Spices, sage, ground', 'sage_dried') %>%
            str_replace('Seasoning mix, dry, sazon, coriander & annatto', 'sazon seasoning') %>%
-           str_replace('Cheese, cottage, lowfat, 2% milkfat', 'cottage cheese_low fat') %>%
+           str_replace('Cheese, cottage, lowfat, 2% milkfat', 'cheese cottage_low fat') %>%
            str_replace('Cheese spread, pasteurized process, American', 'cheese_american') %>%
-           str_replace('Cheese, monterey', 'monterey_cheese') %>%
+           str_replace('Cheese, monterey', 'cheese_monterey') %>%
            str_replace('Cheese, neufchatel', 'cheese_neufchatel') %>%
            str_replace('Cheese, provolone', 'cheese_provolone') %>%
            str_replace('Cheese, romano', 'cheese_romano') %>%
@@ -607,7 +653,21 @@ fromFoodDataCentral_foods <- read_csv(
            str_replace('Leavening agents, baking soda', 'baking_soda') %>%
            str_replace('Leavening agents, baking powder, low-sodium', 'baking_powder') %>%
            str_replace('Buckwheat', 'buckwheat') %>%
-           str_replace("Tempeh", "tempeh")
+           str_replace("Tempeh", "tempeh") %>%
+           str_replace_all(., c(
+             'Cockles, raw \\(Alaska Native\\)' = 'cockles',
+             "Blueberries, dried, sweetened" = "blueberries_dried",
+             "Bananas, dehydrated, or banana powder" = "banana_dried",
+             "Nuts, macadamia nuts, raw" = "macademia_nut",
+             "Peppers, hot chili, red, canned, excluding seeds, solids and liquids" = "chili_canned",
+             "Lamb, New Zealand, imported, fore-shank, separable lean and fat, raw" = "lamb_shank",
+             "Lamb, Australian, ground,  85% lean / 15% fat, raw" = "lamb_minced meat",
+             "Beets, pickled, canned, solids and liquids" = "beet_pickled",
+             "Peppers, hot pickled, canned" = "chili pepper_pickled",
+             "Radish seeds, sprouted, raw" = "sprouts_radish",
+             "Pomegranate juice, bottled" = "pomegranate_juice",
+             "Crustaceans, crayfish, mixed species, farmed, raw" = "crayfish"
+           ))
          #'Tamarind nectar, canned'
   ) %>%
 
@@ -719,7 +779,7 @@ clean_nutrients <- bind_rows(clean_nutrients, various$component_ingredients_nutr
 various$shellfish <- raw_data %>%
 
   #Remove columns and nutrients not needed
-  select(!contains(c('ref', 'Edible', 'Water', ':0', ' sum', '2n', '3n', '4n', 'Foodgroup'))) %>%
+  select(!contains(c('ref', 'Edible', ':0', ' sum', '2n', '3n', '4n', 'Foodgroup'))) %>%
   #Filter out shellfish
   filter(`Food Item` %in% c('Crab, plain, canned', 'King prawns, raw', 'Lobster, boiled',
                             'Mussel, blue, raw', 'Oyster, common, raw', 'Scallop, raw')) %>%
@@ -759,9 +819,9 @@ various$shellfish <- raw_data %>%
   mutate(Foodgroup = "shellfish, fish offal")
 
 #Dairy grouped ingredients
-various$dairy_ingredients<- raw_data %>%
+various$dairy_ingredients <- raw_data %>%
   #Remove columns and nutrients not needed
-  select(!contains(c('ref', 'Edible', 'Water', ':0', ' sum', '2n', '3n', '4n', 'Foodgroup'))) %>%
+  select(!contains(c('ref', 'Edible', ':0', ' sum', '2n', '3n', '4n', 'Foodgroup'))) %>%
   #Rename to fit
   rename(
     database_ID = FoodID,
@@ -775,7 +835,9 @@ various$dairy_ingredients<- raw_data %>%
       str_detect(`Food Item`, 'anilla|berr|fruit') &
       !str_detect(`Food Item`, 'granola|muesli|grain') |
     #Blue cheese
-      str_detect(`Food Item`, 'Cheese, blue mold')) %>%
+      str_detect(`Food Item`, 'Cheese, blue mold') |
+    # Cheese spread
+      str_detect(`Food Item`, 'Cheese spread')) %>%
   mutate(`Food Item` = `Food Item` %>%
            str_replace('Yoghurt, blueberries, 0 % fat, Yoplait', 'yoghurt low fat_berries flavored') %>% #Only low fat berry flavored in dataset
            str_replace('Yoghurt, vanilla, 0 % fat, Yoplait', 'yoghurt low fat_flavored') %>%
@@ -784,6 +846,7 @@ various$dairy_ingredients<- raw_data %>%
            str_replace('Yoghurt, strawberry, Q-meieriene|Yoghurt, with strawberry, Tine', 'yoghurt_berries flavored'),
          `Food Item` = case_when(
            str_detect(`Food Item`, 'Cheese, blue mold') ~ 'cheese blue',
+           str_detect(`Food Item`, 'Cheese spread') ~ 'cheese_spread',
            TRUE ~ `Food Item`
          )
   ) %>%
@@ -824,7 +887,7 @@ clean_nutrients <- bind_rows(clean_nutrients,
 nutrients_to_use <- raw_data %>%
 
   #Remove columns and nutrients not needed
-  select(!contains(c('ref', 'Edible', 'Water', ':0', ' sum', '2n', '3n', '4n'))) %>%
+  select(!contains(c('ref', 'Edible', ':0', ' sum', '2n', '3n', '4n'))) %>%
 
   #Rename to fit
   rename(
@@ -885,7 +948,9 @@ saveRDS(matvaretabellen2022_foodgroups, "./data-raw/matvaretabellen2022_foodgrou
 
 #Save database_ID and food_item columns to create a query dataframe
 matvaretabellen2022_query_prep <- clean_nutrients %>%
-  select(Ingredients, database_ID)
+  select(Ingredients, database_ID) %>%
+  filter(!str_detect(Ingredients, ', imported|, norwegian|apple,|,'))
 
 #Save the dataframe to use to create the queries
 saveRDS(matvaretabellen2022_query_prep, "./data-raw/matvaretabellen2022_query_prep.Rds")
+
