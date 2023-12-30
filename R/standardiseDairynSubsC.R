@@ -28,7 +28,7 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'brie') & !str_detect(Ingredients, 'marmelade|marmalade') ~ 'cheese brie',
     str_detect(Ingredients, 'camembert') & str_detect(Ingredients, 'vegan|plant based|plant-based') ~ 'cheese plant-based camembert',
     str_detect(Ingredients, 'camembert') & !str_detect(Ingredients, 'marmelade|marmalade') ~ 'cheese camembert',
-    str_detect(Ingredients, 'real goat cheese') ~ 'goat brown cheese',
+    str_detect(Ingredients, 'real goat cheese') ~ 'cheese brown goat',
     (str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'brown') |
        (str_detect(Ingredients, 'gudbrandsdal|grandmother') & str_detect(Ingredients, 'cheese') )     ) &
       str_detect(Ingredients, "low fat|light") ~ 'cheese brown low fat',
@@ -60,21 +60,22 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'pecorino') & str_detect(Ingredients, 'cheese|romano') ~ 'cheese pecorino',
     str_detect(Ingredients, 'saint agur') ~ 'cheese blue saint agur',
     str_detect(Ingredients, 'emmentaler') & str_detect(Ingredients, 'cheese') ~ 'cheese emmentaler',
-    str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'goat') & str_detect(Ingredients, 'hard') ~ 'cheese hard goat',
+    str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'goat') & str_detect(Ingredients, 'hard') ~ 'cheese goat hard',
     str_detect(Ingredients, 'sn\u00f8frisk|snow fresh') ~ 'cheese cream goat sn\u00f8frisk',
     (str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'cream') | str_detect(Ingredients, 'kremgo') | str_detect(Ingredients, 'philadelphia')) & str_detect(Ingredients, 'herb|chocolate|season|truffle|garlic|chive|spice|apricot|pepper') ~ 'cheese cream flavored',
     (str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'cream') | str_detect(Ingredients, 'kremgo') | str_detect(Ingredients, 'philadelphia')) & !str_detect(Ingredients, 'glaze') ~ 'cheese cream',
     (str_detect(Ingredients, 'cottage') & str_detect(Ingredients, 'skinny|low fat|lean|mager|low-fat')) | str_detect(Ingredients, 'paneer cheese') ~ 'cheese cottage low fat', #Paneer is a cheese like low fat cc
     str_detect(Ingredients, 'cottage') & str_detect(Ingredients, 'cheese') ~ 'cheese cottage',
     str_detect(Ingredients, 'parmesan') ~ 'parmesan cheese',
-    str_detect(Ingredients, 'parmigiano reggiano') ~ 'cheese parmigiano reggiano',
+    str_detect(Ingredients, 'parmigiano reggiano|parmigiano reggiano') ~ 'cheese parmigiano reggiano',
     str_detect(Ingredients, 'castello') & str_detect(Ingredients, 'white')  ~ 'cheese soft castello',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'soft') ~ 'cheese soft',
+    str_detect(Ingredients, 'cheese le crémier de chaumes') ~ 'cheese soft cheese le cremier de chaumes',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'spread|tube') ~ 'cheese spread',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'plant-based|vegan') ~ 'cheese plant-based',
     str_detect(Ingredients, 'bacon cheese') ~ 'cheese bacon',
     str_detect(Ingredients, 'cheese') &
-      !str_detect(Ingredients, 'yogurt|yoghurt|cracker|mac|bacon|for cheese|salad|sandwich|cake|tube|schnitzel|sausage|knacker|marmalade|marmelade|potato|filled|pizza|grandiosa|hold-it|glaze|\\bdip\\b') ~ 'cheese semi-hard',
+      !str_detect(Ingredients, 'yogurt|yoghurt|pancake|cracker|mac|bacon|for cheese|salad|sandwich|cake|tube|schnitzel|sausage|knacker|marmalade|marmelade|potato|filled|pizza|grandiosa|hold-it|glaze|\\bdip\\b') ~ 'cheese semi-hard',
 
     str_detect(Ingredients, 'whip') & str_detect(Ingredients, 'it|stabilizer') ~ 'whip it stabilizer',
     str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'double') ~ 'cream double 48 \u0025',
@@ -84,6 +85,7 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'boat') ~ 'ice cream boat',
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'sandwich') ~ 'ice cream sandwich',
     str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'lollipop') ~ 'ice cream lollipop',
+    str_detect(Ingredients, 'ice cream') & str_detect(Ingredients, 'cake') ~ 'ice cream cake',
     str_detect(Ingredients, 'cream') & str_detect(Ingredients, '\\bice') & str_detect(Ingredients, 'vegan|plant-based|plant based') ~ 'ice cream plant-based',
     str_detect(Ingredients, 'cream') & str_detect(Ingredients, '\\bice') ~ 'ice cream',
     str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'vegan|plant-based|plant based|rice') ~ 'cream plant-based',

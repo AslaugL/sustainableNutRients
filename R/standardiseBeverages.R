@@ -15,6 +15,7 @@ standardiseBeverages <- function(df) {
     mutate(Ingredients_standardised = case_when(
 
       # Alcohol
+      str_detect(Ingredients, "aquavit") ~ "aquavit",
       str_detect(Ingredients, 'beer') & str_detect(Ingredients, 'dark|amber|christmas') ~ 'beer dark',
       str_detect(Ingredients, 'beer|\\bale\\b') & !str_detect(Ingredients, 'sausage') ~ 'beer',
       str_detect(Ingredients, 'brandy') ~ 'spirits 40 vol-% alcohol brandy',
@@ -24,6 +25,7 @@ standardiseBeverages <- function(df) {
       str_detect(Ingredients, 'kirsch') ~ 'spirits 40 vol-% alcohol kirsch',
       str_detect(Ingredients, 'madeira') ~ 'madeira fortified wine 15 vol-% alcohol',
       str_detect(Ingredients, 'marsala') ~ 'marsala fortified wine 20 vol-% alcohol',
+      str_detect(Ingredients, 'liquor') ~ 'fortified wine 20 vol-% alcohol',
       str_detect(Ingredients, 'sake') ~ 'sake',
       str_detect(Ingredients, 'sherry') & !str_detect(Ingredients, 'vinegar') ~ 'sherry fortified wine 15 vol-% alcohol',
       str_detect(Ingredients, 'vermouth') ~ 'vermouth fortified wine 15 vol-% alcohol',
@@ -34,6 +36,10 @@ standardiseBeverages <- function(df) {
       str_detect(Ingredients, 'wine') & str_detect(Ingredients, 'red|merlot') & !str_detect(Ingredients, 'vinegar|sausage|salami|sauce') ~ 'wine red',
       str_detect(Ingredients, 'wine') & str_detect(Ingredients, 'port') ~ 'wine port fortified wine 20 vol-% alcohol',
       str_detect(Ingredients, 'mirin japanese sweet wine') ~ 'wine mirin',
+      str_detect(Ingredients, 'liqueur') & str_detect(Ingredients, 'orange') ~ 'orange liqueur',
+      str_detect(Ingredients, 'liqueur') & str_detect(Ingredients, 'raspberry') ~ 'raspberry liqueur',
+      str_detect(Ingredients, 'liqueur') & str_detect(Ingredients, 'coffee') ~ 'coffee liqueur',
+      str_detect(Ingredients, 'seltzer') ~ 'seltzer',
 
       # Coffee, tea and cocoa
       str_detect(Ingredients, 'coffee') & str_detect(Ingredients, 'filter') & str_detect(Ingredients, 'brew') ~ 'coffee filter brew',
@@ -45,6 +51,8 @@ standardiseBeverages <- function(df) {
       str_detect(Ingredients, 'iced coffee') & str_detect(Ingredients, 'sproud|vegan|plant-based|plant based') ~ 'iced coffee plant-based',
       str_detect(Ingredients, 'iced coffee') ~ 'iced coffee',
       str_detect(Ingredients, 'iced tea') ~ 'iced tea',
+      str_detect(Ingredients, 'coffee') & str_detect(Ingredients, "espresso") & !str_detect(Ingredients, "ice|bean|chocolate") ~ "coffee espresso",
+      str_detect(Ingredients, 'coffee') & !str_detect(Ingredients, "ice|bean|chocolate") ~ "coffee",
 
       (str_detect(Ingredients, 'tea') & str_detect(Ingredients, 'black')) | str_detect(Ingredients, 'earl grey|lady gray|english breakfast') ~ 'tea black',
       str_detect(Ingredients, 'tea') & str_detect(Ingredients, 'green') ~ 'tea green',
@@ -122,6 +130,7 @@ standardiseBeverages <- function(df) {
       str_detect(Ingredients, 'smoothie') & str_detect(Ingredients, 'green|spinach|kale') ~ 'smoothie green leaves',
 
       # Others
+      str_detect(Ingredients, 'household juice') ~ 'household juice',
       str_detect(Ingredients, 'kombucha') & str_detect(Ingredients, 'start') ~ 'kombucha starter',
       str_detect(Ingredients, 'kombucha') ~ 'kombucha',
       str_detect(Ingredients, 'lemonade') ~ 'lemonade',
@@ -130,6 +139,9 @@ standardiseBeverages <- function(df) {
       str_detect(Ingredients, 'farris|carbonated water|bonaqua|\\bolden\\b') ~ 'carbonated water',
       str_detect(Ingredients, 'water') & !str_detect(Ingredients, 'corn|beef|tuna|coffee|chili|cream|cress|chestnut|melon|and water') ~ 'water',
       str_detect(Ingredients, 'water to the corn') ~ 'water',
+      str_detect(Ingredients, 'vinaigrette') ~ 'vinaigrette',
+      str_detect(Ingredients, 'juice') & str_detect(Ingredients, 'strawberr') ~ "strawberry juice",
+      str_detect(Ingredients, 'soda') & !str_detect(Ingredients, 'baking') ~ "soda",
 
 
       TRUE ~ Ingredients_standardised))

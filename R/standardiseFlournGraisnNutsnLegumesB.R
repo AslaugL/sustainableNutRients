@@ -106,7 +106,7 @@ standardiseFlournGraisnNutsnLegumesB <- function(df) {
       str_detect(Ingredients, 'flatbread') ~ 'bread flat hard',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'nan|naan') ~ 'bread naan',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'nan|naan') ~ 'bread crisp',
-      str_detect(Ingredients, 'pita') & str_detect(Ingredients, coarse) ~ 'bread coarse pita',
+      str_detect(Ingredients, 'pita|pocket') & str_detect(Ingredients, 'coarse|brown|whole') ~ 'bread coarse pita',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'pocket|pita') ~ 'bread white pita',
       str_detect(Ingredients, 'bread') & str_detect(Ingredients, 'polar') ~ 'bread polar',
       str_detect(Ingredients, 'bread|bun') & str_detect(Ingredients, 'sausage|hot dog') & str_detect(Ingredients, coarse) ~ 'bread coarse sausage',

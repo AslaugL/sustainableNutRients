@@ -47,6 +47,7 @@ standardiseFlournGraisnNutsnLegumesP <- function(df) {
       str_detect(Ingredients, 'pine') & str_detect(Ingredients, 'nut|seed|kernel') & !str_detect(Ingredients, 'apple') ~ 'pine nut',
       str_detect(Ingredients, 'pistachio') ~ 'pistachio nut',
       str_detect(Ingredients, 'pumpkin seed') ~ 'pumpkin seed',
+      str_detect(Ingredients, 'poppy seed') ~ 'poppy seed',
 
       #Others
       str_detect(Ingredients, 'phyllo dough') ~ 'phyllo dough',

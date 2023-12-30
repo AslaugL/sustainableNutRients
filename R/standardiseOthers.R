@@ -250,13 +250,19 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'custard') ~ 'custard vanilla',
       str_detect(Ingredients, 'vanilla') & str_detect(Ingredients, 'cream') & !str_detect(Ingredients, "ice|flavor|drink") ~ 'vanilla cream',
 
+      str_detect(Ingredients, 'fiberhusk|fiber husk') ~ 'psyllium husk',
       str_detect(Ingredients, 'fig tart') ~ 'fig tart',
+
+      str_detect(Ingredients, 'glucose') ~ 'glucose',
 
       str_detect(Ingredients, 'herb') & !str_detect(Ingredients, 'basil|thyme|parsley|rosemary|dill|sauce|cheese|philadelphia|tomato|in herb|with herb|and herb|& herb|herb marinate|\\btea\\b') ~ 'herbs',
       str_detect(Ingredients, 'honey') &
-        !str_detect(Ingredients, 'mustard|melon|dew|apple|pecan|nut|with hiney|in honey|puff|yoghurt|yogurt|honey-roast|honey roast|honey tomato|honey glaze|cereal') ~ 'honey',
+        !str_detect(Ingredients, 'mustard|melon|dew|apple|pecan|nut|with hiney|in honey|puff|yoghurt|yogurt|honey-roast|honey roast|honey tomato|honey glaze|cereal|crunch') ~ 'honey',
+      str_detect(Ingredients, 'horn salt') ~ 'horn salt',
 
       str_detect(Ingredients, 'ice cube') ~ 'ice cube',
+
+      str_detect(Ingredients, 'juice') & is.na(Ingredients_standardised) ~ 'juice', #Standard
 
       str_detect(Ingredients, 'kombu') & str_detect(Ingredients, 'dashi') ~ 'dashi kombu dried kelp',
       str_detect(Ingredients, 'mire poix') ~ 'mire poix',
@@ -287,6 +293,9 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'spring roll paper') ~ 'spring roll paper',
       str_detect(Ingredients, 'spring roll') ~ 'spring roll',
       str_detect(Ingredients, '(yogurt|yoghurt)(?=( nut|nut))') ~ 'yoghurt nuts',
+
+      # Cereals
+      str_detect(Ingredients, "cornflake") ~ "cornflakes",
 
       TRUE ~ Ingredients_standardised))
 }

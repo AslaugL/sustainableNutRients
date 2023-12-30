@@ -38,12 +38,12 @@ standardiseDairynSubsM <- function(df) {
       ((str_detect(Ingredients, 'oat') & str_detect(Ingredients, 'milk|drink')) | str_detect(Ingredients, 'mylk')) &
         !str_detect(Ingredients, 'goat') ~ 'dairy imitate oatmilk',
       str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'milk|drink') &
-        str_detect(Ingredients, 'chocolate') ~ 'dairy imitate soymilk chocolate',
+        str_detect(Ingredients, 'chocolate') ~ 'dairy imitate soy milk chocolate',
       str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'milk|drink') &
-        str_detect(Ingredients, 'vanilla') ~ 'dairy imitate soymilk vanilla',
+        str_detect(Ingredients, 'vanilla') ~ 'dairy imitate soynmilk vanilla',
       str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'milk|drink') &
-        str_detect(Ingredients, 'unsweetened') ~ 'dairy imitate soymilk unsweetened',
-      str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'milk|drink') ~ 'dairy imitate soymilk',
+        str_detect(Ingredients, 'unsweetened') ~ 'dairy imitate soymmilk unsweetened',
+      str_detect(Ingredients, 'soy') & str_detect(Ingredients, 'milk|drink') ~ 'dairy imitate soynmilk',
       str_detect(Ingredients, 'milk|drink') & str_detect(Ingredients, 'coconut') | str_detect(Ingredients, 'koko dairy free') ~ 'milk coconut',
       str_detect(Ingredients, 'cream') & str_detect(Ingredients, 'coconut') ~ 'milk coconut cream full fat',
 

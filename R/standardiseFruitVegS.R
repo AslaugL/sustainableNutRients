@@ -50,6 +50,7 @@ standardiseFruitVegS <- function(df){
       str_detect(Ingredients, 'sprout') & str_detect(Ingredients, 'pea') ~ 'sprouts pea',
       str_detect(Ingredients, 'sprout') & str_detect(Ingredients, 'leek') ~ 'sprouts leeks',
       str_detect(Ingredients, 'sprout') & !str_detect(Ingredients, 'brussel') ~ 'sprouts alfalfa', #Default
+      str_detect(Ingredients, 'star') & str_detect(Ingredients, 'fruit') ~ 'starfruit',
       str_detect(Ingredients, 'stew') & str_detect(Ingredients, 'mix') ~ 'stew mix',
       str_detect(Ingredients, 'stirfry|stir-fry|stir fry') & str_detect(Ingredients, 'mix') ~ 'stir fry assorted vegetables',
       str_detect(Ingredients, 'strawberr') & str_detect(Ingredients, 'jam') ~ 'jam strawberry',
@@ -59,9 +60,9 @@ standardiseFruitVegS <- function(df){
       str_detect(Ingredients, 'sugar') & str_detect(Ingredients, 'pea') & !str_detect(Ingredients, 'peach|pearl') ~ 'sugar snap pea',
       str_detect(Ingredients, 'swede') | (str_detect(Ingredients, 'cabbage') & str_detect(Ingredients, 'root')) | str_detect(Ingredients, 'rutabaga') ~ 'swede',
       str_detect(Ingredients, 'pickle') & str_detect(Ingredients, 'red pepper|paprika|sweet pepper') ~ 'sweet pepper pickled',
-      str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'grilled') & str_detect(Ingredients, 'green') ~ 'sweet pepper green grilled',
-      str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'grilled') & str_detect(Ingredients, 'can') ~ 'sweet pepper grilled canned',
-      str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'grilled') ~ 'sweet pepper grilled',
+      str_detect(Ingredients, 'pepper|paprika') & str_detect(Ingredients, 'grilled') & str_detect(Ingredients, 'green') ~ 'sweet pepper green grilled',
+      str_detect(Ingredients, 'pepper|paprika') & str_detect(Ingredients, 'grilled') & str_detect(Ingredients, 'can') ~ 'sweet pepper grilled canned',
+      str_detect(Ingredients, 'pepper|paprika') & str_detect(Ingredients, 'grilled') ~ 'sweet pepper grilled',
       str_detect(Ingredients, 'sweet pepper') & str_detect(Ingredients, 'can|drain') ~ 'sweet pepper canned',
       str_detect(Ingredients, 'sweet pepper|bell pepper|paprika') & str_detect(Ingredients, 'green') |
         str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'green|padron') & str_detect(Ingredients, 'slice|deseed|strips') ~ 'sweet pepper green',

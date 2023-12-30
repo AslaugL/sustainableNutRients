@@ -70,6 +70,7 @@ standardiseSeafood <- function(df) {
 
       str_detect(Ingredients, 'mackerel') & str_detect(Ingredients, 'tomato') ~ 'mackerel tomato canned',
       str_detect(Ingredients, 'mackerel') & str_detect(Ingredients, 'smoked') ~ 'mackerel smoked',
+      str_detect(Ingredients, 'mackerel') & str_detect(Ingredients, 'filet') ~ 'mackerel filet',
       str_detect(Ingredients, 'mackerel') ~ 'mackerel',
       str_detect(Ingredients, 'mussels') & !str_detect(Ingredients, 'power') ~ 'mussels',
       str_detect(Ingredients, 'sand shell') ~ 'scallop', #Similar in nutrition value

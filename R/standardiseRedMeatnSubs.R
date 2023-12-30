@@ -10,7 +10,7 @@
 #' @export
 standardiseRedMeatnSubs <- function(df) {
 
-  plant_based <- 'vegan|plant based|plant-based|substitute'
+  plant_based <- 'vegan|plant based|plant-based|substitute|vegetarian'
 
   df  %>%
 
@@ -71,7 +71,7 @@ standardiseRedMeatnSubs <- function(df) {
       (str_detect(Ingredients, 'ham') & str_detect(Ingredients, 'cured') | str_detect(Ingredients, 'pancetta|prosciutto')) & !str_detect(Ingredients, 'pizza') ~ 'ham cured',
       (str_detect(Ingredients, 'ham') & str_detect(Ingredients, 'smoked')) & !str_detect(Ingredients, 'pizza') ~ 'ham smoked',
       str_detect(Ingredients, 'ham') & str_detect(Ingredients, 'vegan|plant based|plant-based') ~ 'ham plant-based',
-      str_detect(Ingredients, 'ham') & !str_detect(Ingredients, 'bacon|tenderloin|hamburger|champignon|pork from|turkey|steak|bone|cheese|graham|cham|pizza|with ham') ~ 'ham',
+      str_detect(Ingredients, 'ham') & !str_detect(Ingredients, 'bacon|tenderloin|hamburger|champignon|pork from|turkey|steak|bone|cheese|graham|cham|pizza|with ham|chicken') ~ 'ham',
       str_detect(Ingredients, 'burger') & str_detect(Ingredients, 'vegetarian|vegan|bean|soy|plant-based|plant based') & !str_detect(Ingredients, 'bread') ~ 'hamburger plant-based',
       str_detect(Ingredients, 'burger') & !str_detect(Ingredients, 'bun|bread|dressing|chicken|cheese') ~ 'hamburger beef patty',
 
@@ -118,7 +118,7 @@ standardiseRedMeatnSubs <- function(df) {
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'pulled') ~ 'pork shoulder cooked',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'salt') ~ 'pork shoulder salt',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'kidney') ~ 'pork kidney',
-      str_detect(Ingredients, 'pig') & str_detect(Ingredients, 'liver') ~ 'pork liver',
+      str_detect(Ingredients, 'pig|pork') & str_detect(Ingredients, 'liver') ~ 'pork liver',
       str_detect(Ingredients, 'pork belly') ~ 'pork belly',
       str_detect(Ingredients, 'pork rib roast') ~ 'pork rib roast',
       str_detect(Ingredients, 'pork') & str_detect(Ingredients, 'ham') | str_detect(Ingredients, 'ham steak') ~ 'pork ham roast',

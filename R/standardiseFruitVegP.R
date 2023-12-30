@@ -27,6 +27,7 @@ standardiseFruitVegP <- function(df){
       str_detect(Ingredients, 'pear') & str_detect(Ingredients, 'sirup|syrup') & !str_detect(Ingredients, 'onion|barley') ~ 'syrup pear',
       str_detect(Ingredients, 'pear') & str_detect(Ingredients, 'juice') & !str_detect(Ingredients, 'onion|barley') ~ 'pear juice',
       str_detect(Ingredients, 'pear') & !str_detect(Ingredients, 'onion|barley|sugar') ~ 'pear',
+      str_detect(Ingredients, 'persimmon') ~ "persimmon",
       str_detect(Ingredients, 'physalis') ~ 'physalis',
       str_detect(Ingredients, 'pimiento|pimento') ~ 'pimiento chili pepper',
       str_detect(Ingredients, 'pineapple') & str_detect(Ingredients, 'can') ~ 'pineapple canned',

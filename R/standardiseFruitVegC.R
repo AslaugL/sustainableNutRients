@@ -44,6 +44,8 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'chili|chilli|chile') & str_detect(Ingredients, 'green') ~ 'chili pepper green',
 
       str_detect(Ingredients, 'habanero') ~ 'chili pepper red habanero',
+      str_detect(Ingredients, 'chipotle') & str_detect(Ingredients, "paste") ~ "chili paste chipotle",
+      str_detect(Ingredients, 'chipotle') ~ "chili pepper red chipotle",
       ((str_detect(Ingredients, 'pepper') & str_detect(Ingredients, 'chili|chilli')) | (str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'red|r\u00f8d'))) & !str_detect(Ingredients, 'powder') |
         str_detect(Ingredients, 'mild chili|mild chilli') & !str_detect(Ingredients, 'sauce') | str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'chop') |
         str_detect(Ingredients, 'chili|chilli') & str_detect(unit, 'pcs') |
@@ -65,7 +67,7 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'corn') & str_detect(unit, 'pcs') &
         !str_detect(Ingredients, 'pepper') | str_detect(Ingredients, 'corn') & str_detect(Ingredients, 'cob') ~ 'corn cob',
       str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'jam') ~ 'cranberries jam',
-      str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'juice') ~ 'cranberries juice',
+      str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'juice') ~ 'cranberry juice',
       str_detect(Ingredients, 'cranberr') & str_detect(Ingredients, 'dried|dry') ~ 'cranberries dried',
       str_detect(Ingredients, 'cranberr') & !str_detect(Ingredients, 'sauce') ~ 'cranberries',
       str_detect(Ingredients, 'cucumber') & str_detect(Ingredients, 'snake') ~ 'cucumber snake',
