@@ -8,9 +8,9 @@ type_of_units = c(
 
   'g', 'kg', 'ounce', 'oz', 'pound', "lb",
 
-  'box', 'bunch', 'can', 'cm', 'hp',  'leaf', 'pot', 'tube', 'inch',
+  'box', 'bunch', 'can', 'cm', 'hp',  'leaf', 'pot', 'tube', 'inch', "scoop",
 
-  'portion', 'pcs', 'slice', '\\bclove\\b',
+  'portion', 'pcs', "\\bring\\b", 'slice', '\\bclove\\b',
   'pack', 'plate', 'twig', 'stalk'
   ) %>%
   #Add whitespace on both sides to only match a unit in a string
