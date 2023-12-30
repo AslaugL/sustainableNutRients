@@ -12,25 +12,34 @@
 
    #Liquid foods with the same weight as water
    similar_to_water <- c(
+     "almond essence", "apple juice", "aquavit",
+
      "beer", "broth",
 
-     "cider", "cognac", "cream", "cr\u00E8me fra\u00CEche",
+     "cider", "cognac", "cream", "cr\u00E8me fra\u00CEche", "coffee",
+     "coffee espresso", "coffee liqueur", "iced coffee",
 
      "eddik",
 
      "fund",
 
-     "juice",
+     "household juice",
+
+     "jelly apple",  "juice",
 
      "kefir", "kraft",
 
      "madeira", "marsala", "milk",
 
-     "r\u00F8mme",
+     "orange juice", "orange liqueur",
 
-     "sherry", "spirits", "stock",
+     "r\u00F8mme", "raspberry liqueur", "reduction",
 
-     "vin", "vinegar",
+     "sherry", "soda", "spirits", "stock", "strawberry juice", 'soda', 'seltzer',
+
+     "tea black",
+
+     "vanilla essence", "vanilla extract", "vin", "vinegar", "vinaigrette",
 
      "water", "wine",
 
@@ -120,7 +129,7 @@
    #Add back to recipes
    standardised <- standardised %>%
       #Remove broth wthout broth cubes
-      filter(!str_detect(Ingredients, 'water broth')) %>%
+      filter(!(str_detect(Ingredients, 'water broth') & !is.na(Amounts))) %>%
       #Add back with broth cues
       bind_rows(temp)
 
