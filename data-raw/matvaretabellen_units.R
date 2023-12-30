@@ -7,7 +7,7 @@ matvaretabellen_units <- tibble(
                 'Calcium', 'Iron', 'Sodium',
                 'Potassium', 'Magnesium', 'Zinc',
                 'Selenium', 'Copper', 'Phosphorus',
-                'Iodine'),
+                'Iodine', 'Water'),
 
   'unit' = c("mcg-RE", "mcg", "mcg",
              "mcg", "mg-ATE", "mg",
@@ -16,7 +16,7 @@ matvaretabellen_units <- tibble(
              "mg", "mg", "mg",
              "mg", "mg", "mg",
              "mcg", "mg", "mg",
-             "mcg")
+             "mcg", 'g')
 )
 
 saveRDS(matvaretabellen_units,"./data-raw/matvaretabellen_units.Rds")
