@@ -29,6 +29,8 @@
 
      "kefir", "kraft",
 
+     "lemonade",
+
      "madeira", "marsala", "milk",
 
      "orange juice", "orange liqueur",

@@ -57,7 +57,7 @@ standardisePoultry <- function(df) {
         !str_detect(Ingredients, 'power|condensed|broth|stock|sauce|salad|spice mix|soup|egg|tube|taco|servelat|sausage|wiener|tandoori|pizza|season|with chicken|sandwich|toast|tapast|ball|pastrami|bbq|barbecue|butter') ~ 'chicken whole',
 
       str_detect(Ingredients, 'duck') & str_detect(Ingredients, 'breast|filet|fillet') ~ 'duck breast',
-      str_detect(Ingredients, 'duck') & str_detect(Ingredients, 'leg') ~ 'duck leg',
+      str_detect(Ingredients, 'duck') & str_detect(Ingredients, 'leg|thigh') ~ 'duck leg',
       str_detect(Ingredients, 'duck') & !str_detect(Ingredients, 'pancake') ~ 'duck whole',
 
       str_detect(Ingredients, 'egg') & str_detect(Ingredients, 'boil|hard cook|hard-cook|hard boiled') & !str_detect(unit, 'pcs') ~ 'egg boiled',
@@ -66,7 +66,8 @@ standardisePoultry <- function(df) {
       str_detect(Ingredients, 'egg') & str_detect(Ingredients, 'yolk') ~ 'egg yolk',
       str_detect(Ingredients, '\\begg\\b|\\beggs\\b') & !str_detect(Ingredients, 'plant|noodle|vegg') ~ 'egg',
 
-      str_detect(Ingredients, 'grouse') ~ 'hen breast fillet grouse',
+      str_detect(Ingredients, 'grouse') & str_detect(Ingredients, 'breast') ~ 'hen breast fillet grouse',
+      str_detect(Ingredients, 'grouse') ~ 'hen grouse',
 
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'ground|dough') ~ 'turkey minced meat',
       str_detect(Ingredients, 'turkey') & str_detect(Ingredients, 'breast|fillet') & str_detect(Ingredients, 'smoke') ~ 'turkey breast smoked',

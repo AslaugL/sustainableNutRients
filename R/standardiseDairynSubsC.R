@@ -62,8 +62,8 @@ standardiseDairynSubsC <- function(df) {
     str_detect(Ingredients, 'emmentaler') & str_detect(Ingredients, 'cheese') ~ 'cheese emmentaler',
     str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'goat') & str_detect(Ingredients, 'hard') ~ 'cheese goat hard',
     str_detect(Ingredients, 'sn\u00f8frisk|snow fresh') ~ 'cheese cream goat sn\u00f8frisk',
-    (str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'cream') | str_detect(Ingredients, 'kremgo') | str_detect(Ingredients, 'philadelphia')) & str_detect(Ingredients, 'herb|chocolate|season|truffle|garlic|chive|spice|apricot|pepper') ~ 'cheese cream flavored',
-    (str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'cream') | str_detect(Ingredients, 'kremgo') | str_detect(Ingredients, 'philadelphia')) & !str_detect(Ingredients, 'glaze') ~ 'cheese cream',
+    (str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'cream|fresh') | str_detect(Ingredients, 'kremgo') | str_detect(Ingredients, 'philadelphia')) & str_detect(Ingredients, 'herb|chocolate|season|truffle|garlic|chive|spice|apricot|pepper') ~ 'cheese cream flavored',
+    (str_detect(Ingredients, 'cheese') & str_detect(Ingredients, 'cream|fresh') | str_detect(Ingredients, 'kremgo') | str_detect(Ingredients, 'philadelphia')) & !str_detect(Ingredients, 'glaze') ~ 'cheese cream',
     (str_detect(Ingredients, 'cottage') & str_detect(Ingredients, 'skinny|low fat|lean|mager|low-fat')) | str_detect(Ingredients, 'paneer cheese') ~ 'cheese cottage low fat', #Paneer is a cheese like low fat cc
     str_detect(Ingredients, 'cottage') & str_detect(Ingredients, 'cheese') ~ 'cheese cottage',
     str_detect(Ingredients, 'parmesan') ~ 'parmesan cheese',
