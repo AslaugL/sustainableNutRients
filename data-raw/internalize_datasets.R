@@ -46,6 +46,7 @@ usethis::use_data(unit_weights, unit_weights_query,
                   SHARP2018, SHARP2018_query,
                   pcs, type_of_units,
                   matvaretabellen2020_foodgroups, SHARP2018_foodgroups,
+                  matvaretabellen_units,
                   composite_ingredients_oda,
                   overwrite = TRUE,
                   internal = TRUE)
