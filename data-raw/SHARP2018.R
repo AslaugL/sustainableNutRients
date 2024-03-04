@@ -24,7 +24,6 @@ various$sharp_to_remove <- SHARP %>%
                    'Alcoholic beverages', 'Seasoning, sauces and condiments',
                    'Water and water-based beverages') |
            str_detect(Ingredients, 'rice|other wine-like fruit drinks|soft')) %>%
-  # This variable is a list of food items from the above categories to remove from the SHARP DB
   # The food items listed below are from these categories but will be kept in the db
   filter(!Ingredients %in% tolower(c('White sugar', 'Honey', 'Syrups',
 
@@ -46,10 +45,10 @@ various$sharp_to_remove <- SHARP %>%
                                      'breadcrumbs', 'buns', 'wheat bread and rolls, brown or wholemeal', 'wheat flour', 'maize flour',
                                      'wheat wholemeal flour', 'dried pasta', 'pasta wholemeal', 'oat grain', 'bulgur', 'barley grain, pearled',
                                      'oat rolled grains', 'processed oat-based flakes', 'rye flour, light', 'rye flour, wholemeal',
-                                     'wheat semolina', 'wheat bran',
+                                     'wheat semolina', 'wheat bran', 'common millet grain',
                                      #Alcoholic beverages
                                      'beer', 'wine', 'whisky', 'fortified and liqueur wines', 'cider', 'brandy', 'vodka and vodka-like spirits',
-                                     'rum',
+                                     'rum', 'liqueurs', 'coffee liqueur',
                                      #Conditments, sauces and spices
                                      'soy sauce', 'salt', 'mixed herbs and spices', 'curry powder',
                                      'stock cubes or granulate bouillon base', 'mustard and related sauces', 'vinegar', 'vinegar, wine',
@@ -61,7 +60,11 @@ various$sharp_to_remove <- SHARP %>%
                                      'cocoa powder', 'bitter chocolate', 'milk chocolate', 'white chocolate',
 
                                      #Coffee and tea
-                                     'coffee ground, roasted',
+                                     'coffee ground, roasted', 'coffee beverages',
+
+                                     # Div
+                                     'potato crisps from potato slices', 'liquorice candies', 'popcorn maize, popped',
+                                     'cola-type drinks', 'french fries from cut potato',
 
                                      #Water
                                      'tap water'))) #All sugars have the same CO2 and land-use footprint, only need one, same with types of cheeses
@@ -71,8 +74,8 @@ SHARP <- SHARP %>%
   filter(!FoodEx2 %in% c(various$sharp_to_remove$FoodEx2,
 
                          #Potato products
-                         "A011L", "A011S", "A03VG", "A0BYS", "A0BYV", "A00ZX", "A011D",
-                         "A011E", "A011P", "A011R", "A0BYT", "A005A", "A00ZV",
+                         "A011S", "A03VG", "A00ZX", "A011D", "A011E",
+                         "A011P", "A011R", "A0BYT", "A005A", "A00ZV",
                          #Pasta products
                          "A007G", "A007M", "A007J", "A007V", "A007P",
                          #Soyabean Sprouts
@@ -192,6 +195,7 @@ SHARP <- SHARP %>%
            str_replace('juice, grape', 'grape juice') %>%
            str_replace('juice, pineapple', 'pineapple juice') %>%
            str_replace('juice, carrot', 'carrot juice') %>%
+           str_replace('juice, tomato', 'tomato juice') %>%
            str_replace('juice, elderberry', 'elderberry juice') %>%
            str_replace('parsley roots', 'parsley root') %>%
            str_replace('vegetable fats and oils, edible', 'vegetable oil') %>%
@@ -220,12 +224,18 @@ SHARP <- SHARP %>%
            str_replace('canned or jarred pineapple', 'pineapple canned') %>%
            str_replace('canned or jarred peach', 'peach canned') %>%
            str_replace('canned or jarred sweet cherry', 'cherries canned') %>%
+           str_replace('canned or jarred fruit', 'fruit canned') %>%
            str_replace('wheat semolina', 'wheat flour semolina') %>%
            str_replace('rye flour, light', 'wheat flour rye') %>%
            str_replace('rye flour, wholemeal', 'wheat flour rye wholemeal') %>%
            str_replace('passionfruits', 'passion fruit') %>%
            str_replace('almonds sweet', 'almond') %>%
            str_replace('berries and small fruits', 'berries') %>%
+           str_replace('currants black, red and white', 'currant') %>%
+           str_replace('common millet grain', 'millet') %>%
+           str_replace('popcorn maize, popped', 'popcorn') %>%
+           str_replace('\\bkaki\\b', 'persimmon') %>%
+           str_replace('french fries from cut potato', 'french fries') %>%
 
            #Meat
            str_replace('beef tallow including processed suet', 'tallow') %>%
@@ -262,6 +272,7 @@ SHARP <- SHARP %>%
            str_replace('anchovies', 'anchovy') %>%
            str_replace('smoked salmon', 'salmon smoked') %>%
            str_replace('smoked herring', 'herring smoked') %>%
+           str_replace('freshwater crayfishes', 'crayfish') %>%
 
            #Div
            str_replace('barbecue or steak sauces', 'barbeque sauce') %>%
@@ -280,7 +291,16 @@ SHARP <- SHARP %>%
            str_replace('milk chocolate', 'chocolate milk') %>%
            str_replace('white chocolate', 'chocolate white') %>%
            str_replace('traditional margarine', 'margarine') %>%
-           str_replace('dairy imitates other than milks', 'dairy imitate')
+           str_replace('jelly candies', 'candy jelly') %>%
+           str_replace('potato crisps from potato slices', 'chips_potato') %>%
+           str_replace('liquorice candies', 'liquorice') %>%
+
+           # Beverages
+           str_replace('coffee liqueur', 'liqueur coffee') %>%
+           str_replace('liqueurs', 'liqueur') %>%
+           str_replace('dairy imitates other than milks', 'dairy imitate') %>%
+           str_replace('coffee beverages', 'coffee') %>%
+           str_replace('cola-type drinks', 'soda')
 
   ) %>%
 
