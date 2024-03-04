@@ -40,7 +40,7 @@ clean_nutrients <- raw_data %>%
     'chocolate bar, milk', 'chocolate, white', 'chocolate, cooking, plain, minimum 35 % cocoa',
     'pizza, industrially made', 'breakfast cereal, wheat, barley, rye, oat, no sugar, 4-korn',
     'chocolate, snickers', 'ice cream, dairy', 'chocolate, dark, 70 % cocoa', 'tart shell, no filling',
-    'puffed oats', 'puffed wheat', 'puffed rice', 'corn flakes, Kelloggs')) |
+    'puffed oats', 'puffed wheat', 'puffed rice', 'corn flakes, kelloggs')) |
            !str_detect(Foodgroup,
                        'dessert|other meat products, prepared|other meats, minced, offal, prepared|egg, prepared|cookies|cod liver oil|homemade|chocolate|instant|cake|breakfast cereals|porridge|pizza')) %>%
 
@@ -91,7 +91,6 @@ clean_nutrients <- raw_data %>%
   food_item == 'pork, shoulder, with fat, for roast, raw' ~ 'pork_shoulder',
   food_item == 'pork, grillbones, spare ribs, raw' ~ 'pork_spare rib',
   food_item == 'pork, tenderloin, raw' ~ 'pork_tenderloin',
-  food_item == 'pork, trimmed fat, raw' ~ 'pork_lard',
   food_item == 'pork scratchings' ~ 'bacon_crisp',
   food_item == 'ham, cured' ~ 'ham_cured',
   food_item == 'ham, smoke-cured' ~ 'ham_smoked',
@@ -123,6 +122,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'ham, turkey, smoked' ~ 'turkey_ham',
   food_item == 'turkey, meat and skin, raw' ~ 'turkey_meat',
   food_item == 'grouse, breast, without skin, raw' ~ 'grouse_breast',
+  food_item == "grouse, meat, raw" ~ "grouse",
 
   #Game meat----
   food_item == 'moose, roasting, raw' ~ 'elk moose',
@@ -257,6 +257,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'persimmon, kaki fruit, raw' ~ 'persimmon',
   food_item == 'pineapple, canned, in natural juice' ~ 'pineapple_canned',
   food_item == 'potato flatbread, soft, lompe' ~ 'potato flatbread lompe',
+  food_item == "potato crisps" ~ "chips_potato",
   food_item == 'potatoes, storage, raw' ~ 'potato',
   food_item == 'prunes' ~ 'prune',
   food_item == 'radish, norwegian, raw' ~ 'radish',
@@ -562,7 +563,7 @@ fromFoodDataCentral_foods <- read_csv(
     #Meat products
     'Beef, variety meats and by-products, tongue, raw', 'Pork, fresh, variety meats and by-products, kidneys, raw',
     'Beef, New Zealand, imported, flank, separable lean and fat, raw', 'Lamb, New Zealand, imported, fore-shank, separable lean and fat, raw',
-    'Lamb, Australian, ground,  85% lean / 15% fat, raw',
+    'Lamb, Australian, ground,  85% lean / 15% fat, raw', "Lard",
 
     #Fruit and veg
     'Jams and preserves, apricot', 'Artichokes, (globe or french), raw', 'Plantains, yellow, raw', 'Sauerkraut, canned, solids and liquids',
@@ -666,7 +667,8 @@ fromFoodDataCentral_foods <- read_csv(
              "Peppers, hot pickled, canned" = "chili pepper_pickled",
              "Radish seeds, sprouted, raw" = "sprouts_radish",
              "Pomegranate juice, bottled" = "pomegranate_juice",
-             "Crustaceans, crayfish, mixed species, farmed, raw" = "crayfish"
+             "Crustaceans, crayfish, mixed species, farmed, raw" = "crayfish",
+             "\\bLard\\b" = "pork_lard"
            ))
          #'Tamarind nectar, canned'
   ) %>%
