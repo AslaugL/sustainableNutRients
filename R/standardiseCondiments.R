@@ -68,7 +68,7 @@ standardiseCondiments <- function(df) {
     str_detect(Ingredients, 'paste|pasta') & str_detect(Ingredients, 'curry') ~ 'paste curry',
     str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'garlic') ~ 'paste garlic',
     str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'shrimp') ~ 'paste shrimp',
-    str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'tomato') & str_detect(Ingredients, 'sun') ~ 'paste tomato sun-dried',
+    str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'tomato') & str_detect(Ingredients, 'sun') ~ 'paste tomato sun dried',
     str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'tomato') ~ 'paste tomato',
     str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'tikka masala') ~ 'paste tikka masala',
     str_detect(Ingredients, 'paste') & str_detect(Ingredients, 'korma') ~ 'paste korma',

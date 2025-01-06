@@ -18,21 +18,21 @@ calculateNutrientContentOfFoodlist <- function(df, calculate_nutrients = 'total'
   #Drop NA values help function
   drop_nas <- function(df, identifier) {
 
-    if(sum(is.na(df$environmental_impact_indicator)) > 0) {
+    if(sum(is.na(df$nutrient)) > 0) {
 
       #Print recipe names and warning
       has_missing <- df %>%
-        filter(is.na(environmental_impact_indicator)) %>%
+        filter(is.na(nutrient)) %>%
         select(all_of(identifier)) %>% unique() %>%
         as.character()
 
       print(paste0(
         "These ", noquote(identifier), " ", has_missing,
-        " have values not mapped to Matvaretabellen, be sure mapping has been correct. NA values are removed before calculating environmental impact"))
+        " have values not mapped to Matvaretabellen, be sure mapping has been correct. NA values are removed before calculating nutrient content"))
 
       #Filter out the NA foods
       without_NAs <- df %>%
-        filter(!is.na(environmental_impact_indicator))
+        filter(!is.na(nutrient))
 
     } else {
 

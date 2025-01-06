@@ -17,7 +17,7 @@
      "beer", "broth",
 
      "cider", "cognac", "cream", "cr\u00E8me fra\u00CEche", "coffee",
-     "coffee espresso", "coffee liqueur", "iced coffee",
+     "coffee espresso", "coffee liqueur", "iced coffee", "ice coffee",
 
      "eddik",
 
