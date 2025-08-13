@@ -1,0 +1,286 @@
+library(tidyverse)
+
+# Build expression
+fixes <- tibble(
+  tmp = c(
+    #Fruit and veg
+    'eggplant_eggplant',
+    'peach_peach',
+    'sweet corn kernels_sweet corn_canned',
+    'sweet potato_sweet potato',
+    'jerusalem artichoke_jerusalem artichoke',
+    'chili pepper dried_chili pepper_red',
+    'mangold_mangold',
+
+    'watermelon_watermelon',
+    'salsa_chunky_salsa',
+    'pear_pear',
+    'jam blueberries_jam',
+    'tomato beef_tomato',
+    "grape fruit_grapefruit",
+
+    'pimiento chili pepper_sweet pepper_red',
+    'sweet pepper grilled_sweet pepper_red',
+    'sweet pepper canned_sweet pepper_red',
+    'sweet pepper pickled_chili pepper_pickled',
+    'chili pepper jalapeno pickled_chili pepper_pickled',
+    'potato_potato',
+    'potato boiled_potato', ## Dobbeltsjekk denne om ikke matvaretabellen har den
+
+    #Dairy
+    'parmesan cheese_cheese_parmesan',
+    #Can be substituted for eachother in recipes
+    paste0(c('cheese asiago', 'cheese cotjia', 'cheese pecorino',
+             'cheese romano', 'cheese gruyere', 'cheese parmigiano reggiano'),
+           "_cheese_parmesan"),
+    'butter clarified ghee_ghee',
+    'cheese cottage low fat_cheese cottage_low fat',
+    'cheese cottage_cheese cottage',
+    'cheese goat chevre white_cheese_chevre',
+    'cheese goat_cheese_chevre',
+    'cheese cream_cheese cream',
+    'cheese soft_cheese cream',
+    'cheese le crémier de chaumes_cheese cream',
+    'cheese cream goat sn\u00f8frisk_cheese cream',
+    'goat sn\u00f8frisk_cream cheese goat',
+    'cheese cream_goat sn\u00f8frisk',
+    'cheese semi-hard_cheese_norvegia',
+    'cheese emmentaler_cheese_norvegia',
+    'cheese garlic_cheese_norvegia',
+    'cheese pizza_cheese_norvegia',
+    'cheese hard goat_cheese hard goat_kvitlin', #Use as standard for time being
+    'cheese jarlsberg_cheese_jarlsberg',
+    'cheese manchego_cheese_cheddar', #Can be substituted in recipes
+    'cheese mozzarella_cheese_mozzarella',
+    'cheese norvegia_cheese_norvegia',
+    'cheese ricotta salata_cheese_ricotta salata',
+    'cheese port salut_cheese_port salut',
+    'cheese burrata mozzarella_cheese_mozzarella',
+    'goat brown cheese_cheese brown_goat',
+    'cheese mascarpone_cheese_mascarpone',
+    'tine light 2 \u0025 a good alternative to sour cream_quark_1', #Closest in nutritional value
+    'milk evaporated_milk evaporated',
+    'buttermilk_buttermilk',
+    'cheese blue_cheese blue',
+    'cheese blue castello_cheese blue',
+
+    #Div
+    'mushroom_mushroom',
+    'mushroom chestnut_mushroom',
+    'sugar_sugar',
+    'pearl sugar_sugar',
+    'sesame seed oil_sesame_oil',
+    'condensed cream of celery soup_condensed cream of celery soup',
+    'condensed cream of chicken soup_condensed cream of chicken soup',
+    'condensed cream of mushroom soup_condensed cream of mushroom soup',
+    'oil corn_vegetable_oil',
+    'soup onion instant_onion soup mix',
+    'sauce hot pepper_hot pepper sauce',
+    'sauce pasta_tomato_sauce', #Use as substitute for time being
+    'sauce hot_hot pepper sauce',
+    'olive paste tapenade_olive paste tapenade',
+    'homemade beef gravy_beef gravy',
+    'sweet chili sauce_chili sauce_sweet',
+    'refrigerated buttermilk biscuit dough_refrigerated buttermilk biscuit dough',
+    'beef gravy_beef_gravy',
+    'sauce piri-piri_sauce piri-piri',
+    'sauce tikka masala_sauce tikka masala',
+    'sauce pad thai_sauce pad thai',
+    'ice cube_water',
+
+    #Grains, seeds nuts
+    'chick pea_chick pea',
+    'rice white long grain_rice white long grain',
+    'dried soybeans_bean_soya',
+    'bean canned_bean_kidney canned', #Standard
+    'peanut_peanut',
+    'peanut salt_peanut_salt',
+    'rice parboiled_rice parboiled',
+    'rice brown long grain_rice brown long grain',
+    'white bread mix_white bread_mix',
+    'cookies amarettini_amaretti cookie',
+    'bean salad_bean salad',
+    'taco shell_nacho',
+    'lasagna plate pasta_pasta',
+
+    #Seafood
+    'cod lutefisk_lutefisk',
+    'mackerel tomato canned_mackerel_tomato canned',
+    'fish cakes coarse_fish cakes_coarse',
+
+    #Herbs spices and condiments
+    'parsley_parsley_fresh',
+    'dry mustard_mustard',
+    'mayonnaise sauce_mayonnaise',
+    'chili flake dried_chili_powder',
+    'mustard honey_mustard',
+    'lemongrass_lemongrass',
+    'spice mix taco_taco spice mix',
+    'lemon balm_mint_fresh',
+
+    #Meat
+    'pork neck chop_pork_neck chop',
+    'sausage_sausage',
+    'chicken_chicken_whole',
+    'whole turkey_turkey_meat',
+    'pork neck_pork_neck chop',
+    "meatballs in tomato sauce_meatball_tomato sauce",
+    "bacon fat_pork_lard", #Closest match
+    'chicken wing_chicken_drumstick',
+    'hamburger beef patty_beef_minced meat',
+    'lamb ribs_lamb_chop',
+
+
+    #Substitutions or ingredients not found in Matvaretabellen
+    'hazelnut oil_walnut_oil', #Another nut oil
+    'bean canned_bean black_canned',
+    'scampi_shrimp',
+    'ciabatta_bread_white',
+    'elk shoulder_elk moose',
+    'elk tenderloin_beef_tenderloin',
+    'lime, the zest_lemon_zest',
+    'sugar vanilla_sugar',
+    'cream double 48 \u0025_cream whipped_37', #Highest in the database
+    'chocolate unsweetened_chocolate_dark', #Highes cocoa percentage in database
+    'aioli_mayonnaise', #Similar
+    'trout smoked_salmon_smoked',
+    'fresh herbs ginger_ginger',
+    'butter plant-based_margarine',
+    'apple cider_cider',
+    'currant juice_black currant_juice',
+    'cashew nut salt_cashew_nut',
+    'cashew nut roasted_cashew_nut',
+    'bread crumb_bread',
+    'bread_bread',
+    'bread_naan',
+    'breadstick_bread',
+    'crisp bread_crisp bread_coarse',
+    'crisp bread coarse_crisp bread_coarse',
+    'rolls white baguette garlic_bread_white',
+    'bread sausage_bread_white',
+    'hamburger bread_bread_white',
+    'bread brown chapati_bread_coarse',
+    'tortilla coarse_bread_coarse',
+    'rolls coarse_bread_coarse',
+    'rolls coarse baguette_bread_coarse',
+    'red chili_chili pepper_red',
+    'strong chili_chili pepper_red',
+    'chili peppers_chili pepper_red',
+    'beef shank_beef_veal chops',
+    'beef oxtail_beef_veal chops',
+    'syrup apple_syrup_maple',
+    'syrup pear_syrup_maple',
+    'syrup currant_syrup_maple',
+    'syrup_syrup_maple',
+    'agave syrup_syrup_maple',
+    'syrup ginger_syrup_maple',
+    'syrup chocolate_syrup_maple',
+    'syrup caramel_syrup_maple',
+    'glucose_syrup_maple',
+    'salsa_chunky_salsa',
+    'salsa tomato_chunky_salsa',
+    'syrup apple_syrup_maple',
+    'syrup pear_syrup_maple',
+    'garlic oil_olive_oil',
+    'oil truffle_olive_oil',
+    'frying oil_vegetable_oil',
+    'oil_vegetable_oil',
+    'flaxseed meal_flax_seed',
+    'seed flax_flax_seed'
+  )
+) %>%
+  separate_wider_delim(., cols = tmp, names = c("Ingredient", "refWord1", "refWord2"),
+                       too_few = "align_start", delim = "_")
+
+fakeDatabase <- fixes %>%
+  dplyr::mutate(
+    database_word = str_replace(paste0(refWord1, " ", refWord2), " NA", "")
+  ) %>% dplyr:: select(database_word, refWord1, refWord2) %>% distinct() %>%
+  dplyr::mutate(.by = database_word, ID = cur_group_id()) %>%
+  # Arrange by counts
+  dplyr::mutate(
+    counts_word1 = str_count(refWord1),
+    counts_word2 = str_count(refWord2)) %>%
+  arrange(desc(counts_word1), desc(counts_word2)) %>%
+  dplyr::select(-starts_with("counts"))
+
+Ingredients <- fixes %>%
+  dplyr::select(Ingredient)
+
+
+fixFoodMappingError <- function(database, first_w, second_w = NA) {
+
+  ID <- database %>% filter(first_word == first_w & second_word == second_w) %>% select(ID) %>% unique() %>% as.numeric()
+
+}
+
+# Look up ingredients in database
+testrun2 <- sapply(Ingredients$Ingredient[150:158], function(singleIngredient) {
+
+  # Only look up relevant database hits
+  tmp_db <- fakeDatabase %>%
+    dplyr::filter(str_detect(singleIngredient, refWord1))
+
+  # Hvis det ikke er noen treff, bruk ID 0
+  if(nrow(tmp_db) == 0) {
+
+    ID <- 0
+
+    # Hvis det er treff, undersøk nærmere
+  } else {
+
+    ID <- numeric(1)
+
+    for (reference in 1:length(tmp_db)) {
+
+      #Only look for the whole word found in the reference
+      if(all(str_detect(singleIngredient, regex(paste0('\\b', tmp_db$refWord1[reference], '\\b'))),
+             str_detect(singleIngredient, regex(paste0('\\b', tmp_db$refWord2[reference], '\\b'))))
+      ) {
+        print("in loop 1")
+        ID <- tmp_db$ID[reference]
+        break
+
+      } else if(all(str_detect(singleIngredient, regex(paste0('\\b', tmp_db$refWord1[reference], '\\b'))),
+                    str_detect(singleIngredient, regex(paste0('\\b', tmp_db$refWord2[reference], '\\w+'))))
+      ) {
+        print("in loop 2")
+        ID <- tmp_db$ID[reference]
+        break
+
+      } else if(isTRUE(str_detect(singleIngredient, regex(paste0('\\b', tmp_db$refWord1[reference], '\\b'))))) {
+
+        ID <- tmp_db$ID[reference]
+        break
+
+      }
+    }
+    return(ID)
+
+  }
+
+
+}, USE.NAMES = TRUE, simplify = FALSE) %>%
+  map_dfr(as_tibble, .id = "Ingredient") %>%
+  rename(ID = value)
+
+
+
+results
+# #Milk with cocoa powder
+# str_detect(Ingredients, 'butternut') ~ fixFoodMappingError(database = reference, 'winter squash_butternut',
+# str_detect(Ingredients, 'milk beverage chocolate') ~ fixFoodMappingError(database = reference, 'milk beverage_chocolate',
+# str_detect(Ingredients, 'water broth') ~ fixFoodMappingError(database = reference, 'water',
+# database_reference == 'mushroom' & !str_detect(Ingredients, 'condensed cream of mushroom soup|sauce') ~ fixFoodMappingError(database = reference, 'mushroom',
+#
+#
+# str_detect(Ingredients, 'barley cooked') ~ fixFoodMappingError(database = reference, 'barley_cooked',
+#
+#
+# str_detect(Ingredients, 'vinegar') & !str_detect(database_reference, 'vinegar') ~ fixFoodMappingError(database = reference, 'vinegar',
+#
+# str_detect(Ingredients, 'grouse') ~ fixFoodMappingError(database = reference, 'grouse',
+
+
+
+
