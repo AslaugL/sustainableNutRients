@@ -92,7 +92,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
     #Separate out ingredients with weight in kilo already, unnecessary to look through them
     if(length(unique(df$unit) > 1)) {
 
-      ingredients_to_check <- df %>% filter(unit != 'kg')
+      ingredients_to_check <- df %>% dplyr::filter(unit != 'kg')
 
     }else if(unique(df$unit) == "kg") {
 
@@ -105,22 +105,22 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
       #Database query words
       reference <- unit_weights_query %>%
-        filter(.data$language == 'english') %>%
-        select(-.data$language)
+        dplyr::filter(language == 'english') %>%
+        select(-language)
 
       #The database
       db <- unit_weights %>%
-        filter(.data$language == 'english') %>%
+        dplyr::filter(language == 'english') %>%
         rename(unit = unit_enhet) %>%
-        mutate(unit = unit %>%
+        dplyr::mutate(unit = unit %>%
                  str_replace('neve', 'handful')) %>%
         #Use brutto weight when possible
         group_by(Ingredients) %>%
-        mutate(unit = case_when(
+        dplyr::mutate(unit = case_when(
           any(unit == "brutto") ~ str_replace(unit, "brutto", "pcs"),
           TRUE ~ str_replace(unit, "netto", "pcs")
         )) %>% ungroup() %>%
-        select(-c(Ingredients, .data$language, reference))
+        select(-c(Ingredients, language, reference))
 
     }else if(!is.null(additional_entries)){
 
@@ -133,13 +133,13 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
         #Database query words
         reference <- unit_weights_query %>%
-          filter(.data$language == 'english') %>%
-          select(-.data$language) %>%
+          dplyr::filter(language == 'english') %>%
+          select(-language) %>%
           bind_rows(additional_entries$query_words) %>% unique() %>%
           #Add user entries
           bind_rows(additional_entries$query_words) %>%
           #Arrange by lexogographical order and number of words in the first search term
-          mutate(
+          dplyr::mutate(
             number_of_words1 = str_count(first_word, "\\b\\w+\\b"),
             number_of_words2 = str_count(second_word, "\\b\\w+\\b"),
             number_of_words2 = case_when(
@@ -153,18 +153,20 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
         #The database
         db <- unit_weights %>%
-          filter(.data$language == 'english') %>%
+          dplyr::filter(language == 'english') %>%
           rename(unit = unit_enhet) %>%
-          mutate(unit = unit %>%
+          dplyr::mutate(unit = unit %>%
                    str_replace('neve', 'handful')) %>%
           #Use brutto weight when possible
           group_by(Ingredients) %>%
-          mutate(unit = case_when(
+          dplyr::mutate(unit = case_when(
             any(unit == "brutto") ~ str_replace(unit, "brutto", "pcs"),
             TRUE ~ str_replace(unit, "netto", "pcs")
           )) %>% ungroup() %>%
-          select(-c(Ingredients, .data$language, reference)) %>%
+          select(-c(Ingredients, language, reference)) %>%
           bind_rows(additional_entries$db) %>% unique()
+
+        print()
 
       } else if(isFALSE(is.list(additional_entries) &
                        all.equal(names(additional_entries), c('db', 'query_words')) &
@@ -194,7 +196,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         db <- matvaretabellen2024
       } else if(isFALSE(include_water)){
         db <- matvaretabellen2024 %>%
-          filter(nutrient != "Water")
+          dplyr::filter(nutrient != "Water")
       }
 
 
@@ -212,12 +214,12 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           #Add user entries
           bind_rows(additional_entries$query_words) %>%
           #Arrange by lexogographical order and number of words in the first search term
-          mutate(
-            number_of_words1 = str_count(first_word, "\\b\\w+\\b"),
-            number_of_words2 = str_count(second_word, "\\b\\w+\\b"),
+          dplyr::mutate(
+            number_of_words1 = str_count(first_word),
+            number_of_words2 = str_count(second_word),
             number_of_words2 = case_when(
 
-              second_word == "\\" ~ 10,
+              second_word == "\\" ~ 50,
               TRUE ~ number_of_words2
 
             )) %>%
@@ -230,7 +232,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         } else if(isFALSE(include_water)){
           db <- matvaretabellen2024 %>% bind_rows(additional_entries$db) %>% #Add user entries
             #Remove water
-            filter(nutrient != "Water")
+            dplyr::filter(nutrient != "Water")
           }
 
       } else {
@@ -269,12 +271,12 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           #Add user entries
           bind_rows(additional_entries$query_words) %>%
           #Arrange by lexogographical order and number of words in the first search term
-          mutate(
-            number_of_words1 = str_count(first_word, "\\b\\w+\\b"),
-            number_of_words2 = str_count(second_word, "\\b\\w+\\b"),
+          dplyr::mutate(
+            number_of_words1 = str_count(first_word),
+            number_of_words2 = str_count(second_word),
             number_of_words2 = case_when(
 
-              second_word == "\\" ~ 10,
+              second_word == "\\" ~ 50,
               TRUE ~ number_of_words2
 
             )) %>%
@@ -297,7 +299,8 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
   }
 
   #Run on all ingredients
-  results <- lapply(ingredients_to_check$Ingredients %>% unique(), temp, reference = reference) %>% bind_rows()
+  results <- lapply(ingredients_to_check$Ingredients %>% unique(),
+                    temp, reference = reference) %>% bind_rows()
 
   #Fix some known errors
   if(isTRUE(fix_errors)){
@@ -305,12 +308,15 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
     #Fix volume weight hits
     if(database == 'volume_weight'){
 
+      print(head(df))
+      print(head(results))
+
       #Add ingredient metadata
       temp <- results %>%
         full_join(df) %>%
 
         #Fix errors
-        mutate(database_ID = case_when(
+        dplyr::mutate(database_ID = case_when(
           Ingredients == 'butter clarified ghee' ~ fixFoodMappingError(database = reference, 'ghee'),
           Ingredients == 'eggplant' ~ fixFoodMappingError(database = reference, 'eggplant'),
           Ingredients == 'sugar' ~ fixFoodMappingError(database = reference, 'sugar', 'white'),
@@ -347,7 +353,8 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'hamburger bun' ~ fixFoodMappingError(database = reference, 'hamburger', 'bread'),
           Ingredients == 'mustard honey' ~ fixFoodMappingError(database = reference, 'mustard'),
           Ingredients %in% c('salad lollo rosso', 'salad heart') & unit == 'leaf' ~ fixFoodMappingError(database = reference, 'lettuce'),
-          Ingredients == 'bread crumb' & unit == 'slice' ~ fixFoodMappingError(database = reference, 'bread'),
+          Ingredients %in% c('bread crumb', 'bread crumb white') & unit %in% c('slice', 'pcs') ~ fixFoodMappingError(database = reference, 'bread'),
+          Ingredients == 'bread rye' ~ fixFoodMappingError(database = reference, 'bread'),
           Ingredients == 'cheese goat chevre white' & unit == 'pcs' ~ fixFoodMappingError(database = reference, 'soft ripened cheese'),
           Ingredients == 'watermelon' ~ fixFoodMappingError(database = reference, 'melon', 'water'),
           Ingredients == 'broccolini' ~ fixFoodMappingError(database = reference, 'broccolini'),
@@ -367,6 +374,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == "chili pepper jalapeno pickled" & unit == "pcs" ~ fixFoodMappingError(database = reference, 'jalapeño'), #Regular jalapeno
           str_detect(Ingredients, "granola") ~ fixFoodMappingError(database = reference, 'granola'),
           Ingredients %in% c("rolls white baguette garlic") ~ fixFoodMappingError(database = reference, 'baguette', 'half'),
+          str_detect(Ingredients, "grape fruit") ~ fixFoodMappingError(database = reference, 'grapefruit'),
 
           #Cheeses
           str_detect(Ingredients, 'cheddar|jarlsberg|norvegia|semi-hard|cheese romano') ~ fixFoodMappingError(database = reference, 'hard to semi-hard cheese'),
@@ -395,13 +403,16 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           str_detect(Ingredients, "quark") ~ fixFoodMappingError(database = reference, 'cottage', 'cheese'),
           Ingredients == "garlic powder" ~ fixFoodMappingError(database = reference, 'onion', 'powder'),
           Ingredients == "remulade" ~ fixFoodMappingError(database = reference, "mayonnaise"),
-          Ingredients %in% c("cheese plant-based", 'cheese, plant-based') ~ fixFoodMappingError(database = reference, "dairy imitate"),
+          Ingredients %in% c("cheese plant-based", 'cheese, plant-based') ~ fixFoodMappingError(database = reference, "hard to semi-hard cheese"),
           Ingredients == "almond butter" ~ fixFoodMappingError(database = reference, 'peanut', 'butter'),
           Ingredients == "barbecue seasoning" ~ fixFoodMappingError(database = reference, 'taco', 'spice'),
-          Ingredients %in% c("syrup chocolate", "syrup currant", "syrup blackcurrant", 'glucose') ~ fixFoodMappingError(database = reference, 'syrup'),
+          Ingredients %in% c("syrup chocolate", "syrup currant", "syrup blackcurrant", 'syrup glucose') ~ fixFoodMappingError(database = reference, 'syrup'),
           Ingredients %in% c("erythriol", 'pearl sugar') ~ fixFoodMappingError(database = reference, 'sugar', 'white'),
           Ingredients == "egg yolk boiled" ~ fixFoodMappingError(database = reference, 'egg', 'yolk'),
           Ingredients == "o'boy pulver" ~ fixFoodMappingError(database = reference, 'cocoa', 'powder'),
+          Ingredients == "hamburger plant-based" ~ fixFoodMappingError(database = reference, 'meat', 'ground'),
+          Ingredients == "coconut flake" ~ fixFoodMappingError(database = reference, 'coconut', 'mass'),
+          Ingredients == "sauce pasta" ~ fixFoodMappingError(database = reference, 'sauce', 'tomato'),
 
           #Ingredients with no references
           ((Ingredients %in% c('mustard powder', 'chinese five spice', 'dip mix', 'asafoetida powder', 'lemon gel',
@@ -414,15 +425,17 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           TRUE ~ database_ID
         ))
 
+      print("Finished fixing IDs")
+
       #Add the new reference words and join with the database
       results <- temp %>%
-        left_join(reference %>% filter(database_ID %in% temp$database_ID)) %>%
-        mutate(database_reference = paste0(first_word, ' ', second_word)) %>%
+        left_join(reference %>% dplyr::filter(database_ID %in% temp$database_ID)) %>%
+        dplyr::mutate(database_reference = paste0(first_word, ' ', second_word)) %>%
         #Remove unnecessary columns
-        select(-c(first_word, second_word, .data$loop)) %>% unique() %>%
+        select(-c(first_word, second_word, loop)) %>% unique() %>%
         left_join(db,
                   by = c("database_ID", "unit")) %>%
-        mutate(
+        dplyr::mutate(
           grams_per_unit = case_when(unit == 'kg' ~ 1000, TRUE ~ grams_per_unit),
           database_reference = case_when(
             unit == 'kg' ~ "Not looked up in database as weight already given",
@@ -438,7 +451,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         full_join(df) %>%
 
         #Fix errors
-        mutate(database_ID = case_when(
+        dplyr::mutate(database_ID = case_when(
 
           #Fruit and veg
           Ingredients == 'eggplant' ~ fixFoodMappingError(database = reference, 'eggplant'),
@@ -480,7 +493,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'cheese ricotta salata' ~ fixFoodMappingError(database = reference, 'cheese', 'ricotta salata'),
           Ingredients == 'cheese port salut' ~ fixFoodMappingError(database = reference, 'cheese', 'port salut'),
           Ingredients == 'cheese burrata mozzarella' ~ fixFoodMappingError(database = reference, 'cheese', 'mozzarella'),
-          Ingredients == 'goat brown cheese' ~ fixFoodMappingError(database = reference, 'cheese brown_goat'),
+          Ingredients == 'goat brown cheese' ~ fixFoodMappingError(database = reference, 'cheese brown', 'goat'),
           Ingredients %in% c('cheese cream goat sn\u00f8frisk', 'cream cheese goat') ~ fixFoodMappingError(database = reference, 'cheese cream', 'goat sn\u00f8frisk'),
           Ingredients == 'cheese mascarpone' ~ fixFoodMappingError(database = reference, 'cheese', 'mascarpone'),
           Ingredients == 'tine light 2 \u0025 a good alternative to sour cream' ~ fixFoodMappingError(database = reference, 'quark', '1'), #Closest in nutritional value
@@ -508,16 +521,19 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'homemade beef gravy' ~ fixFoodMappingError(database = reference, 'beef gravy'),
           Ingredients == 'sweet chili sauce' ~ fixFoodMappingError(database = reference, 'chili sauce', 'sweet'),
           Ingredients == 'refrigerated buttermilk biscuit dough' ~ fixFoodMappingError(database = reference, 'refrigerated buttermilk biscuit dough'),
-          Ingredients == 'beef gravy' ~ fixFoodMappingError(database = reference, 'beef', 'gravy'),
+          Ingredients == 'beef gravy' ~ fixFoodMappingError(database = reference, 'beef gravy'),
           Ingredients == 'sauce piri-piri' ~ fixFoodMappingError(database = reference, 'sauce piri-piri'),
           Ingredients == 'sauce tikka masala' ~ fixFoodMappingError(database = reference, 'sauce tikka masala'),
           Ingredients == 'sauce pad thai' ~ fixFoodMappingError(database = reference, 'sauce pad thai'),
-          Ingredients == 'ice cube' ~  fixFoodMappingError(database = reference,'water'),
+          Ingredients == 'ice cube' ~  fixFoodMappingError(database = reference, 'water'),
+          Ingredients == 'beer' ~  fixFoodMappingError(database = reference, 'beer', 'dark'),
+          Ingredients == 'chips' ~  fixFoodMappingError(database = reference, 'chips', 'potato'),
 
           #Grains, seeds nuts
           Ingredients == 'chick pea' ~ fixFoodMappingError(database = reference, 'chick pea'),
           Ingredients == 'rice white long grain' ~ fixFoodMappingError(database = reference, 'rice white long grain'),
           Ingredients == 'dried soybeans' ~ fixFoodMappingError(database = reference, 'bean', 'soya'),
+          Ingredients == 'bean pinto canned' ~ fixFoodMappingError(database = reference, 'bean', 'white canned'),
           Ingredients %in% c('cashew nut salt', 'cashew nut roasted') ~ fixFoodMappingError(database = reference, 'cashew', 'nut'),
           Ingredients %in% c('bread crumb', 'bread', 'bread naan', 'breadstick') ~ fixFoodMappingError(database = reference, 'bread'),
           Ingredients %in% c('crisp bread', 'crisp bread coarse') ~ fixFoodMappingError(database = reference, 'crisp bread', 'coarse'),
@@ -526,6 +542,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'bean canned' ~ fixFoodMappingError(database = reference, 'bean', 'kidney canned'), #Standard
           Ingredients == 'peanut' ~ fixFoodMappingError(database = reference, 'peanut'),
           Ingredients == 'peanut salt' ~ fixFoodMappingError(database = reference, 'peanut', 'salt'),
+          Ingredients == 'peanut butter unsalted' ~ fixFoodMappingError(database = reference, 'peanut'),
           Ingredients == 'rice parboiled' ~ fixFoodMappingError(database = reference, 'rice parboiled'),
           Ingredients == 'rice brown long grain' ~ fixFoodMappingError(database = reference, 'rice brown long grain'),
           Ingredients == 'white bread mix' ~ fixFoodMappingError(database = reference, 'white bread', 'mix'),
@@ -535,6 +552,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'taco shell' ~ fixFoodMappingError(database = reference, 'nacho'),
           Ingredients == 'lasagna plate pasta' ~ fixFoodMappingError(database = reference, 'pasta'),
           str_detect(Ingredients, 'barley cooked') ~ fixFoodMappingError(database = reference, 'barley', 'cooked'),
+          str_detect(Ingredients, 'rice porridge') ~ fixFoodMappingError(database = reference, 'rice', 'porridge'),
 
           #Seafood
           Ingredients == 'cod lutefisk' ~ fixFoodMappingError(database = reference, 'lutefisk'),
@@ -562,6 +580,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == "meatballs in tomato sauce" ~ fixFoodMappingError(database = reference, "meatball", "tomato sauce"),
           Ingredients == "bacon fat" ~ fixFoodMappingError(database = reference, "pork", "lard"), #Closest match
           Ingredients == 'chicken wing' ~ fixFoodMappingError(database = reference, "chicken", "drumstick"),
+          Ingredients == 'chicken ham' ~ fixFoodMappingError(database = reference, "turkey", "ham"),
           Ingredients == 'hamburger beef patty' ~ fixFoodMappingError(database = reference, "beef", "minced meat"),
           Ingredients == 'lamb ribs' ~ fixFoodMappingError(database = reference, "lamb", "chop"),
 
@@ -572,22 +591,21 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'bean canned' ~ fixFoodMappingError(database = reference, 'bean black', 'canned'),
           Ingredients == 'scampi' ~ fixFoodMappingError(database = reference, 'shrimp'),
           Ingredients == 'ciabatta' ~ fixFoodMappingError(database = reference, 'bread', 'white'),
-          Ingredients == 'elk shoulder' ~ fixFoodMappingError(database = reference, 'elk moose'),
-          Ingredients == 'elk tenderloin' ~ fixFoodMappingError(database = reference, 'beef', 'tenderloin'),
+          Ingredients %in% c('elk shoulder', 'elk minced meat') ~ fixFoodMappingError(database = reference, 'elk moose', 'chuck'),
+          Ingredients == 'elk tenderloin' ~ fixFoodMappingError(database = reference, 'elk moose', 'sirloin'),
           Ingredients == 'lime, the zest' ~ fixFoodMappingError(database = reference, 'lemon', 'zest'),
           Ingredients %in% c('salsa', 'salsa tomato') ~ fixFoodMappingError(database = reference, 'chunky', 'salsa'),
           Ingredients %in% c('syrup apple', 'syrup pear') ~ fixFoodMappingError(database = reference, 'syrup', 'maple'),
           Ingredients == 'sugar vanilla' ~ fixFoodMappingError(database = reference, 'sugar'),
           Ingredients %in% c('beef shank', 'beef oxtail') ~ fixFoodMappingError(database = reference, 'beef', 'veal chops'), #Cut with the highest percentage of bone in Matvaretabellen
           Ingredients %in% c('syrup apple', 'syrup pear', 'syrup currant', 'syrup', 'agave syrup',
-                             'syrup ginger', 'syrup chocolate', 'syrup caramel', 'glucose') ~ fixFoodMappingError(database = reference, 'syrup', 'maple'),
+                             'syrup ginger', 'syrup chocolate', 'syrup caramel') ~ fixFoodMappingError(database = reference, 'syrup', 'maple'),
           Ingredients == 'cream double 48 \u0025' ~ fixFoodMappingError(database = reference, 'cream whipped', '37'), #Highest in the database
           Ingredients == 'chocolate unsweetened' ~ fixFoodMappingError(database = reference, 'chocolate', 'dark'), #Highes cocoa percentage in database
           Ingredients == 'aioli' ~ fixFoodMappingError(database = reference, 'mayonnaise'), #Similar
           Ingredients == 'trout smoked' ~ fixFoodMappingError(database = reference, 'salmon', 'smoked'),
           Ingredients == 'fresh herbs ginger' ~ fixFoodMappingError(database = reference, 'ginger'),
           Ingredients == "butter plant-based" ~ fixFoodMappingError(database = reference, 'margarine'),
-          Ingredients == 'apple cider' ~ fixFoodMappingError(database = reference, 'cider'),
           Ingredients == 'currant juice' ~ fixFoodMappingError(database = reference, 'black currant', 'juice'),
 
           #Not in reference
@@ -600,7 +618,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                              '20 pound pack high quality charcoal briquettes', 'wine rice', 'trout caviar', 'vanillin', 'cream sauce base',
                              'vanilla pod', 'butter-vanilla aroma', 'paste vanilla bean', 'blueberries pie filling', 'almond essence', 'vanilla essence',
                              'milk powder nonfat', 'apricot nectar', 'apricot preserve', 'apple sauce', 'oil chili sichuan',
-                             'frozen vegetable mix', 'sauce curry', 'gingerbread house', 'lemonade',
+                             'frozen vegetable mix', 'sauce curry', 'gingerbread house', 'lemonade', 'sugar candy', 'sugar color',
                              'sweet potato fries', 'coriander paste', 'vanilla essence', 'vanilla pod',
                              'cheese schnitzel', 'cheese pancakes', 'honey crunch', 'lemon gel', 'mint jelly',
                              'prune marinade', 'roe salmon', 'vanilla pod', 'vanilla powder', 'vanilla essence',
@@ -620,13 +638,13 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
       #Add the new reference words
       results <- temp %>%
         left_join(reference, by = 'database_ID') %>%
-        mutate(database_reference = paste0(first_word, ' ', second_word)) %>%
+        dplyr::mutate(database_reference = paste0(first_word, ' ', second_word)) %>%
         #Remove unnecessary columns
-        select(-c(first_word, second_word, .data$loop)) %>% unique() %>%
+        select(-c(first_word, second_word, loop)) %>% unique() %>%
         left_join(db,
                   by = "database_ID") %>%
-        select(-.data$from) %>%
-        mutate(database_reference = str_replace(database_reference, "NA NA", "Not in database"))
+        select(-from) %>%
+        dplyr::mutate(database_reference = str_replace(database_reference, "NA NA", "Not in database"))
 
 
     } else if(database == 'sustainability'){
@@ -636,18 +654,19 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
         full_join(df)
 
         #Fix errors
-        temp <- temp %>% mutate(database_ID = case_when(
+        temp <- temp %>% dplyr::mutate(database_ID = case_when(
 
           #Grains, nuts, seeds, legumes
-          Ingredients == 'espresso bean coffee ground' ~ fixFoodMappingError(database = reference, 'coffee ground'),
+          Ingredients %in% c('espresso bean coffee ground', 'coffee beans') ~ fixFoodMappingError(database = reference, 'coffee ground'),
           Ingredients == 'hazelnut' ~ fixFoodMappingError(database = reference, 'nut', 'hazel'),
           str_detect(Ingredients, 'lentils dried') ~ fixFoodMappingError(database = reference, 'lentil', 'dry'),
           Ingredients %in% c('peas green', 'stew peas') ~ fixFoodMappingError(database = reference, 'pea', 'garden'),
           Ingredients %in% c('bean green asparagus', 'bean green', 'bean broad') ~ fixFoodMappingError(database = reference, 'bean with pods', 'with'),
           str_detect(Ingredients, 'bean|chick pea') &
-            !str_detect(Ingredients, 'canned|sprout|oil|flour|paste|coffee ground|white tomato|taco|salad') ~ fixFoodMappingError(database = reference, 'beans', 'dry'),
-          str_detect(Ingredients, 'bean|chick pea|lentils') & str_detect(Ingredients, 'canned') |
-            Ingredients %in% c('bean white tomato', 'chili beans', 'bean mixed', 'refried beans') ~ fixFoodMappingError(database = reference, 'bean', 'canned'),
+            !str_detect(Ingredients,
+                        'canned|sprout|oil|flour|paste|coffee ground|white tomato|taco|salad|chili') ~ fixFoodMappingError(database = reference, 'beans', 'dry'),
+          str_detect(Ingredients, 'bean|chick pea|lentil') & str_detect(Ingredients, 'canned') |
+            Ingredients %in% c('bean white tomato', 'chili beans', 'bean mixed', 'refried beans', 'bean pinto canned') ~ fixFoodMappingError(database = reference, 'bean', 'canned'),
           str_detect(Ingredients, 'noodle') ~ fixFoodMappingError(database = reference, 'noodle'),
           Ingredients == 'pistachio nut' ~ fixFoodMappingError(database = reference, 'pistachio'),
           Ingredients == 'dried soybeans' ~ fixFoodMappingError(database = reference, 'bean', 'soy'),
@@ -660,8 +679,10 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'lasagna plate pasta' ~ fixFoodMappingError(database = reference, 'pasta'),
 
           #Veggies and fruit
-          str_detect(Ingredients, 'pickled') & str_detect(Ingredients, 'ginger|sweet pepper|cucumber|onion|beetroot|chili|jalapeno') ~ fixFoodMappingError(database = reference, 'vegetables', 'pickled'),
-          str_detect(Ingredients, 'canned') & str_detect(Ingredients, 'sweet pepper|sweet corn|artichoke') ~ fixFoodMappingError(database = reference, 'vegetables', 'canned'),
+          str_detect(Ingredients, 'pickled') &
+            str_detect(Ingredients, 'ginger|sweet pepper|cucumber|onion|beetroot|chili|jalapeno') ~ fixFoodMappingError(database = reference, 'vegetables', 'pickled'),
+          str_detect(Ingredients, 'canned') &
+            str_detect(Ingredients, 'sweet pepper|sweet corn|artichoke|chili') ~ fixFoodMappingError(database = reference, 'vegetables', 'canned'),
           str_detect(Ingredients, 'endive|chicory') ~ fixFoodMappingError(database = reference, 'curly', 'endives'),
           Ingredients == 'peach' ~ fixFoodMappingError(database = reference, 'peaches', 'other'),
           Ingredients == 'sorrel' ~ fixFoodMappingError(database = reference, 'lettuce', 'other'),
@@ -691,22 +712,28 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                              'syrup chocolate', 'syrup caramel', 'glucose') ~ fixFoodMappingError(database = reference, 'syrup'),
           Ingredients == 'apricot nectar' ~ fixFoodMappingError(database = reference, 'fruit', 'nectars'),
           Ingredients %in% c(
-            "cloud berry", "lingonberry", "goji berry", "physalis") ~ fixFoodMappingError(database = reference, 'berries'),
+            "cloudberry", "lingonberry", "goji berry", "physalis", "rowan berry") ~ fixFoodMappingError(database = reference, 'berries'),
           Ingredients %in% c("grape fruit") ~ fixFoodMappingError(database = reference, 'grapefruit'),
           Ingredients == "melon honeydew" ~ fixFoodMappingError(database = reference, 'melon'),
           Ingredients == 'sprouts radish' ~ fixFoodMappingError(database = reference, 'sprout'),
           Ingredients %in% c("morel") ~ fixFoodMappingError(database = reference, 'cherries', 'sour'),
           Ingredients %in% c("jackfruit", "nectarine") ~ fixFoodMappingError(database = reference, 'fig'), #In the same family
           Ingredients %in% c("tangerine canned") ~ fixFoodMappingError(database = reference, 'fruit', 'canned'),
-          Ingredients == 'starfruit' ~ fixFoodMappingError(database = reference, 'fruit', 'used'),
+          Ingredients %in% c('starfruit', 'dragon fruit') ~ fixFoodMappingError(database = reference, 'fruit', 'used'),
           Ingredients %in% c('blueberries dried', 'cranberries dried') ~ fixFoodMappingError(database = reference, 'fruit', 'dried'),
+          Ingredients %in% c('horseradish') ~ fixFoodMappingError(database = reference, 'horseradish', 'roots'),
 
           #Red meat
           str_detect(Ingredients, 'reindeer|\\belk ') ~ fixFoodMappingError(database = reference, 'mammals', 'meat'),
           str_detect(Ingredients, 'pork') & !str_detect(Ingredients, 'lard') ~ fixFoodMappingError(database = reference, 'pork'),
-          Ingredients %in% c('lamb sheep cabbage stew meat', 'lamb sheep head', 'lamb minced meat') ~ fixFoodMappingError(database = reference, 'lamb', 'fresh'),
+          Ingredients %in% c(
+            'lamb sheep cabbage stew meat', 'lamb sheep head', 'lamb minced meat'
+            ) ~ fixFoodMappingError(database = reference, 'lamb', 'fresh'),
           Ingredients == "meatballs in tomato sauce" ~ fixFoodMappingError(database = reference, "meatball", "tomato sauce"),
-          Ingredients %in% c("beef minced meat", "beef minced meat 6") ~ fixFoodMappingError(database = reference, "beef"),
+          Ingredients %in% c(
+            "beef minced meat", "beef minced meat lean", "beef rib-eye steak"
+            ) ~ fixFoodMappingError(database = reference, "beef"),
+          str_detect(Ingredients, 'ham smoked ') ~ fixFoodMappingError(database = reference, 'ham'),
 
           #Poultry
           str_detect(Ingredients, 'turkey') & !str_detect(Ingredients, 'broth') ~ fixFoodMappingError(database = reference, 'turkey'),
@@ -759,6 +786,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
           Ingredients == 'tabasco' ~ fixFoodMappingError(database = reference, 'chili', 'sauce'),
           Ingredients %in% c("aioli", "mayonnaise") ~ fixFoodMappingError(database = reference, 'mayonnaise', 'sauce'),
           Ingredients %in% c("aioli plant-based", "mayonnaise plant-based") ~ fixFoodMappingError(database = reference, 'mayonnaise', 'vegan'),
+          Ingredients %in% c("chocolate semi-sweet") ~ fixFoodMappingError(database = reference, 'chocolate', 'dark'),
 
           #Dairy
           Ingredients == 'buttermilk' ~ fixFoodMappingError(database = reference, 'buttermilk'),
@@ -781,7 +809,7 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
 
           #Bread and rolls
           Ingredients %in% c(
-            'bread', 'bread coarse', 'tortilla coarse', 'crisp bread coarse','bread crumb',
+            'bread', 'bread coarse', 'tortilla coarse', 'crisp bread coarse','bread crumb', 'bread crouton',
             'bread rye', 'bread polar', 'hamburger bread coarse', 'rolls coarse baguette garlic',
             'bread brown chapati', 'rolls coarse', 'rolls coarse baguette',
             "pita bread coarse") ~ fixFoodMappingError(database = reference, 'wheat bread and rolls', 'brown'),
@@ -810,14 +838,18 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
                              'pomegranate kernel', 'sauce white', 'celery seed', 'trout caviar', 'vanilla pod', 'condensed tomato soup', 'cream sauce base',
                              'sauce bearnaise', 'wine rice', 'soup onion instant', 'whip it stabilizer', 'butter-vanilla aroma', 'shake mixed spice',
                              'vanilla bean', 'sauce curry', 'gingerbread house', 'rice puffed', 'candy mixed', 'horn salt',
-                             'dragon fruit', 'decorative glaze', 'lemon gel', 'sauce mushroom', 'lemon gel', 'prune marinade', 'roe salmon',
+                             'decorative glaze', 'lemon gel', 'sauce mushroom', 'lemon gel', 'prune marinade', 'roe salmon',
                              'chia seed', 'cornflakes', 'erythriol', 'flowers', 'firkorn', 'food coloring', 'food coloring', 'baking soda',
                              'gelatin', 'pavlova powder mix', 'quick lunch', 'psyllium husk', 'raspberry jelly', 'rice puffed', 'seltzer',
                              'spring roll paper', 'sprinkles', 'wakame', 'wasabi', 'weetabix', 'yeast', 'yeast dry', 'almond essence', 'lemonade') |
-             str_detect(Ingredients, 'spice mix(?! taco)|powder mix|soup instant')
+             str_detect(Ingredients, 'spice mix(?! taco)|powder mix|soup instant|refried beans')
           )  &
             #If user have added these ingredients, keep
             !str_detect(database_ID, ".999") ~ 0,
+
+          # Extra check for instant soups not in ref
+          (str_detect(Ingredients, 'soup') & str_detect(Ingredients, 'instant') & !str_detect(database_reference, 'instant')) &
+            !(str_detect(database_ID, ".999") & str_detect(database_reference, 'instant')) ~ 0,
 
           TRUE ~ database_ID
         ))
@@ -826,12 +858,12 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
       #Add the new reference words
       results <- temp %>%
         left_join(reference, by = 'database_ID') %>%
-        mutate(database_reference = paste0(first_word, ' ', second_word)) %>%
+        dplyr::mutate(database_reference = paste0(first_word, ' ', second_word)) %>%
         #Remove unnecessary columns
-        select(-c(first_word, second_word, .data$loop)) %>% unique() %>%
+        select(-c(first_word, second_word, loop)) %>% unique() %>%
         left_join(db,
                   by = "database_ID") %>%
-        mutate(database_reference = str_replace(database_reference, "NA NA", "Not in database"))
+        dplyr::mutate(database_reference = str_replace(database_reference, "NA NA", "Not in database"))
 
 
   } else {
@@ -842,6 +874,6 @@ findFoodInDatabase <- function(df, database, additional_entries = NULL, fix_erro
     results
   }
 
-  results %>% mutate(database_reference = str_replace(database_reference, '\\\\', ''))
+  results %>% dplyr::mutate(database_reference = str_replace(database_reference, '\\\\', ''))
 
 }
