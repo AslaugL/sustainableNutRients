@@ -31,7 +31,7 @@ standardiseOthers <- function(df) {
 
       #Candy and chocolate products
       str_detect(Ingredients, 'candy mix') ~ 'candy mixed',
-      str_detect(Ingredients, 'candy') & str_detect(Ingredients, 'jell') ~ 'candy jelly',
+      str_detect(Ingredients, 'candy') & str_detect(Ingredients, 'jell') ~ 'jelly candy',
       str_detect(Ingredients, 'caramel') & !str_detect(Ingredients, 'sauce|yogurt|yoghurt|skyr|onion|coffee|\\btea\\b|\\blatte\\b|milk|litago') ~ 'caramel',
       str_detect(Ingredients, '\\bsmash\\b') ~ 'candy smash',
       str_detect(Ingredients, 'snow bead') ~ 'candy filled chocolate balls',
@@ -61,7 +61,7 @@ standardiseOthers <- function(df) {
                     'syrup|icing|kruidnoten|mousse|sauce|spread|biscuit|marzipan|nut mix|drink|bun|with chocolate|and chocolate|& chocolate|brownie|yoghurt|yogurt|milkshake|philadelphia|cheese') ~ 'chocolate semi-sweet', #Default
       str_detect(Ingredients, 'coconut') & str_detect(Ingredients, 'bun') ~ 'bun coconut',
       str_detect(Ingredients, 'non-stop') ~ 'milk chocolate non-stop',
-      str_detect(Ingredients, 'tenacious men') ~ 'jelly candy seigmenn',
+      str_detect(Ingredients, 'tenacious men|seigmann') ~ 'jelly candy seigmenn',
       str_detect(Ingredients, '\\bgel\\b') & str_detect(Ingredients, 'top') ~ 'jelly candy gel tops',
 
       str_detect(Ingredients, 'liquorice|licorice') & str_detect(Ingredients, 'powder') ~ 'liquorice powder',
@@ -210,6 +210,7 @@ standardiseOthers <- function(df) {
       str_detect(Ingredients, 'syrup|sirup') & str_detect(Ingredients, 'maple') ~ 'syrup maple',
       str_detect(Ingredients, 'syrup|sirup') & str_detect(Ingredients, 'pomegr') ~ 'syrup pomegranate',
       str_detect(Ingredients, 'syrup') & str_detect(Ingredients, 'chocolate') ~ 'syrup chocolate',
+      str_detect(Ingredients, 'glucose|syrup glucose|glucose syrup') ~ 'syrup glucose',
       str_detect(Ingredients, 'syrup') ~ 'syrup',
 
       str_detect(Ingredients, 'yeast') & str_detect(Ingredients, 'dry|dried') ~ 'yeast dry',
@@ -252,8 +253,6 @@ standardiseOthers <- function(df) {
 
       str_detect(Ingredients, 'fiberhusk|fiber husk') ~ 'psyllium husk',
       str_detect(Ingredients, 'fig tart') ~ 'fig tart',
-
-      str_detect(Ingredients, 'glucose') ~ 'glucose',
 
       str_detect(Ingredients, 'herb') & !str_detect(Ingredients, 'basil|thyme|parsley|rosemary|dill|sauce|cheese|philadelphia|tomato|in herb|with herb|and herb|& herb|herb marinate|\\btea\\b') ~ 'herbs',
       str_detect(Ingredients, 'honey') &

@@ -12,12 +12,13 @@
 
    #Liquid foods with the same weight as water
    similar_to_water <- c(
-     "almond essence", "apple juice", "aquavit",
+     "almond essence", "apple juice", "apple sauce", "aquavit",
 
-     "beer", "broth",
+     "beer", "broth", "black currant juice",
 
      "cider", "cognac", "cream", "cr\u00E8me fra\u00CEche", "coffee",
      "coffee espresso", "coffee liqueur", "iced coffee", "ice coffee",
+     "currant juice", "cranberry juice",
 
      "eddik",
 
@@ -25,7 +26,9 @@
 
      "household juice",
 
-     "jelly apple",  "juice",
+     "ice coffee",
+
+     "jelly apple", "jelly raspberry", "jelly",  "juice",
 
      "kefir", "kraft",
 
@@ -35,17 +38,26 @@
 
      "orange juice", "orange liqueur",
 
-     "r\u00F8mme", "raspberry liqueur", "reduction",
+     "pineapple juice",
 
-     "sherry", "soda", "spirits", "stock", "strawberry juice", 'soda', 'seltzer',
+     "r\u00F8mme", "raspberry liqueur", "reduction", "romessens",
 
-     "tea black",
+     "saft", "sherry", "soda", "spirits", "stock", "strawberry juice", 'soda', 'seltzer',
+     'smoothie fruit or berries',
+
+     "tea black", "tea",
 
      "vanilla essence", "vanilla extract", "vin", "vinegar", "vinaigrette",
 
      "water", "wine",
 
-     "yogurt", "yoghurt")
+     "yogurt", "yoghurt",
+
+     #cream based sauces/dressing
+     "pepper sauce", "sauce mushroom", "sauce chicken", "sauce hollandaise",
+     "sauce vanilla",
+     "dressing garlic", "dressing caesar", "dressing pizza", "dressing"
+     )
 
    #Turn everything into the same unit----
    standardised <- df %>% mutate(

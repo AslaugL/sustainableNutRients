@@ -50,6 +50,15 @@ standardiseCondiments <- function(df) {
     str_detect(Ingredients, 'marmelade|marmalade') & str_detect(Ingredients, 'fig') ~ 'marmelade fig',
     str_detect(Ingredients, 'marmelade|marmalade') & str_detect(Ingredients, 'orange') ~ 'marmelade orange',
     str_detect(Ingredients, 'marmelade|marmalade') & str_detect(Ingredients, 'pear') ~ 'marmelade pear',
+    str_detect(Ingredients, '\\blemon') & str_detect(Ingredients, 'jelly') ~ 'jelly lemon',
+    str_detect(Ingredients, 'raspberr') & str_detect(Ingredients, 'jelly') ~ 'jelly raspberry',
+    str_detect(Ingredients, 'strawberr') & str_detect(Ingredients, 'jelly') ~ 'jelly strawberry',
+    str_detect(Ingredients, 'blueberr') & str_detect(Ingredients, 'jelly') ~ 'jelly blueberry',
+    str_detect(Ingredients, 'currant') & str_detect(Ingredients, 'jelly') ~ 'jelly currant',
+    str_detect(Ingredients, 'mint') & str_detect(Ingredients, 'jelly') ~ 'jelly mint',
+    str_detect(Ingredients, 'rowan berr|rognebær') & str_detect(Ingredients, 'jelly') ~ 'jelly rowan berries',
+    str_detect(Ingredients, 'instant') & str_detect(Ingredients, 'jelly') ~ 'jelly instant powder',
+    str_detect(Ingredients, 'jelly') ~ 'jelly',
 
     # Mustard
     str_detect(Ingredients, 'mustard') & str_detect(Ingredients, 'herring') ~ 'herring mustard',

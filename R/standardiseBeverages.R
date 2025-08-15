@@ -140,6 +140,7 @@ standardiseBeverages <- function(df) {
       str_detect(Ingredients, 'water') & !str_detect(Ingredients, 'corn|beef|tuna|coffee|chili|cream|cress|chestnut|melon|and water') ~ 'water',
       str_detect(Ingredients, 'water to the corn') ~ 'water',
       str_detect(Ingredients, 'vinaigrette') ~ 'vinaigrette',
+      str_detect(Ingredients, 'juice') & str_detect(Ingredients, 'pineapple') ~ "pineapple juice",
       str_detect(Ingredients, 'juice') & str_detect(Ingredients, 'strawberr') ~ "strawberry juice",
       str_detect(Ingredients, 'soda') & !str_detect(Ingredients, 'baking') ~ "soda",
 

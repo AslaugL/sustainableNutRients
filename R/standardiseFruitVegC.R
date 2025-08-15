@@ -26,13 +26,13 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'carrot|raw yellow') & !str_detect(Ingredients, 'paste|wok|mire') ~ 'carrot',
       str_detect(Ingredients, 'cauliflower') & !str_detect(Ingredients, 'butter') ~ 'cauliflower',
       str_detect(Ingredients, 'celery|cellery') & !str_detect(Ingredients, 'salt|soup|seed') | str_detect(Ingredients, 'celeriac') & str_detect(Ingredients, 'stilk|stalk|rib') ~ 'celery', #Use celery for stangselleri
-      str_detect(Ingredients, 'celeriac') & !str_detect(Ingredients, 'mire') ~ 'celariac root',
+      str_detect(Ingredients, 'celeriac|celariac root') & !str_detect(Ingredients, 'mire') ~ 'celariac root',
       str_detect(Ingredients, 'chard') & !str_detect(Ingredients, 'wine') ~ 'mangold',
       str_detect(Ingredients, 'cherry tomato') & str_detect(Ingredients, 'can') ~ 'cherry tomato canned',
       str_detect(Ingredients, 'cherry') & str_detect(Ingredients, 'tomato') ~ 'cherry tomato',
       str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'can|in syrup') & !str_detect(Ingredients, 'tomato') ~ 'cherries canned', #Name used in SHARP and Matvaretabellen
       str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'compote') ~ 'cherries compote',
-      str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'jelly') ~ 'cherries jelly',
+      str_detect(Ingredients, 'cherry|cherries') & str_detect(Ingredients, 'jelly') ~ 'jelly cherries',
       str_detect(Ingredients, 'cherry|cherries') & !str_detect(Ingredients, 'tomato') ~ 'cherries', #Name used in SHARP and Matvaretabellen
       str_detect(Ingredients, 'chicory') & str_detect(Ingredients, 'white') ~ 'chicory white',
       str_detect(Ingredients, 'chicory') & str_detect(Ingredients, 'red') ~ 'chicory red',
@@ -55,7 +55,7 @@ standardiseFruitVegC <- function(df){
       str_detect(Ingredients, 'chili|chilli') & str_detect(Ingredients, 'pickle') ~ 'chili pepper pickled',
 
       str_detect(Ingredients, 'clemen') ~ 'clementine',
-      str_detect(Ingredients, 'cloud') & str_detect(Ingredients, 'berr') ~ 'cloud berry',
+      str_detect(Ingredients, 'cloud') & str_detect(Ingredients, 'berr') ~ 'cloudberry',
       str_detect(Ingredients, 'coconut') & !str_detect(Ingredients, 'milk|cream|oil') ~ 'coconut',
       str_detect(Ingredients, 'minima|baby corn|mini corn') ~ 'corn baby',
       str_detect(Ingredients, 'corn') & str_detect(unit, 'g') &
