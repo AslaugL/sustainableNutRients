@@ -118,190 +118,195 @@ SHARP <- SHARP %>%
                              'marinated / pickled fish')) %>%
 
   #Fix some names and remove duplicate items
-  mutate(Ingredients = Ingredients %>%
+  dplyr::mutate(Ingredients = str_replace_all(
+    Ingredients, c(
+             'extra hard cheese parmesan, grana type' = 'parmesan/hard cheese',
+             'hard cheese cheddar, emmental type|firm/semi-hard cheese gouda and edam type' = 'hard to semi-hard cheese',
+             'soft - ripened cheese' = 'soft-ripened cheese',
+             'yoghurt, cow milk' = 'yoghurt',
+             'cream, plain' = 'cream',
+             'sour cream, plain' = 'sour cream',
+             'cr�me fraiche and other mild variants of sour cream' = 'crème fraîche',
+             'cow milk' = 'milk',
+             'milk powder, skimmed' = 'milk powder nonfat',
+             'ice cream, milk-based' = 'ice cream',
+             'cheese, pecorino toscano' = 'cheese pecorino',
 
-           #Dairy
-           str_replace('extra hard cheese parmesan, grana type', 'parmesan/hard cheese') %>%
-           str_replace('hard cheese cheddar, emmental type|firm/semi-hard cheese gouda and edam type', 'hard to semi-hard cheese') %>%
-           str_replace('soft - ripened cheese', 'soft-ripened cheese') %>%
-           str_replace('yoghurt, cow milk', 'yoghurt') %>%
-           str_replace('cream, plain', 'cream') %>%
-           str_replace('sour cream, plain', 'sour cream') %>%
-           str_replace('cr�me fraiche and other mild variants of sour cream', 'crème fraîche') %>%
-           str_replace('cow milk', 'milk') %>%
-           str_replace('milk powder, skimmed', 'milk powder nonfat') %>%
-           str_replace('ice cream, milk-based', 'ice cream') %>%
-           str_replace('cheese, pecorino toscano', 'cheese pecorino') %>%
+             #Plants
+             'aubergines' = 'eggplant',
+             'textured soy protein' = 'tofu',
+             'barley grain, pearled' = 'pearl barley',
+             'potato flour' = 'potato starch',
+             'podded pea young pods' = 'sugar snap pea',
+             'spring onions' = 'scallion',
+             'celeriacs' = 'Celariac root',
+             'celeries' = 'celery stalk',
+             'common mushrooms' = 'mushroom',
+             'coconut oil/fat' = 'Coconut oil',
+             'white sugar' = 'sugar',
+             'olive oil, virgin or extra-virgin' = 'olive oil',
+             'olives, processed' = 'olives canned',
+             'table olives ready for consumption' = 'olives fresh',
+             'kohlrabies' = 'swede',
+             'dried pasta' = 'pasta',
+             'beans with pods and similar-' = 'bean with pods',
+             'canned or jarred common beans' = 'beans canned',
+             'unleavened or flat bread and similar' = 'flatbread',
+             'shallots and similar-' = 'shallots',
+             'soya bean oil, refined' = 'soy oil',
+             'oils' = 'oil',
+             'tomato ketchup and related sauces' = 'tomato ketchup',
+             'mustard and related sauces' = 'mustard',
+             'coconut milk cocos nucifera liquid' = 'coconut milk',
+             'palm oil/fat' = 'palm oil',
+             'soyabeans for consumption dry' = 'soy bean',
+             'canned/jarred vegetables' = 'vegetables canned',
+             'pickled/marinated vegetables' = 'vegetables, pickled',
+             'florence fennels' = 'fennel',
+             'sweet potatoes' = 'potato sweet',
+             'red cabbages' = 'cabbage red',
+             'head cabbages' = 'cabbage', #Default
+             'white cabbage' = 'cabbage white',
+             'savoy cabbages' = 'cabbage savoy',
+             'chinese cabbages' = 'cabbage chinese',
+             'dried vine fruits raisins etc.' = 'raisin',
+             'dried prunes' = 'prune dried',
+             'dried figs' = 'fig dried',
+             'dried fruit' = 'fruit dried',
+             'dried dates' = 'dates dried',
+             'dried bananas' = 'banana dried',
+             'dried apricots' = 'apricot dried',
+             'dried mushrooms' = 'mushroom dried',
+             'dried nuts and related flours and powderes' = 'nutflour',
+             'dried vegetables' = 'vegetables dried',
+             'jam, sweet cherry' = 'sweet cherry jam',
 
-           #Plants
-           str_replace('aubergines', 'eggplant') %>%
-           str_replace('textured soy protein', 'tofu') %>%
-           str_replace('barley grain, pearled', 'pearl barley') %>%
-           str_replace('potato flour', 'potato starch') %>%
-           str_replace('podded pea young pods', 'sugar snap pea') %>%
-           str_replace('spring onions', 'scallion') %>%
-           str_replace('celeriacs', 'Celariac root') %>%
-           str_replace('celeries', 'celery stalk') %>%
-           str_replace('common mushrooms', 'mushroom') %>%
-           str_replace('coconut oil/fat', 'Coconut oil') %>%
-           str_replace('white sugar', 'sugar') %>%
-           str_replace('olive oil, virgin or extra-virgin', 'olive oil') %>%
-           str_replace('olives, processed', 'olives canned') %>%
-           str_replace('table olives ready for consumption', 'olives fresh') %>%
-           str_replace('kohlrabies', 'swede') %>%
-           str_replace('dried pasta', 'pasta') %>%
-           str_replace('beans with pods and similar-', 'bean with pods') %>%
-           str_replace('canned or jarred common beans', 'beans canned') %>%
-           str_replace('unleavened or flat bread and similar', 'flatbread') %>%
-           str_replace('shallots and similar-', 'shallots') %>%
-           str_replace('soya bean oil, refined', 'soy oil') %>%
-           str_replace('oils', 'oil') %>%
-           str_replace('tomato ketchup and related sauces', 'tomato ketchup') %>%
-           str_replace('mustard and related sauces', 'mustard') %>%
-           str_replace('coconut milk cocos nucifera liquid', 'coconut milk') %>%
-           str_replace('palm oil/fat', 'palm oil') %>%
-           str_replace('soyabeans for consumption dry', 'soy bean') %>%
-           str_replace('canned/jarred vegetables', 'vegetables canned') %>%
-           str_replace('pickled/marinated vegetables', 'vegetables, pickled') %>%
-           str_replace('florence fennels', 'fennel') %>%
-           str_replace('sweet potatoes', 'potato sweet') %>%
-           str_replace('red cabbages', 'cabbage red') %>%
-           str_replace('head cabbages', 'cabbage') %>% #Default
-           str_replace('white cabbage', 'cabbage white') %>%
-           str_replace('savoy cabbages', 'cabbage savoy') %>%
-           str_replace('chinese cabbages', 'cabbage chinese') %>%
-           str_replace('dried vine fruits raisins etc.', 'raisin') %>%
-           str_replace('dried prunes', 'prune dried') %>%
-           str_replace('dried figs', 'fig dried') %>%
-           str_replace('dried fruit', 'fruit dried') %>%
-           str_replace('dried dates', 'dates dried') %>%
-           str_replace('dried bananas', 'banana dried') %>%
-           str_replace('dried apricots', 'apricot dried') %>%
-           str_replace('dried mushrooms', 'mushroom dried') %>%
-           str_replace('dried nuts and related flours and powderes', 'nutflour') %>%
-           str_replace('dried vegetables', 'vegetables dried') %>%
-           str_replace('jam, sweet cherry', 'sweet cherry jam') %>%
-           str_replace('jam, plums', 'plum jam') %>%
-           str_replace('jam, strawberries', 'strawberry jam') %>%
-           str_replace('jam, apricots', 'apricot jam') %>%
-           str_replace('jam, oranges', 'orange jam') %>%
-           str_replace('jam of fruit / vegetables', 'jam') %>%
-           str_replace('juice, apple', 'apple juice') %>%
-           str_replace('juice, lemon', 'lemon juice') %>%
-           str_replace('juice, lime', 'lime juice') %>%
-           str_replace('juice, orange', 'orange juice') %>%
-           str_replace('juice, mango', 'mango juice') %>%
-           str_replace('juice, grapefruit', 'grapefruit juice') %>%
-           str_replace('juice, grape', 'grape juice') %>%
-           str_replace('juice, pineapple', 'pineapple juice') %>%
-           str_replace('juice, carrot', 'carrot juice') %>%
-           str_replace('juice, tomato', 'tomato juice') %>%
-           str_replace('juice, elderberry', 'elderberry juice') %>%
-           str_replace('parsley roots', 'parsley root') %>%
-           str_replace('vegetable fats and oils, edible', 'vegetable oil') %>%
-           str_replace('swiss chards', 'chard') %>%
-           str_replace('roman rocket and similar-', 'salad rocket') %>% #What other salads are like rockets?
-           str_replace('summer squashes', 'squash summer') %>%
-           str_replace('kales and similar-', 'kale') %>%
-           str_replace('globe artichokes', 'artichoke') %>%
-           str_replace('dried prunes', 'prune dried') %>%
-           str_replace('granate apples', 'pomegranat') %>%
-           str_replace('radishes', 'radish') %>%
-           str_replace('litchis', 'lychee') %>%
-           str_replace('table grapes', 'grapes') %>%
-           str_replace("lamb's lettuces", "lettuce lamb") %>%
-           str_replace('barley grain, pearled', 'barley pearl') %>%
-           str_replace('courgettes', 'zucchini') %>% #Name used in recipes
-           str_replace('sprouts, shoots and similar', 'sprout') %>%
-           str_replace('maize flour', 'corn flour') %>%
-           str_replace('processed oat-based flakes', 'oatmeal') %>%
-           str_replace('oat rolled grains', 'oat rolled') %>%
-           str_replace('black cherries', 'cherries black') %>%
-           str_replace('cherries and similar-', 'cherries') %>%
-           str_replace('sour cherries', 'cherries sour') %>%
-           str_replace('jam of fruit / vegetables', 'jam') %>%
-           str_replace('fruit juices 100% from named source', 'fruit juice') %>%
-           str_replace('canned or jarred pineapple', 'pineapple canned') %>%
-           str_replace('canned or jarred peach', 'peach canned') %>%
-           str_replace('canned or jarred sweet cherry', 'cherries canned') %>%
-           str_replace('canned or jarred fruit', 'fruit canned') %>%
-           str_replace('wheat semolina', 'wheat flour semolina') %>%
-           str_replace('rye flour, light', 'wheat flour rye') %>%
-           str_replace('rye flour, wholemeal', 'wheat flour rye wholemeal') %>%
-           str_replace('passionfruits', 'passion fruit') %>%
-           str_replace('almonds sweet', 'almond') %>%
-           str_replace('berries and small fruits', 'berries') %>%
-           str_replace('currants black, red and white', 'currant') %>%
-           str_replace('common millet grain', 'millet') %>%
-           str_replace('popcorn maize, popped', 'popcorn') %>%
-           str_replace('\\bkaki\\b', 'persimmon') %>%
-           str_replace('french fries from cut potato', 'french fries') %>%
+             'jam, plums' = 'plum jam',
+             'jam, strawberries' = 'strawberry jam',
+             'jam, apricots' = 'apricot jam',
+             'jam, oranges' = 'orange jam',
+             'jam of fruit / vegetables' = 'jam',
 
-           #Meat
-           str_replace('beef tallow including processed suet', 'tallow') %>%
-           str_replace('bovine, minced meat', 'beef minced meat') %>% #Used in the norwegian recipes
-           str_replace('pork lard', 'lard') %>%
-           str_replace('bovine tongue', 'beef tongue') %>%
-           str_replace('bovine marrowbone', 'marrow bone beef') %>%
-           str_replace('pig muscle', 'pork') %>% #Use as standard
-           str_replace('pig liver', 'pork liver') %>%
-           str_replace('pig kidney', 'pork kidney') %>%
-           str_replace('chicken fresh meat', 'chicken') %>%
-           str_replace('goose fresh meat', 'goose') %>%
-           str_replace('sheep muscle', 'sheep') %>%
-           str_replace('salami-type sausage', 'salami') %>%
-           str_replace('ham, pork', 'ham') %>%
+             'juice, apple' = 'apple juice',
+             'juice, lemon' = 'lemon juice',
+             'juice, lime' = 'lime juice',
+             'juice, orange' = 'orange juice',
+             'juice, mango' = 'mango juice',
+             'juice, grapefruit' = 'grapefruit juice',
+             'juice, grape' = 'grape juice',
+             'juice, pineapple' = 'pineapple juice',
+             'juice, carrot' = 'carrot juice',
+             'juice, tomato' = 'tomato juice',
+             'juice, elderberry' = 'elderberry juice',
+             'parsley roots' = 'parsley root',
+             'vegetable fats and oils, edible' = 'vegetable oil',
+             'swiss chards' = 'chard;mangold',
+             'roman rocket and similar-' = 'salad rocket', #What other salads are like rockets?
+             'summer squashes' = 'summer squash',
+             'kales and similar-' = 'kale',
+             'globe artichokes' = 'artichoke',
+             'dried prunes' = 'prune dried',
+             'granate apples' = 'pomegranat',
+             'radishes' = 'radish',
+             'litchis' = 'lychee',
+             'table grapes' = 'grapes',
+             "lamb's lettuces" = "lettuce lamb",
+             'barley grain, pearled' = 'barley pearl',
+             'courgettes' = 'zucchini', #Name used in recipes
+             'sprouts, shoots and similar' = 'sprout',
+             'maize flour' = 'corn flour',
+             'processed oat-based flakes' = 'oatmeal',
+             'oat rolled grains' = 'oat rolled',
+             'black cherries' = 'cherries black',
+             'cherries and similar-' = 'cherries',
+             'sour cherries' = 'cherries sour',
+             'jam of fruit / vegetables' = 'jam',
+             'fruit juices 100% from named source' = 'fruit juice',
+             'canned or jarred pineapple' = 'pineapple canned',
+             'canned or jarred peach' = 'peach canned',
+             'canned or jarred sweet cherry' = 'cherries canned',
+             'canned or jarred fruit' = 'fruit canned',
+             'wheat semolina' = 'wheat flour semolina',
+             'rye flour, light' = 'wheat flour rye',
+             'rye flour, wholemeal' = 'wheat flour rye wholemeal',
+             'passionfruits' = 'passion fruit',
+             'almonds sweet' = 'almond',
+             'berries and small fruits' = 'berries',
+             'currants black, red and white' = 'currant',
+             'common millet grain' = 'millet',
+             'popcorn maize, popped' = 'popcorn',
 
-           #Poultry
-           str_replace('hen ', '') %>%
-           str_replace('eggs', 'egg') %>%
-           str_replace('turkey fresh meat', 'turkey') %>%
-           str_replace('cooked other poultry meat', 'chicken cooked/turkey cooked') %>%
-           str_replace('fried egg', 'omelet') %>% #Only type of fried eggs in the recipe
+             '\\bkaki\\b' = 'persimmon',
+             'french fries from cut potato' = 'french fries',
+             "pumpkins" = "winter squash",
+             "peaches and similar-" = "peach",
+             "watermelons" = "watermelon",
 
-           #Seafood
-           str_replace('anglerfish and monkfish', 'anglerfish/monkfish') %>% #Easier to separate
-           str_replace('cods, hakes, haddocks', 'cod/hake/haddock/pollock') %>% #Pollock is in the same fish family
-           str_replace('canned tunas and similar', 'tuna canned') %>%
-           str_replace('canned anchovies', 'anchovies canned') %>%
-           str_replace('canned mackerel', 'mackerel canned') %>%
-           str_replace('shrimps and prawns', 'shrimp/prawn') %>%
-           str_replace('canned/jarred fish', 'fish canned') %>%
-           str_replace('scallops, pectens', 'scallops') %>%
-           str_replace('edible crab', 'crab') %>%
-           str_replace('anchovies', 'anchovy') %>%
-           str_replace('smoked salmon', 'salmon smoked') %>%
-           str_replace('smoked herring', 'herring smoked') %>%
-           str_replace('freshwater crayfishes', 'crayfish') %>%
+             #Meat
+             'beef tallow including processed suet' = 'tallow',
+             'bovine, minced meat' = 'beef minced meat', #Used in the norwegian recipes
+             'pork lard' = 'lard',
+             'bovine tongue' = 'beef tongue',
+             'bovine marrowbone' = 'marrow bone beef',
+             'pig muscle' = 'pork', #Use as standard
+             'pig liver' = 'pork liver',
+             'pig kidney' = 'pork kidney',
+             'chicken fresh meat' = 'chicken',
+             'goose fresh meat' = 'goose',
+             'sheep muscle' = 'sheep',
+             'salami-type sausage' = 'salami',
+             'ham, pork' = 'ham',
 
-           #Div
-           str_replace('barbecue or steak sauces', 'barbeque sauce') %>%
-           str_replace(', common|, edible', '') %>%
-           str_replace('p�rigord black truffles', 'truffle black') %>%
-           str_replace('common mushrooms', 'mushroom common') %>%
-           str_replace('canned mushrooms', 'mushroom canned') %>%
-           str_replace('dried mushrooms', 'mushroom dried') %>%
-           str_replace('hazelnuts', 'nuts hazel') %>%
-           str_replace('maize oil', 'corn oil') %>%
-           str_replace('short pastry doughs pate brisee', 'pastry dough') %>%
-           str_replace('tap water', 'water') %>%
-           str_replace('pasta sauce', 'tomato sauce') %>% #pasta sauces are tomato sauces
-           str_replace('vodka and vodka-like spirits', 'vodka') %>%
-           str_replace('bitter chocolate', 'chocolate dark') %>%
-           str_replace('milk chocolate', 'chocolate milk') %>%
-           str_replace('white chocolate', 'chocolate white') %>%
-           str_replace('traditional margarine', 'margarine') %>%
-           str_replace('jelly candies', 'candy jelly') %>%
-           str_replace('potato crisps from potato slices', 'chips_potato') %>%
-           str_replace('liquorice candies', 'liquorice') %>%
+             #Poultry
+             'hen ' = '',
+             'eggs' = 'egg',
+             'turkey fresh meat' = 'turkey',
+             'cooked other poultry meat' = 'chicken cooked/turkey cooked',
+             'fried egg' = 'omelet', #Only type of fried eggs in the recipe
 
-           # Beverages
-           str_replace('coffee liqueur', 'liqueur coffee') %>%
-           str_replace('liqueurs', 'liqueur') %>%
-           str_replace('dairy imitates other than milks', 'dairy imitate') %>%
-           str_replace('coffee beverages', 'coffee') %>%
-           str_replace('cola-type drinks', 'soda')
+             #Seafood
+             'anglerfish and monkfish' = 'anglerfish/monkfish', #Easier to separate
+             'cods, hakes, haddocks' = 'cod/hake/haddock/pollock', #Pollock is in the same fish family
+             'canned tunas and similar' = 'tuna canned',
+             'canned anchovies' = 'anchovies canned',
+             'canned mackerel' = 'mackerel canned',
+             'shrimps and prawns' = 'shrimp/prawn',
+             'canned/jarred fish' = 'fish canned',
+             'scallops, pectens' = 'scallops',
+             'edible crab' = 'crab',
+             'anchovies' = 'anchovy',
+             'smoked salmon' = 'salmon smoked',
+             'smoked herring' = 'herring smoked',
+             'freshwater crayfishes' = 'crayfish',
 
+             #Div
+             'barbecue or steak sauces' = 'barbeque sauce',
+             ', common|, edible' = '',
+             'p�rigord black truffles' = 'truffle black',
+             'common mushrooms' = 'mushroom common',
+             'canned mushrooms' = 'mushroom canned',
+             'dried mushrooms' = 'mushroom dried',
+             'hazelnuts' = 'nuts hazel',
+             'maize oil' = 'corn oil',
+             'short pastry doughs pate brisee' = 'pastry dough',
+             'tap water' = 'water',
+             'pasta sauce' = 'tomato sauce', #pasta sauces are tomato sauces
+             'vodka and vodka-like spirits' = 'vodka',
+             'bitter chocolate' = 'chocolate dark',
+             'milk chocolate' = 'chocolate milk',
+             'white chocolate' = 'chocolate white',
+             'traditional margarine' = 'margarine',
+             'jelly candies' = 'candy jelly',
+             'potato crisps from potato slices' = 'chips_potato',
+             'liquorice candies' = 'liquorice',
+
+             # Beverages
+             'coffee liqueur' = 'liqueur coffee',
+             'liqueurs' = 'liqueur',
+             'dairy imitates other than milks' = 'dairy imitate',
+             'coffee beverages' = 'coffee',
+             'cola-type drinks' = 'soda'
+           ))
   ) %>%
 
   #Change 'and similar' to 'other'

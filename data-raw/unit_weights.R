@@ -397,7 +397,7 @@ temp <- list(
   c('salsa', 'dl', '94.7', 'FoodData Central', 'english'),
   c('dip mix', 'pack', '22', 'Maarud', 'english'),
   c('tandoori spice', 'dl', '106.8', 'FoodData Central', 'english'),
-  c('fajita spice', 'dl', '81.2', 'FoodData Central', 'english'),
+  c('fajita spice mix', 'dl', '81.2', 'FoodData Central', 'english'),
   c('wasabi', 'dl', '101.4', 'FoodData Central', 'english'),
   c('yeast dry', 'dl', '81.2', 'FoodData Central', 'english'),
   c('anise star', 'pcs', '0.7', 'https://www.chowhound.com/post/mass-star-anise-pod-969821', 'english'),
@@ -577,7 +577,7 @@ various$not_needed <- unit_weights %>%
   filter(!Ingredients %in% c('crisp bread', 'flatbread, hard','smoke-cured ham', 'cured ham', 'spekeskinke', 'boiled ham', 'honning', 'sukker, brunt',
                              'sukker hvitt', 'anchovies, canned', 'anchovy fillets, canned', 'salmon, smoked, dry salted',
                              'mackerel fillet, in tomato sauce, canned', 'cod roe', 'tuna canned', 'ground meat, raw', 'bread, semi-coarse', 'bread, white',
-                             'cream cracker', 'salami', 'rice parboiled', 'caramels', 'marshmallows', 'ice cream', 'pancakes',
+                             'cream cracker', 'salami', 'rice parboiled', 'caramels', 'marshmallows', 'ice cream', 'pancakes', 'waffles, made with sour cream', 'waffles',
                              'biscuit, with oats, digestive', 'biscuit, marie', 'biscuit, for childen', 'muesli', 'roast beef'))
 
 #Remove the not needed ingredients
@@ -637,8 +637,16 @@ unit_weights <- unit_weights %>%
            str_replace('caramels', 'caramel') %>%
            str_replace('marshmallows', 'marshmallow') %>%
            str_replace('pancakes', 'pancake') %>%
+           str_replace('waffles, made with sour cream', 'waffle sour cream') %>%
+           str_replace('waffles', 'waffle') %>%
            str_replace('oats', 'oat') %>%
-           str_replace("noodles", "noodle")
+           str_replace("noodles", "noodle") %>%
+
+           #NEW
+           str_replace_all(., c(
+             "shrimps, in brine" = "shrimp brine",
+             "shrimps, boiled" = "shrimp boiled"
+           ))
   ) %>%
   #Conditionals
   mutate(Ingredients = case_when(
@@ -646,7 +654,15 @@ unit_weights <- unit_weights %>%
     TRUE ~ Ingredients
   )) %>%
   #Remove some duplicates (f.ex both storebought and homemade bread, or where the english and norwegian name is the same)
-  select(-Foodgroup) %>% unique()
+  select(-Foodgroup) %>% unique() %>%
+  # Change some units
+  dplyr::mutate(
+    unit_enhet = case_when(
+      Ingredients %in% c("waffle", "waffle sour cream") & unit_enhet == "pcs" ~ "heart",
+      Ingredients %in% c("waffle", "waffle sour cream") & unit_enhet == "waffel" ~ "pcs", # Whole waffle
+      TRUE ~ unit_enhet
+    )
+  )
 
 #Create one ID each for butter, margarine and ghee
 unit_weights <- unit_weights %>%
@@ -703,10 +719,10 @@ saveRDS(unit_weights, "./data-raw/unit_weights.Rds")
 #Read in already created db
 old <- readRDS("./data-raw/unit_weights.Rds")
 
-#Ingredients with IDs already
 new <- tibble(
   temporary = c(
 
+    #Ingredients with IDs already
     "chocolate spread, nut spread;dl;100;",
     "gelatin;pcs;2;", #Same as leaf
     "sauce satay;dl;108.2;FoodData Central",
@@ -717,12 +733,546 @@ new <- tibble(
     "granola;portion;100;Same as muesli from Helsedir",
     "lemon balm fresh;dl_bunch_neve;20;Lemon balm is in the mint family, so same as mint",
     "vanilla pod;pcs;3;Oda online store",
-    "sausage wiener;pcs;65;Gilde wiener sausages 8 per 520g"
+    "sausage wiener;pcs;65;Gilde wiener sausages 8 per 520g",
+    "coconut mass;pcs;200;Meny",
+    "chips;pcs;200;Meny",
+    "tea;pcs;2;Standard portion bag",
+    "bread crumb;slice;42.5", # Same as bread
+    "bread crumb white;slice;42.5", # Same as bread
+    "bread crumb;pcs;700", # Same as bread
+    "bread crumb white;pcs;700", # Same as bread
+    "cheese goat chevre white;pcs;150", #Soft ripened cheese
+    "scampi;pcs;17", # Same as prawn
+    "chicken breast;dl;57.14", # Same as chicken diced
+    "bread brown chapati;pcs;50", # Same as chapati
+    "corn cob;dl;105.7", #Corn kernels
+    "lettuce;dl;25", #As iceberg
+    "salad lettuce;dl;25",
+    "shrimp boiled;dl;70",
+    "shrimp brine;portion;150",
+    "sweet pepper grilled;brutto;170",
+    "sweet pepper grilled;netto;145",
+    "salad lollo rosso;leaf;15",
+    "salad heart;leaf;15",
+    "chili pepper jalapeno pickled;brutto;15",
+    "chili pepper jalapeno pickled;netto;14",
+    "plantain;dl;75", #Banan
+    "chunky salsa;dl;97.14", #Tomatsalsa
+    "salsa;glass;240",
+    "salad;pcs;150",
 
+     #create english db entry
+    "lefse tykk;pcs;87.5;Helsedir",
+    "lefse vestland;pcs;35;Helsedir",
+    "meatball;pcs;55;Helsedir",
+    "meatball;portion;150;Helsedir",
+    "lunch cake;pcs;100;Same as karbonade Helsedir",
+
+
+    # new ingredients
+    "soup instant cauliflower;pcs;65;Toro",
+    "spring roll paper;pcs;12;Blue Dragon",
+    "sauce hp;dl;114;FoodData Central"
   )
 ) %>%
   separate(., col = temporary, into = c("Ingredients", "unit_enhet", "grams_per_unit", "reference"), sep = ";") %>%
   separate_rows(., unit_enhet, sep = "_") %>%
+
+  # Add from latest recipe project
+  bind_rows(.,
+            tibble(
+              #Packs
+              Ingredients = c(
+                "asparagus_bean_150",
+                "almond_250", "basil_fresh_20",
+                "blue_cheese_125", "bread_700",
+                "blueberries_150", "cottage_cheese_250", "cream_cheese_125",
+                "feta_cheese_200", "mozzarella_125", "ricotta_salata_250",
+                "hard to semi-hard cheese_450",
+                "chives_fresh_20", "mango_chutney_250", "coconut_250",
+                "tomato_ketchup_400", "coriander_fresh_20",
+                "cream_300",
+                "dill_fresh_20", "egg_noodle_250","kale_150", "lentil_canned_200",
+                "parsley_fresh_20", "pea_frozen_150",
+                "jam_marmalade_330", "mustard_400",
+                #"olive_black_340",
+                "pasta_400", "pine_nut_50",
+                "pineapple_canned_565",
+                "potato_mash_450", "potato_salad_300",
+                "rice_125", #Legg til boil in bag i stadardise names
+                "crispi_salad_150",
+                "sour_cream_300", "tomato_canned_400", "thyme_fresh_20",
+                "spinach_125", "sugar_white_500", "heart_salad_150",
+                "salmon_smoked_100",
+                "salad_150", "salt_150",
+                "corn_kernel_380",
+                "gingerbread_house_380", "cherries_compote_455",
+                "nuts_mixed_260", "fish_ball_800", "brownie_mix_552", "chocolate_glaze mix_350",
+                "coleslaw_250", "frozen_vegetable mix_500", "mediterranean_vegan salad_300",
+                "nugget_plant based_300", "onion_fried_100", "pancake_dry mix_196", "liver_pate_100",
+                "pie_dough_275", "potato_chip_250", "candy filled_chocolate balls_100",
+                "cheese_halloumi_200", "marmelade_blueberry_250", "milk chocolate_non-stop_180",
+                "tart_shell_210", "nugget_plant-based_300", "pizza_base_370", "sauce_pizza red_400",
+                "pizza_filling_50", "soup fish_1000", "soup fish_instant_37", "salad_rocket_75",
+                "mediterranean_vegan salad_300", "jelly_instant powder_125", "soup_pea instant_146",
+                "jelly_candy_350", "muffin_powder mix_330", "sauce_sandefjord_29", "sauce_tikka masala_360",
+                "soup_spinach instant_79", "soup_thai instant_84", "soup tomato_instant_91",
+                "toro_jegergryte_106", "carbonara_powder mix_29",
+                "chick pea_canned_560", "chicken_salad_200", "ham_325", "chicken_ham_325",
+                "greek moussaka_powder mix_136",
+                "salt_stick_250",
+                "mayonnaise_215", "potato_boat_600", "chocolate_cake mix_1100",
+                "yeast_dry_15", "bearnaise_powder mix_29", "alfalfa_sprouts_100",
+                "jam_400", "bali stew_powder mix_91", "remulade_160", "currant_150", "sausage_vossa_400",
+                "salad_mix_175", "carrot_cake mix_396"
+              )
+            ) %>%
+              #Create units of packs/pcs
+              mutate(tmp = "pack_pcs") %>%
+              separate(., tmp, into = c("unit1", "unit2"), sep = "_") %>%
+              pivot_longer(., cols = c("unit1", "unit2"), names_to = "tmp", values_to = "unit") %>%
+              select(-tmp) %>%
+              #Add new items with pcs unit
+              bind_rows(
+                tibble(
+
+                  #From Oda webstore
+                  query = c(
+                    "barbecue_marinade_100", "barbecue_rub_155",
+                    "basil_fresh_20", "beetroot_pickled_580", "berries mixed_wild_250",
+                    "pizza_base_370", "sauce_pizza red_400", "bread_rye_800",
+                    "brown sauce_powder mix_44", "caviar_185", "cheese_blue_150",
+                    "cheese_burrata mozzarella_125", "cream_cheese_125", "cheese_halloumi_200",
+                    "chili_sin carne_370", "chives_fresh_20", "chocolate_cake mix_1100",
+                    "chocolate mousse_powder mix_100", "chocolate_sauce_360", "coconut_flake_100",
+                    "coconut_mass_250", "coleslaw_250", "coriander_fresh_20",
+                    "crème_fraîche_300", "decorative glaze_125", "dill_fresh_20",
+                    "egg_noodle_250", "fondant_250", "gel_top_100", "gingerbread_dough_500",
+                    "greek moussaka_powder mix_136", "ham_325", "chicken_ham_325", "ham_cured_120",
+
+                    "hollandaise_powder mix_26", "hummus_165", "jam_400", "spice mix_taco_28",
+                    "margarine_540", "butter_540", #Soft flora in the recipe, add to butter as margarine is mapped as butter
+                    "gelatin_sheet_6", "vanilla_pod_3", "rosemary_fresh_20",
+                    "taco_shell_13", #Olde el paso¨
+                    "tomato_salsa_240", #The one mentioned in the Oda recipes
+                    "sauce_pad thai_150", #Santa Maria in the recipe
+                    "chili_sauce_781", #700 ml on the recipe site, using density from unit weight database
+                    "pearl_barley_300",
+                    "ginger_30", #One small piece
+                    "pesto_190", "sauce_taco_230", "pork_belly_2000",
+                    "pork_spare rib_800", "sauce_barbeque_540", "sauce_teriyaki_345", #Assume same density as soy sauce
+                    "parmesan_cheese_200", "nacho_185", "porridge_rice_148",
+                    "soup beta_instant_112", "sauce pizza_white_140", "sauce_white_140", "wok_mix_200",
+                    "brown sauce_powder mix_44", "wine_750", "brown_cheese_500", "pork_shoulder_150",
+                    "pork_tenderloin_600", "milk_1000", "juniper_berry_1", #Small number
+                    "pak_choi_125", #Assume same as bok choi
+                    "spice mix_raita_8", "spring roll_wrap_11", #Blue dragon spring rolls, 134g/12pcs
+                    "stir fry_assorted vegetables_200",
+                    "pollock_150", #Based on recipe site
+                    "mexican stew_powder mix_284",
+                    "sprinkles_chocolate_120",
+
+                    "sauce_wok_161", #Chop suey brand used on recipe site, assume same density as soy sauce
+
+                    "pizza_filling_50", "pavlova_powder mix_299",
+                    "soup fish_1000", "soup fish_instant_37", "salad_rocket_75",
+                    "mediterranean_vegan salad_300", "jelly_instant powder_125", "soup_pea instant_146",
+                    "jelly_candy_350", "muffin_powder mix_330", "sauce_sandefjord_29", "sauce_tikka masala_360",
+                    "soup_spinach instant_79", "soup_thai instant_84", "soup tomato_instant_91",
+                    "toro_jegergryte_106", "carbonara_powder mix_29",
+                    "sausage_chorizo_67.5", #Jacobs utvalgte
+                    "bean_mixed_220",
+
+                    "broccolini_200"
+                  )) %>%
+                  mutate(unit = "pcs")
+              ) %>%
+              # other units
+              bind_rows(.,
+                        tibble(
+
+                          #From oda webstore recipe ingredient sugestions
+                          tmp = c(
+                            "lefse_200;pack", # Birger's beste lefser
+                            "lefse_40;pcs",
+                            "salad_175;portion", #Suggested ingredient size at Oda
+                            "salad_mix_175;portion",
+                            "plum_500;pack",
+                            "jam_125;dl", #From matprat.no
+                            "marmelade_blueberry_125;dl", #Assume same as jam
+                            "bean_kidney_400;can",
+                            "bean_black_400;can",
+                            "bean_white_400;can",
+                            "brussel_sprouts_400;pack",
+                            "bean black_canned_400;can",
+                            "chick pea_canned_400;can",
+                            "chick pea_400;can",
+                            "bean_edamame_80;dl", # Same as other beans
+                            "coconut_flake_35;dl", #Assume same as per dl
+                            "smoothie_mix_60;dl", #Assume same as strawberries
+                            "smoothie_mix_400;pack",
+                            "tzatziki_100;dl", #Assume same as yoghurt
+                            "marshmallow_40.58;dl", #FoodData Central
+                            "lemon_balm_20;dl", #Same as mint, lemon balm is in the mint family
+                            "mint_fresh_1;stalk", #A stalk is the same as a twig
+                            "rosemary_fresh_1;stalk",
+                            "parsley_fresh_1;stalk",
+                            #"tomato_salsa_101.44;dl", #FoodData Central
+                            "sauce_tomato_350;pcs", #Oda
+                            "sauce_tomato_350;box",
+                            "vegetable_spread_113.39;dl", #Assume same a nut butter
+                            "salt_128;dl",
+                            #"tomato_sun dried_96.37;dl", #FoodData Central
+                            "sausage_chorizo_78.2;dl", #FoodData Central
+                            "nuts_mixed_55;dl", #Mean of all nuts in database
+                            "onion_fried_23.67;dl", #FoodData central
+                            "gel_top_100;dl", #Recipe says 100g
+                            "jelly_candy_100;dl",
+                            "currant_jelly_400;pcs",
+                            "biscuit_gingerbread_11;pcs",
+                            "biscuit_sourdough_11;pcs", #Same as cream crackers
+                            "currant_jelly_115;dl", #Same as jam and marmelade
+                            "roe_50;dl", #Size of container in recipe
+                            "sausage_wiener_520;pack", #Gilde
+                            "sausage_grill_600;pack", #Gilde
+                            "bread_sausage_396;pack", #Prima sausage
+                            "bread_sausage_33;pcs", #Prima sausage
+                            "potato_flatbread lompe_290;pack",
+                            "potato_flatbread lompe_26;pcs",
+                            "pita bread_480;pack",
+                            "pita bread_coarse_75;pcs",
+                            "pita bread_white_75;pcs",
+                            "salmon_fillet_500;pack",
+                            "hamburger_bread_480;pack",
+                            "tortilla_570;pack", #Fiks tortilla i findFoodInDatabase, ha hvete som standard
+                            "pork_chop_1000;pack",
+                            "naan_bread_260;pack",
+                            "pork_tenderloin_200;portion",
+                            "carrot_750;pack",
+                            "scallion_150;pack",
+                            "tomato_400;pack",
+                            "radish_130;pack",
+                            "celery_stalk_350;pack",
+                            "bearnaise_sauce_150;box",
+                            "sauce_herb_150;box",
+                            "fish_ball_800;box",
+                            "tomato_juice_100;dl",
+                            "corn_cob_250;box",
+                            "cocoa_mass_92.1;dl",
+                            "hen_850;pcs", # Holte
+                            "bulgur_150;box",
+                            "yoghurt_skyr_125;pack",
+                            "broccoli_460;pack",
+                            "cucumber_pickled_580;pack",
+                            "biscuit_children_175;pack",
+                            "biscuit_children_3;pcs",
+                            "biscuit_sweet_3;pcs",
+                            "potato_salad_300;box",
+                            "reindeer_1000;pcs", # without bone, Meny
+                            "water_chestnut_227;box",
+                            "cod_fillet_400;pack",
+                            "cherry_tomato_250;pack",
+                            "asparagus_250;pack",
+                            "raspberries_125;pack",
+                            "cracker_cream_400;pack",
+                            "anchovy_canned_200;pack",
+                            "tart_50;pcs",
+                            "rolls_fine_560;pack",
+                            "corn_baby_410;pack",
+                            "soup_carrot_530;pcs",
+                            "soup_cauliflower_530;pcs",
+                            "soup_paprika_100;dl",
+                            "soup_tomato_530;pcs",
+                            "sauce_taco_113.4;dl",
+                            "sauce_wok_111.6;dl",
+                            "sauce_hoisin_132.8;glass",
+                            "sauce_hoisin_132.8;pcs",
+                            "broccoli_400;bunch",
+                            "spice mix_taco_61;dl",
+                            "spice mix_chicken_61;dl", #Same as taco spice
+                            "spice mix_fish_61;dl",
+                            "spice mix_mexican_61;dl",
+                            "carrot_750;bunch",
+                            "lemon_curd_100;dl", # Egg yolks and butter or cream
+                            "lemongrass_50;box",
+                            "lemongrass_5;twig", # Assume a bit more than basil
+                            "tomato_sun dried_280;box", # Same as pcs
+                            "tomato_sun dried_280;glass",
+                            "tomato_sun dried_280;pack",
+                            "apricot_dried_250;pack",
+                            "bean_green_400;pack",
+                            "biscuit_marie_200;pack",
+                            "cashew_nut_250;pack",
+                            "flatbread_hard_275;pack",
+                            "pea_sugar snap_250;pack",
+                            "pistachio_nut_175;pack",
+                            "walnut_175;pack",
+                            "sausage_cumberland_400;pack",
+                            "beef_minced meat_100;dl",
+                            "beef_minced meat_200;portion",
+                            "cod_breaded_125;pcs",
+                            "parata_flat bread_50;pcs", #Tortilla
+                            "bread_foccacia_380;pcs", #Meny
+                            "sauce_butterchicken_100;dl",
+                            "sauce_butterchicken_360;pcs",
+                            "sauce_caramel_100;dl",
+                            "icing_chocolate_113;dl",
+                            "syrup_chocolate_140;dl",
+                            "celariac_root_200;portion",
+                            "chick pea_flour_38.9;dl",
+                            "cheese_schnitzel_200;pcs",
+                            "chicken_skewer_50;pcs",
+                            "sauce_chicken_250;pcs",
+                            "sauce_curry_108.2;dl",
+                            "sauce_curry_350;glass",
+                            "coriander_paste_100;dl",
+                            "asparagus_white_250;bunch",
+                            "cheese_spread_87.92;dl", # Mayo
+                            "corn_baby_125;box",
+                            "firkorn_40;dl",
+                            "chili_bean_400;box",
+                            "chili_canned_38;dl",
+                            "chili pepper_dried_15.6;dl",
+                            "chili_glaze_111.6;dl", #Mostly chili sauce
+                            "chili_marinade_98.7;dl", #Mainly vegetable oils
+                            "onion_340;bunch", #Two large three small
+                            "fish_stick_25;pcs",
+                            "cucumber_pickled_500;glass",
+                            "salsa_fruit_94.7;dl",
+                            "salsa_fruit_240;box",
+                            "chili_sauce_340;box",
+                            "dragon_fruit_475;pcs", #Seeds del mundo
+                            "dressing_garlic_100;dl",
+                            "hamburger_plant-based_120;pcs", #Naturli' burger
+                            "hamburger_lamb_130;pcs",
+                            "hamburger_lamb_130;portion",
+                            "pork_ham roast_1500;pcs",
+                            "strawberries_400;box",
+                            "hazelnut_60;dl", #Mål vekt og porsjonsstørrelser
+                            "broccoli_salad_260;glass",
+                            "sauce_vanilla_100;dl",
+                            "sauce_strawberries_100;dl",
+                            "chocolate_sauce_100;dl",
+                            "salad_mediterranean_200;pcs",
+                            "salad_potato_500;pcs",
+                            "salad_shellfish_200;pcs",
+                            "salad_chicken_200;pcs",
+                            "bread_polar_37.5;pcs", #Findal og krogh as
+                            "honey_crunch_50;dl", #Granola
+                            "hummus_104;dl",
+                            "hummus_150;box", # Used in the meny recipes
+                            "ice cream_540;box", #Inspera 9dl
+                            "ice cream_cake_540;pcs", # Daim 9dl ice cream
+                            "lingonberry_jam_115;dl",
+                            "lingonberry_jam_400;box", # Same as per pcs
+                            "jam_400;box",
+                            "jam_400;glass",
+                            "lamb_leg roast_3000;pcs", #Range from 2.5-4.5kg Gilde
+                            "lamb_shank_300;pcs", # Gilde sells in twopacks of 600g
+                            "lamb_sausage_65;pcs", #Jacobs utvalgte
+                            "lamb_chop_145;pcs",
+                            "lamb_chop_1000;pack",
+                            "lamb_rib_700;pcs", # Gourmetlam
+                            "lingonberry_65;dl", # common for berries
+                            "lingonberry_40;box",
+                            "mackerel_tomato canned_185;box",
+                            "mackerel_tomato canned_185;pcs",
+                            "mackerel_80;box", # Pepper mackerel as in recipe
+                            "mayonnaise_160;glass",
+                            "mayonnaise_140;box",
+                            "pork_minced meat_400;pcs",
+                            "spice mix_meat_61;dl",
+                            "milk_evaporated_400;box",
+                            "milk chocolate_non-stop_50;dl",
+                            "mozzarella_25;slice", #Google
+                            "sauce_mushroom_250;box", # REMA / Stange
+                            "noodle_rice_85;portion", # Pasta
+                            "noodle_rice_85;pcs",
+                            "halibut_600;pcs", #Godehav
+                            "sour cream_300;box",
+                            "falafel_8.3;pcs", # Sold in bags at Meny
+                            "dressing_caesar_100;dl",
+                            "tofu_300;pcs", #Oda
+                            "waffle_88;pcs", # Sold at Meny
+                            "physalis_7;pcs", #Googe
+                            "meringue_3;pcs",
+                            "curry_paste_100;glass",
+                            "ice_cube_50;dl",
+                            "nøttesjoko_113.9;dl", # Same as nut butters
+                            "nugatti_113.9;dl",
+                            "nøttesjoko_400;glass",
+                            "tomato_paste_140;box",
+                            "tomato_paste_140;glass",
+                            "tikka masala_paste_104;dl",
+                            "sauce_tikka masala_360;glass",
+                            "pineapple_200;box",
+                            "pineapple_canned_200;box",
+                            "sauce_hp_115;dl",
+                            "sauce_hp_255;pcs",
+                            "sauce_hollandaise_100;dl",
+                            "currant_50;dl", # Like other berries
+                            "coleslaw_100;dl",
+                            "coleslaw_240;box",
+                            "sauce_white_100;dl",
+                            "sauce_white_280;box",
+                            "couscous_400;box",
+                            "cream_300;box",
+                            "vanilla_sugar_175;box",
+                            "ginger_100;pack",
+                            "ginger_100;box",
+                            "ginger_3;slice",
+                            "herbs_20;dl",
+                            "lemongrass_50;pack",
+                            "lentil_dried_80;dl",
+                            "nacho_50;dl",
+                            "cottage_cheese_300;box",
+                            "sausage_pork belly_125;pcs",
+                            "pork_neck_220;slice", # same as portion size
+                            "ham_325;box",
+                            "chicken_ham_325;box",
+                            "apple_17.5;slice", # One apple a 140g sliced into 8s
+                            "chicken_whole_100;dl",
+                            "bean_mixed_380;box",
+                            "sauce_white_45;portion", # Standardised sauce portion is three tablespoons
+                            "lunch_cake_255;pcs",
+                            "mackerel_600;pcs",
+                            "mackerel_filet_250;pcs",
+                            "crayfish_150;pcs", # Meny
+                            "shrimp_14.3;pcs", #70 shrimps per kilo
+                            "ritz crackers_5;pcs",
+                            "guacamole_94.7;dl",
+                            "guacamole_150;portion", # Recipe uses portion to mean for the whole recipe
+                            "raw vegetables_assorted_150;pcs", #Pack of råkost
+                            "marzipan_50;pcs", # Recipes uses "Gullbrød" marzipan
+                            "marzipan_50;dl", # Similar to non-stop, they used marzipan balls
+                            "liquorice_150;box",
+                            "liquorice_100;dl",
+                            "bread_brioche_50;pcs", # Meny burger bread
+                            "burger_bacon_140;pcs",
+                            "bacon_140;pcs",
+                            "pepper_ground_42;glass",
+                            "grape_fruit_300;pcs",
+                            "spice mix_fajita_30;pcs",
+                            "potato_boiled_73;pcs",
+                            "lasagna_800;pcs",
+                            "spice mix_pasta_65;pcs",
+                            "spice mix_pasta_61;dl",
+                            "sauce_pepper_100;dl",
+                            "pumpkin_1500;pcs", #Hokkaido
+                            "pre-cut vegetables mixed vegetables_200;pcs",
+                            "sauce_pizza red_103.55;dl", # Same as tomato sauce
+                            "sauce_pizza red_200;glass",
+                            "coriander_fresh_0.3;leaf",
+                            "coriander_fresh_3;twig",
+                            "mint_fresh_0.3;leaf",
+                            "jackfruit_400;box",
+                            "salad_15;leaf", # Other salads
+                            "crispi_salad_15;leaf",
+                            "sour_cream_300;box",
+                            "beans_400;box",
+                            "bean_white_400;box",
+                            "bean white_canned_400;box",
+                            "bean black_canned_400;box",
+                            "olive_green_300;glass",
+                            "olive_black_300;glass",
+                            "shrimp_250;box",
+                            "aioli_150;pack",
+                            "capers_100;glass",
+                            "grissini_5;pcs", # Google
+                            "water_1500;pcs", # Large bottle of water
+                            "water_carbonated_1000;pcs",
+                            "berries mixed_wild_50;dl",
+                            "cornflakes_50;dl",
+                            "char_900;pcs", # Vulkanfisk
+                            "potato_300;pack",
+                            "strawberries _400;box",
+                            "taco_sauce_103;dl",
+                            "turnip_100;slice",
+                            "salmon_spread_90;pcs",
+                            "sausage_vegetarian_60;pcs",
+                            "biscuit_amaretti_26;pcs",  #Google
+                            "tomato_salsa_230;box",
+                            "baguette_half_17.5;slice", #Assume they used one baguette and sliced it
+                            "ham_12;slice", # Mål vekt og porsjonsstørrelser
+                            "chicken_ham_12;slice",
+                            "bread_white_67.5;dl", # Assume same as breadcrumbs
+                            "bread_67.5;dl", # Assume same as breadcrumbs
+                            "cream_vanilla_500;box",
+                            "tomato_beef_15;slice", # A bit bigger than regular tomato
+                            "tzatziki_180;box",
+                            "cake_wreath_900;pcs",
+                            "cake_yellow_370;pcs",
+                            "sauce_red wine_250;box",
+                            "prune_400;box",
+                            "honey_350;glass",
+                            "brown_cheese_40;dl",
+                            "bread_crumb_25;slice", #kavring
+                            "bread_crumb_25;pcs",
+                            "beetroot_12;slice",
+                            "beetroot_520;glass",
+                            "cloves_47.3;dl", # Assume same as nutmeg
+                            "anise_star_47.3;dl",
+                            "bean_sprout_425;box",
+                            "bean_sprout_425;glass",
+                            "sauce_sweet and sour_100;dl",
+                            "macaroon_12;pcs",
+                            "relish_55;dl", # Same as pickled cucumbers
+                            "relish_165;box", # Heinz is 3dl
+                            "sauce_venison_100;dl",
+                            "wakame_35;dl", # Assume similar to cabbage
+                            "dates_dried_80;dl", # Same as figs
+                            "apricot_80;dl",
+                            "oregano_dried_10;glass",
+                            "oregano_dried_1;twig",
+                            "sage_dried_3;twig",
+                            "sage_dried_0.3;leaf",
+                            "sage_dried_20;pcs",
+                            "tarragon_dried_1;twig",
+                            "ham_smoked_280;pcs",
+                            "sweet_pepper_295;glass",
+                            "pickled_pepper_295;glass",
+                            "psyllium_husk_40;dl", # Similar to oats
+                            "cinnamon_4;pcs", #bar of cinnamon
+                            "passion fruit_curd_100;dl",
+                            "passion fruit_curd_340;glass", # Lemon curd in oda
+                            "passion fruit_curd_340;box",
+                            "beer_300;box",
+                            "beer_300;pcs",
+                            "reduction_100;dl",
+                            "cider_apple_500;pcs",
+                            "daim_58;pcs",
+                            "food_coloring_100;dl",
+                            "food_coloring_15;pcs",
+                            "chocolate_50;pcs",
+                            "star_fruit_90;pcs",
+                            "starfruit_90;pcs",
+                            "roe_75;glass",
+                            "taco_dinner kit_365;pcs",
+                            "tomato_sun dried_160;box",
+                            "tomato_sun dried_160;glass",
+                            "tomato_sun dried_101.4;handful",
+                            "tomato_sun dried in oil_101.4;dl", #Same as regular sun dried
+                            "soda_500;pcs",
+                            "orange_18;slice", # A bit larger than lemon
+                            "roast_beef_100;pcs",
+                            "dairy imitate_oatmilk full fat_250;pack",
+                            # Hard to semi hard cheeses
+                            "cheese cheddar_14.33;slice",
+                            "cheese norvegia_14.33;slice",
+                            "cheese jarlsberg_14.33;slice",
+                            "cheese romano_14.33;slice",
+                            "cheese semi hard_14.33;slice",
+                            # Spice mix, taco as reference
+                            "spice mix_28;pack"
+                          )) %>%
+                          separate(tmp, into=c("Ingredients", "unit_enhet"), sep = ";")
+              ) %>%
+              unique() %>%
+              separate(., "Ingredients", into = c("Ingredients", "grams_per_unit"), sep = "_(?=\\d+)") %>%
+              select(Ingredients, unit_enhet, grams_per_unit)  %>%
+              dplyr::mutate(Ingredients = str_replace_all(Ingredients, "_", " "))
+            ) %>%
+
   #Add IDs
   left_join(., old %>% select(Ingredients, database_ID) %>% unique()) %>%
   mutate(language = "english",

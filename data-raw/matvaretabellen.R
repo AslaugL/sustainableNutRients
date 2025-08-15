@@ -267,10 +267,10 @@ clean_nutrients <- raw_data %>%
   str_detect(food_item, 'beef') & str_detect(food_item, 'rib-eye steak, raw') ~ 'beef_rib-eye steak',
   str_detect(food_item, 'beef') & str_detect(food_item, 'liver') ~ 'beef_liver/veal_liver',
   str_detect(food_item, 'beef, trimmed fat, raw') ~ 'tallow_beef',
-  str_detect(food_item, 'beef') & str_detect(food_item, 'minced meat') & str_detect(food_item, '6 %') ~ 'beef minced meat_6',
-  str_detect(food_item, 'beef') & str_detect(food_item, 'minced meat') & str_detect(food_item, '4,5 %') ~ 'beef minced meat_4,5',
-  str_detect(food_item, 'beef') & str_detect(food_item, 'minced meat') & str_detect(food_item, '13 %') ~ 'beef minced meat_13',
-  str_detect(food_item, 'beef') & str_detect(food_item, 'minced meat') & str_detect(food_item, '14 %') ~ 'beef minced meat', # Default
+  (str_detect(food_item, 'beef') & str_detect(food_item, 'minced meat') & str_detect(food_item, '6 %')) |
+    food_item %in% c('beef, minced meat, 4,5 % fat, raw') ~ 'beef_minced meat lean',
+  str_detect(food_item, 'beef') & str_detect(food_item, 'minced meat') &
+    str_detect(food_item, '14 %|13 %') & str_detect(food_item, 'without') ~ 'beef_minced meat', # Default
   #food_item == 'beef, minced meat, without salt and water, raw' ~ 'beef minced meat',
   food_item == 'veal, for roast, raw' ~ 'beef_veal for roast',
   food_item == 'beef, roast of nuckle, raw' ~ 'beef_roast of knuckle',
@@ -378,7 +378,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'powan, raw' ~ 'powan',
   food_item == 'salmon fillet, dry salted, with sugar and spices' ~ 'trout_cured', #Similar nutritional profile
   food_item == 'lobster, boiled' ~ 'lobster',
-  food_item == 'mackerel, may-june, raw' ~ 'mackerel',
+  food_item %in% c('mackerel, may-june, raw', 'mackerel, february - june, raw') ~ 'mackerel',
   food_item == 'mussel, blue, raw' ~ 'mussel',
   food_item == 'nori, seaweed, dried' ~ 'nori_seaweed',
   food_item == 'salmon, farmed, raw' ~ 'salmon',
@@ -389,7 +389,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'scallion, spring onion, raw' ~ 'scallion',
   food_item == 'oyster, common, raw' ~ 'oyster',
   food_item == 'shrimps, in brine, drained' ~ 'shrimp_in brine',
-  food_item == 'shrimps, northern, boiled' ~ 'shrimp',
+  #food_item == 'shrimps, northern, boiled' ~ 'shrimp',
+  food_item == 'shrimps, raw' ~ 'shrimp',
   food_item == 'trout, farmed, raw' ~ 'trout',
   food_item == 'tuna in water, drained, canned' ~ 'tuna_in water canned',
   food_item == 'tuna, in oil, canned' ~ 'tuna_in oil canned',
@@ -448,14 +449,16 @@ clean_nutrients <- raw_data %>%
   food_item == 'yardlong beans, raw' ~ 'bean green_asparagus',
   food_item == 'beans, green, french, raw' ~ 'bean green',
   food_item == 'beetroot, norwegian, raw' ~ 'beetroot',
-  food_item == 'beetroot, pickled' ~ 'beetroot_pickled',
+  food_item == 'beetroot, pickled' ~ 'beet_pickled',
   food_item == 'blackcurrants, raw' ~ 'black currant',
   food_item == 'blackberry jam' ~ 'jam_blackberry',
   food_item == 'blueberry jam' ~ 'jam_blueberry',
   food_item == 'redcurrants, raw' ~ 'currant',
   food_item == 'brussel sprouts, norwegian, raw' ~ 'brussel_sprout',
 
-  food_item == 'cabbage, white, raw' ~ 'cabbage', #Standard
+  food_item %in% c(
+    'cabbage, white, raw',
+    'cabbage, white, norwegian, raw') ~ 'cabbage', #Standard
   food_item == 'cabbage, pak-choi, bok choy, raw' ~ 'cabbage_bok choi',
   food_item == 'cabbage, red, raw' ~ 'cabbage_red',
   food_item == 'cabbage, spring green, raw' ~ 'cabbage_spring green',
@@ -466,7 +469,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'cloudberry jam' ~ 'jam_cloudberry',
 
   food_item == 'cauliflower, norwegian, raw' ~ 'cauliflower',
-  food_item == 'celariac root, norwegian, raw' ~ 'celariac_root',
+  food_item %in% c(
+  'celariac root, norwegian, raw', 'celeriac root, raw') ~ 'celariac_root',
   food_item == 'celery stalk or stem, norwegian, raw' ~ 'celery_stalk',
   food_item == 'chicory, raddichio, raw' ~ 'chicory_red',
   food_item == 'chicory, endive, raw' ~ 'chicory_white',
@@ -478,6 +482,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'jalapeño, raw' ~ 'chili pepper_jalapeno',
 
   food_item == 'aubergine, raw' ~ 'eggplant',
+
+  food_item == 'goji berries, dried' ~ 'goji berry',
 
   food_item == 'horse-radish, raw' ~ 'horseradish',
 
@@ -526,6 +532,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'radish, norwegian, raw' ~ 'radish',
   food_item == 'raisins' ~ 'raisin',
   food_item == 'raspberry jam' ~ 'jam_raspberry',
+  food_item == 'rowan-berries, raw' ~ 'rowan berry',
   food_item == 'strawberry jam' ~ 'jam_strawberry',
   food_item == 'salad, rocket, raw' ~ 'salad_rocket',
   food_item == 'romaine lettuce' ~ 'salad_romaine',
@@ -546,7 +553,7 @@ clean_nutrients <- raw_data %>%
   food_item %in% c('apple juice', 'pineapple juice', 'grape juice',
                    'grapefruit juice', 'orange juice', 'tomato juice', 'tomato ketchup') ~ str_replace(food_item, ' ', '_'),
   food_item == 'sweet corn, canned' ~ 'sweet corn_canned',
-  food_item == 'grapes, unspecified, raw' ~ 'grape',
+  food_item == 'grapes, unspecified, raw' ~ 'grapes',
   food_item == 'peaches, canned, in syrup' ~ 'peach_canned',
   food_item == 'cranberries, dried, sweetened' ~ 'cranberries_dried',
   food_item == 'fruit juice drink, blackcurrant, ready-to-drink' ~ 'black currant_juice',
@@ -619,6 +626,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'rice, arborio, risotto rice, uncooked' ~ 'rice_risotto',
   food_item == 'rice, white, long-grain, uncooked' ~ 'rice white long grain',
   food_item == 'rice, white, pre-boiled, uncooked' ~ 'rice parboiled',
+  food_item == 'rice, white, short-grain, for porridge, uncooked' ~ 'rice_porridge',
   food_item == 'rolls, white, industrially made' ~ 'rolls white',
   food_item == 'sesame seeds, without shell' ~ 'sesame_seed',
   food_item == 'tortilla chips' ~ 'nacho',
@@ -761,8 +769,8 @@ clean_nutrients <- raw_data %>%
   food_item == 'oat based beverage' ~ 'dairy imitate oatmilk',
   food_item == 'cultured oat product, for food preparation, 15 % fat' ~ 'dairy imitate oatmilk_full fat',
   food_item == 'ice cream, dairy' ~ 'ice cream',
-  food_item == 'cultured milk, with flavour, skyr' ~ 'skyr_flavored',
-  food_item == 'cultured milk, plain, skyr' ~ 'skyr',
+  food_item == 'cultured milk, with flavour, skyr' ~ 'yoghurt_skyr flavored',
+  food_item == 'cultured milk, plain, skyr' ~ 'yoghurt_skyr',
   food_item == "almond based beverage" ~ "dairy imitate_almond milk",
   food_item == 'plant-based product, used as cheese' ~ 'cheese_plant-based',
   food_item == 'coconut based beverage, with calsium og vitamins (vit b12, vit d)' ~ 'dairy imitate_coconut',
@@ -778,12 +786,12 @@ clean_nutrients <- raw_data %>%
   food_item == 'mushroom, common, canned, drained' ~ 'mushroom_canned',
 
   #Div----
-  food_item == 'beer, dark, 4,5 - 4,7 vol-% alcohol, bayer and christmas beers' ~ 'beer_dark',
+  food_item %in% c('beer, dark, 4,5 - 4,7 vol-% alcohol, bayer and christmas beers',
+                   'beer, dark, 4,5-4,7 vol-% alcohol, bayer and christmas beers') ~ 'beer_dark',
   food_item == 'capers, canned' ~ 'caper',
   food_item == 'spirits, 40 vol-% alcohol' ~ 'spirits 40 vol-% alcohol',
   food_item == 'spirits, 60 vol-% alcohol' ~ 'spirits 60 vol-% alcohol',
-  food_item == 'cider, sweet, 4,5 vol-% alcohol' ~ 'cider_sweet',
-  food_item == 'cider, sweet, 4,5 vol-% alcohol' ~ 'cider',
+  food_item == 'cider, sweet, 4,5 vol-% alcohol' ~ 'apple cider_sweet',
   food_item == 'sugar, brown' ~ 'sugar_brown',
   food_item == 'sugar, white, caster sugar, cube sugar' ~ 'sugar',
   food_item %in% c('fortified wines, sweet vermouth, 15 vol-% alcohol',
@@ -818,7 +826,7 @@ clean_nutrients <- raw_data %>%
   food_item == 'chocolate, dark, 70 % cocoa' ~ 'chocolate_dark', #Not really, but darkest they have
   food_item == 'popcorn, air popped, industrially made' ~ 'popcorn',
   food_item == 'gelatin' ~ 'gelatin',
-  food_item == 'cloudberries, raw' ~ 'cloud_berr',
+  food_item == 'cloudberries, raw' ~ 'cloudberry',
   food_item == 'remoulade' ~ 'remulade',
   food_item == 'pizza, industrially made' ~ 'pizza',
   food_item == 'nut spread, nugatti' ~ 'nugatti',
@@ -838,6 +846,20 @@ clean_nutrients <- raw_data %>%
   food_item == 'tempeh soy bean product' ~ 'tempeh',
   food_item == 'mustard' ~ 'mustard',
   food_item == 'sauerkraut' ~ 'sauerkraut',
+
+  # Beverages
+  food_item == 'mineral water, carbonated, bonaqua naturell' ~ 'water_carbonated',
+  food_item == 'caffe mocha' ~ 'caffe mocha',
+  food_item == 'espresso, single' ~ 'espresso',
+  food_item == 'coffee, infusion' ~ 'coffee',
+  food_item == 'Ice coffee, cappuchino' ~ 'coffee_ice',
+  food_item == 'tea, black, infusion' ~ 'tea_black',
+  food_item == 'tea, green, infusion' ~ 'tea_green',
+  food_item == 'lemonade, with lemon, from cafe/bakery' ~ 'lemonade', #default
+  food_item == 'lemonade, with raspberries, from cafe/bakery' ~ 'lemonade_raspberries',
+  food_item == 'soda, with sugar' ~ 'soda', #Default
+  food_item == 'soda, artificially sweetened, light' ~ 'soda_artificially sweetened',
+  food_item == 'stock, meat, from cube, prepared' ~ 'broth',
 
   #Keep the unspecified ingredients
   str_detect(food_item, ', unspecified, raw') ~ str_replace(food_item, ', unspecified, raw', ''),
@@ -913,7 +935,7 @@ fromFoodDataCentral_foods <- read_csv(
     #Meat products
     'Beef, variety meats and by-products, tongue, raw', 'Pork, fresh, variety meats and by-products, kidneys, raw',
     'Beef, New Zealand, imported, flank, separable lean and fat, raw', 'Lamb, New Zealand, imported, fore-shank, separable lean and fat, raw',
-    'Lamb, Australian, ground,  85% lean / 15% fat, raw', "Lard",
+    #'Lamb, Australian, ground,  85% lean / 15% fat, raw', "Lard",
 
     #Fruit and veg
     #'Jams and preserves, apricot',
@@ -1012,8 +1034,6 @@ fromFoodDataCentral_foods <- read_csv(
              #"Nuts, macadamia nuts, raw" = "macademia_nut",
              "Peppers, hot chili, red, canned, excluding seeds, solids and liquids" = "chili_canned",
              "Lamb, New Zealand, imported, fore-shank, separable lean and fat, raw" = "lamb_shank",
-             "Lamb, Australian, ground,  85% lean / 15% fat, raw" = "lamb_minced meat",
-             "Beets, pickled, canned, solids and liquids" = "beet_pickled",
              "Peppers, hot pickled, canned" = "chili pepper_pickled",
              "Radish seeds, sprouted, raw" = "sprouts_radish",
              "Pomegranate juice, bottled" = "pomegranate_juice",
