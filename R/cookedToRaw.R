@@ -11,7 +11,7 @@
 cookedToRaw <- function(df){
 
   df %>%
-    #Do the conversion
+    #Do the conversion from cooked to raw
     mutate(
       Amounts = case_when(
         Ingredients == 'bacon cooked' ~ Amounts/0.31,
@@ -24,9 +24,16 @@ cookedToRaw <- function(df){
         Ingredients == 'beetroot cooked' ~ Amounts/0.95, #Use values for parsley root
         Ingredients %in% c('lobster cooked', 'shrimp cooked') ~ Amounts/0.77, #Use values for Lean fish, with skin, simmered
 
+        # # Legumes
+        # Ingredients == 'chick pea canned' ~ Amounts/2.55,
+        # Ingredients %in% c(
+        #   "bean black canned", "bean kidney canned", "bean pinto canned") ~ Amounts/2.4,
+        # Ingredients == "bean white canned" ~ Amounts/6.71,
+        #
+
         TRUE ~ Amounts),
 
       #Remove cooked from ingredient name
-      Ingredients = str_replace(Ingredients, ' cooked', '')
+      Ingredients = str_replace(Ingredients, ' cooked| canned', '')
     )
 }
