@@ -1,5 +1,5 @@
 #' Calculate the mean amount of ingredients when recipe says 3-4 and similar.
-#' @title calculateCitrusJuiceZest
+#' @title calculateMeanAmounts
 #'
 #' @description Calculate the mean amount of ingredients when recipe says 3-4 and similar.
 #'
