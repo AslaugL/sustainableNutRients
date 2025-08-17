@@ -19,7 +19,7 @@ standardiseFruitVegG <- function(df){
       str_detect(Ingredients, 'garlic') & str_detect(Ingredients, 'whole') & !str_detect(Ingredients, 'salt|powder') ~ 'whole garlic',
       str_detect(Ingredients, 'garlic') & !str_detect(Ingredients, 'pickle|sauce|paste|oil|baguette|cheese|salt|dressing|scone|pâté|pate|taco mix') ~ 'garlic',
       str_detect(Ingredients, 'grape') & str_detect(Ingredients, 'juice') ~ 'grape juice',
-      str_detect(Ingredients, 'grape') & str_detect(Ingredients, 'fruit') ~ 'grape fruit',
+      str_detect(Ingredients, 'grape') & str_detect(Ingredients, 'fruit') ~ 'grapefruit',
       str_detect(Ingredients, 'grape') ~ 'grapes',
       str_detect(Ingredients, '\\bgoji\\b') ~ 'goji berry',
 

@@ -131,6 +131,7 @@ SHARP <- SHARP %>%
              'milk powder, skimmed' = 'milk powder nonfat',
              'ice cream, milk-based' = 'ice cream',
              'cheese, pecorino toscano' = 'cheese pecorino',
+             'cream cheese' = 'cheese cream',
 
              #Plants
              'aubergines' = 'eggplant',
@@ -256,6 +257,7 @@ SHARP <- SHARP %>%
              'sheep muscle' = 'sheep',
              'salami-type sausage' = 'salami',
              'ham, pork' = 'ham',
+             "stock cubes or granulate bouillon base" = "broth cube",
 
              #Poultry
              'hen ' = '',

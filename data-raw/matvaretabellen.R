@@ -271,6 +271,7 @@ clean_nutrients <- raw_data %>%
     food_item %in% c('beef, minced meat, 4,5 % fat, raw') ~ 'beef_minced meat lean',
   str_detect(food_item, 'beef') & str_detect(food_item, 'minced meat') &
     str_detect(food_item, '14 %|13 %') & str_detect(food_item, 'without') ~ 'beef_minced meat', # Default
+
   #food_item == 'beef, minced meat, without salt and water, raw' ~ 'beef minced meat',
   food_item == 'veal, for roast, raw' ~ 'beef_veal for roast',
   food_item == 'beef, roast of nuckle, raw' ~ 'beef_roast of knuckle',
@@ -1311,6 +1312,7 @@ matvaretabellen2024 <- nutrients_to_use %>% select(-c(food_item, Foodgroup)) %>%
 
 #Save matvaretabellen dataframe
 saveRDS(matvaretabellen2024, "./data-raw/matvaretabellen2024.Rds")
+saveRDS(matvaretabellen2024, "./data-raw/matvaretabellen2022.Rds")
 
 #Save foodgroups info
 matvaretabellen2024_foodgroups <- nutrients_to_use %>%
@@ -1318,6 +1320,7 @@ matvaretabellen2024_foodgroups <- nutrients_to_use %>%
   rename(foodgroup = Foodgroup)
 
 saveRDS(matvaretabellen2024_foodgroups, "./data-raw/matvaretabellen2024_foodgroups.Rds")
+saveRDS(matvaretabellen2024_foodgroups, "./data-raw/matvaretabellen2022_foodgroups.Rds")
 
 #Save database_ID and food_item columns to create a query dataframe
 matvaretabellen2024_query_prep <- clean_nutrients %>%
@@ -1326,4 +1329,4 @@ matvaretabellen2024_query_prep <- clean_nutrients %>%
 
 #Save the dataframe to use to create the queries
 saveRDS(matvaretabellen2024_query_prep, "./data-raw/matvaretabellen2024_query_prep.Rds")
-
+saveRDS(matvaretabellen2024_query_prep, "./data-raw/matvaretabellen2022_query_prep.Rds")

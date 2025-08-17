@@ -2,7 +2,7 @@
 
 # Volume weight
 fixes <- list(
-  volumeWeight <- tibble(
+  volumeWeight = tibble(
     tmp = c(
       'butter clarified ghee_ghee',
       'eggplant_eggplant',
@@ -321,21 +321,158 @@ fixes <- list(
       'salad crispi_crisp_lettuce',
       'salsa tomato_chunky_salsa', #Standard
       paste0(c('tomato sun dried', 'tomato sun dried in oil'), '_tomato_sun-dried'),
-      "tomato canned_preserved_tomato"
-    )
+      "tomato canned_preserved_tomato",
+      paste0(c("lemon, the zest", "orange, the zest", "lime, the zest"), "_citrus_fruit"),
+      'clementine_mandarin',
+      'black currant_blackcurrant',
+      'currant_redcurrant',
+      'tamarind juice_fruit_juice',
+      'salsa_chunky_salsa',
+      paste0(c('syrup apple', 'syrup pear', 'syrup ginger', 'syrup currant',
+               'syrup chocolate', 'syrup caramel', 'glucose'), '_syrup'),
+      'apricot nectar_fruit_nectars',
+      paste0(c(
+        "cloudberry", "lingonberry", "goji berry", "physalis", "rowan berry"), '_berries'),
+      paste0(c("grape fruit"), '_grapefruit'),
+      'melon honeydew_melon',
+      'sprouts radish_sprout',
+      paste0(c("morel"), '_cherries_sour'),
+      paste0(c("jackfruit", "nectarine"), '_fig'), #In the same family
+      paste0(c("tangerine canned"), '_fruit_canned'),
+      paste0(c('starfruit', 'dragon fruit'), '_fruit_used'),
+      paste0(c('blueberries dried', 'cranberries dried'), '_fruit_dried'),
+      paste0(c('horseradish'), '_horseradish_roots'),
+
+      #Red meat
+      paste0(c("reindeer", "elk tenderloin", "elk minced meat", "game beef venison shoulder"), '_mammals_meat'),
+      paste0(c('lamb sheep cabbage stew meat', 'lamb sheep head', 'lamb minced meat', "lamb leg roast",
+               "lamb shank", "lamb chop", "lamb shoulder", "lamb ribs", "hamburger lamb patty", "lamb sausage"), '_lamb_fresh'),
+      "meatballs in tomato sauce_meatball_tomato sauce",
+      paste0(c("beef minced meat", "beef minced meat lean", "beef rib-eye steak", "beef sirloin",
+               "beef chuck roll", "beef tongue", "beef tenderloin", "beef brisket", "beef oxtail",
+               "beef bottom round roast beef", "beef patty lean", "beef patty"), "_beef"),
+      paste0(c("pork shoulder", "pork ham roast", "pork minced meat", "pork belly", "pork inside round",
+               "pork neck chop", "pork tenderloin", "rib roll pork", "pork chop", "sausage pork belly"), '_pork'),
+
+      # Ham
+      paste0(c("pork head cheese", "ham smoked", "ham cured", "ham", "chicken ham", "turkey ham canned"), "_ham"),
+
+      #Poultry
+      paste0(c("sausage turkey chicken", "whole turkey", "turkey breast", "turkey offal"), "_turkey"),
+      paste0(c('hen breast fillet grouse', 'hen', 'hen grouse'), '_poultry_fresh'), #All poultry meats have the same CO2 and landuse in the db
+
+      #Seafood
+      'scampi_prawn',
+      paste0(c('arctic char', 'char'), '_trout'), #Look up other alternatives
+      paste0(c('catfish', 'flounder'), '_miscellaneous_demersal'), #Steinbit
+      paste0(c('salmon roe', 'roe', 'roe salmon'), '_fish_roe'),
+      'fish cakes coarse_fish cakes coarse',
+      'cockles_scallop',
+
+      # Beverages
+      'apple cider_cider',
+      paste0("water broth", "ice cube"), '_water',
+
+      paste0(c(
+        "cranberry juice", "pomegranate juice", 'strawberry juice',
+        "black currant juice", "currant juice", "pineapple juice",
+        "apple juice"), '_fruit_juice'),
+      'aquavit_fortified wine',
+      'coffee liqueur_liqueur_coffee',
+      paste0(c("vinegar white wine", "vinegar red wine", "vinegar sweet wine"), "_vinegar_wine"),
+      paste0(c('vinegar rice', 'vinegar apple cider',
+               'vinegar sherry', 'vinegar brown', 'vinegar raspberries'), '_vinegar'),
+      'condensed cream of celery soup_condensed cream of celery soup',
+      'condensed cream of chicken soup_condensed cream of chicken soup',
+      'condensed cream of mushroom soup_condensed cream of mushroom soup',
+      "mushroom_mushroom",
+      paste0("mushroom ",
+             c("aroma champignon", "chanterelle",
+               "champignon", "portebello", "shiitake"),
+             "_mushroom"),
+      paste0(c('garlic oil', 'oil truffle'), '_olive_oil'), #Garlic/truffle oil can be made by placing garlic in olive oil
+      'sauce hot_hot_pepper',
+      'sesame oil_seed_oil',
+      'hazelnut oil_walnut_oil',
+      'sauce pasta_tomato_sauce',
+      'sweet chili sauce_chili_sweet',
+      paste0(c('cognac', 'kirsch')),  '_brandy',
+
+      #str_detect(Ingredients, 'broth cube') ~ fixFoodMappingError(database = reference, 'stock_cubes',
+      paste0(c('nacho', 'taco shell'), '_tortilla_corn'), #Similar ingredients just with more salt
+      'mango chutney_mango chutney',
+      'soybean oil_soy_oil',
+      'mustard honey_mustard',
+      'refrigerated buttermilk biscuit dough_refrigerated buttermilk biscuit dough',
+      'corn meal mix_corn flour_polenta',
+      paste0(c('jam blueberries', 'jam currant', 'cranberries jam'), '_jam'),
+      'sweet green pickle relish_sweet green pickle relish',
+      'goose fat_fats',
+      'remulade_mayonnaise_sauce',
+      'tabasco_chili_sauce',
+      paste0(c("aioli", "mayonnaise"), '_mayonnaise_sauce'),
+      paste0(c("aioli plant-based", "mayonnaise plant-based"), '_mayonnaise_vegan'),
+      paste0(c("chocolate semi-sweet"), '_chocolate_dark'),
+
+      #Dairy
+      'buttermilk_buttermilk',
+      paste0(c("parmesan cheese", "cheese cheddar", "cheese parmigiano reggiano",
+               "cheese gruyere", "cheese cotjia", "cheese romano", "cheese hard goat"), '_hard cheese'),
+      paste0("cheese ", c("pizza", "halloumi", "manchego", "havarti", "swiss", "monterey jack",
+                          "pepperjack", "asiago", "mozzarella", "jarlsberg", "semi-hard", "provolone",
+                          "norvegia", "emmentaler", "garlic", "brown"), "_hard to semi-hard cheese"),
+      "goat brown cheese_hard to semi-hard cheese",
+      paste0("cheese ", c("ricotta salata", "blue", "blue selbu", "camembert", "neufchatel", "port salut",
+                          "brie", "mascarpone", "gorgonzola", "soft", "le crémier de chaumes", "goat",
+                          "goat chevre white"), '_soft-ripened cheese'),
+      paste0(c('cheese american', 'cheese spread'), '_processed cheese and spreads'),
+      paste0(c('yoghurt plain greek', 'yoghurt plain', 'yoghurt plain skyr', 'kefir',
+               "quark 7 %", "quark 1", "biola"), "_yoghurt"),
+
+      ##Milk with cocoa powder
+      'milk beverage chocolate_milk',
+      paste0(c("cheese plant-based", 'yoghurt plant-based'), "_dairy_imitate"),
+
+
+      #Bread and rolls
+      paste0(c(
+        'bread', 'bread coarse', 'tortilla coarse', 'crisp bread coarse','bread crumb', 'bread crouton',
+        'bread rye', 'bread polar', 'hamburger bread coarse', 'rolls coarse baguette garlic',
+        'bread brown chapati', 'rolls coarse', 'rolls coarse baguette',
+        "pita bread coarse"), '_wheat bread and rolls_brown'),
+      paste0(c(
+        'hamburger bun', 'bread white', 'tortilla', 'crisp bread', 'breadstick', 'ciabatta',
+        'hamburger bread', 'bread white foccacia',
+        'rolls white', 'cracker cream', 'bread naan', 'bread flat hard', 'pita bread white',
+        'bread sausage', 'bread paratha', "parata flat bread",
+        'pizza crust', 'pizza crust italian'), '_wheat bread and rolls_white'),
+      paste0(c('rolls white', "rolls white baguette", "rolls white", "rolls white baguette garlic"),
+             '_wheat bread and rolls_white'),
+
+      #Herbs and spices
+      paste0(c('herbs', 'different spices', 'spices', 'soup seasoning', 'vanilla extract', 'vanilla pod',
+               'vanilla essence', 'vanilla powder', 'saffron', 'fenugreek seed', 'mint fresh herbs',
+               'mint dried', 'lemon balm', 'turmeric', 'anise', 'marjoram', 'sazon seasoning', 'caraway seed',
+               'lemongrass', "basil fresh herbs", "basil dried", "rosemary fresh herbs", "thyme fresh herbs",
+               "thyme dried", "tarragon fresh herbs", "tarragon dried", "oregano fresh herbs", "oregano dried",
+               "black pepper", "cayenne pepper", "sage fresh herbs", "sage dried", "garam masala", "nutmeg",
+               "cloves", "coriander fresh herbs", "coriander seed", "cumin", "dill fresh herbs", "chili powder",
+               "fenugreek leaf", "juniper berry", "cinnamon", "chives", "cardamom", "caper", "allspice",
+               "bay leaf", "paprika powder", "fennel seed", "garlic powder", "chervil fresh herbs", "chili flake dried"), '_mixed_herbs'),
+      paste0("spice mix ", c("taco", "provence", "raita", "tandoori", "meat", "fajita", "chicken", "guacamole"), "_mixed herbs"),
+      paste0(c("piri piri", "five spice", "seafood", "pasta", "pad thai", "fish", "mexican"), " spice mix_mixed_herbs")
   )
 
-) %>% lapply(., function(fixList) {
+)) %>% lapply(., function(fixList) {
 
   fixList %>%
     separate_wider_delim(.,
                          cols = tmp,
                          names = c("Ingredient", "refWord1", "refWord2"),
                          delim = "_",
-                         too_few = "align_start",
-                         too_many = "debug")
+                         too_few = "align_start")
 })
-## Ingredients ==
+## Ingredients ----
 
 not_in_database <- list(
   volumeWeight = tibble(
@@ -391,137 +528,41 @@ not_in_database <- list(
       paste0(c("spice mix(?! taco)", "powder mix", "soup instant", "refried beans"), "_strDetectIngredients")
   )
 
-))
+)) %>% lapply(., function(fixList) {
+
+  fixList %>%
+    separate_wider_delim(.,
+                         cols = tmp,
+                         names = c("Ingredient", "expressionHelp"),
+                         delim = "_",
+                         too_few = "align_start")
+}) %>%
+  bind_rows(.id = "database") %>%
+  nest(.by = database) %>%
+  # Build the expressions
+  dplyr::mutate(
+    data = map(data, function(dta) {
+
+      dta %>%
+        dplyr::mutate(.by = expressionHelp,
+          expression = case_when(
+            expressionHelp == "IngredientsEqual" ~ paste0('Ingredients %in% c("',
+                                                          paste0(Ingredient, collapse = '", "'),
+                                                          '")'),
+            expressionHelp == "strDetectIngredients" ~ paste0('str_detect(Ingredients, "',
+                                                              paste0(Ingredient, collapse = "|"),
+                                                              '")')
+            )
+          ) %>%
+        dplyr::mutate(expression = paste0(expression, ' & !str_detect(database_ID, ".999") ~ 0'))
+        dplyr::select(-Ingredient) %>%
+        distinct()
+    })
+  )
 
 
 ## Sustainability¨
 
-str_detect(Ingredients, 'the zest') ~ fixFoodMappingError(database = reference, 'citrus_fruit'), #Reference for citrus fruit peel
-'clementine_mandarin',
-'black currant_blackcurrant',
-'currant_redcurrant',
-'tamarind juice_fruit_juice',
-'salsa_chunky_salsa',
-paste0(c('syrup apple', 'syrup pear', 'syrup ginger', 'syrup currant',
-         'syrup chocolate', 'syrup caramel', 'glucose'), '_syrup'),
-'apricot nectar_fruit_nectars',
-paste0(c(
-  "cloudberry", "lingonberry", "goji berry", "physalis", "rowan berry"), '_berries'),
-paste0(c("grape fruit"), '_grapefruit'),
-'melon honeydew_melon',
-'sprouts radish_sprout',
-paste0(c("morel"), '_cherries_sour'),
-paste0(c("jackfruit", "nectarine"), '_fig'), #In the same family
-paste0(c("tangerine canned"), '_fruit_canned'),
-paste0(c('starfruit', 'dragon fruit'), '_fruit_used'),
-paste0(c('blueberries dried', 'cranberries dried'), '_fruit_dried'),
-paste0(c('horseradish'), '_horseradish_roots'),
-
-#Red meat
-str_detect(Ingredients, 'reindeer|\\belk ') ~ fixFoodMappingError(database = reference, 'mammals_meat',
-                                                                  str_detect(Ingredients, 'pork') & !str_detect(Ingredients, 'lard') ~ fixFoodMappingError(database = reference, 'pork',
-                                                                                                                                                           paste0(c(
-                                                                                                                                                             'lamb sheep cabbage stew meat', 'lamb sheep head', 'lamb minced meat'
-                                                                                                                                                           ), '_lamb_fresh'),
-                                                                                                                                                           "meatballs in tomato sauce_meatball_tomato sauce",
-                                                                                                                                                           paste0(c(
-                                                                                                                                                             "beef minced meat", "beef minced meat lean", "beef rib-eye steak"
-                                                                                                                                                           ), "_beef"),
-                                                                                                                                                           str_detect(Ingredients, 'ham smoked ') ~ fixFoodMappingError(database = reference, 'ham'),
-
-                                                                                                                                                           #Poultry
-                                                                                                                                                           str_detect(Ingredients, 'turkey') & !str_detect(Ingredients, 'broth') ~ fixFoodMappingError(database = reference, 'turkey'),
-                                                                                                                                                           paste0(c('hen breast fillet grouse', 'hen', 'hen grouse'), '_poultry_fresh'), #All poultry meats have the same CO2 and landuse in the db
-
-                                                                                                                                                           #Seafood
-                                                                                                                                                           'scampi_prawn',
-                                                                                                                                                           paste0(c('arctic char', 'char'), '_trout'), #Look up other alternatives
-                                                                                                                                                           paste0(c('catfish', 'flounder'), '_miscellaneous_demersal'), #Steinbit
-                                                                                                                                                           paste0(c('salmon roe', 'roe', 'roe salmon'), '_fish_roe'),
-                                                                                                                                                           'fish cakes coarse_fish cakes coarse',
-                                                                                                                                                           'cockles_scallop',
-
-                                                                                                                                                           # Beverages
-                                                                                                                                                           'apple cider_cider',
-                                                                                                                                                           str_detect(Ingredients, "water broth|ice cube") ~ fixFoodMappingError(database = reference, 'water'),
-                                                                                                                                                           paste0(c(
-                                                                                                                                                             "cranberry juice", "pomegranate juice", 'strawberry juice',
-                                                                                                                                                             "black currant juice", "currant juice"), '_fruit_juice'),
-                                                                                                                                                           'aquavit_fortified wine',
-                                                                                                                                                           'coffee liqueur_liqueur_coffee',
-
-                                                                                                                                                           #Div
-                                                                                                                                                           str_detect(Ingredients, 'vinegar') & str_detect(Ingredients, 'wine') ~ fixFoodMappingError(database = reference, 'vinegar_wine',
-                                                                                                                                                                                                                                                      paste0(c('vinegar rice', 'vinegar apple cider',
-                                                                                                                                                                                                                                                               'vinegar sherry', 'vinegar brown', 'vinegar raspberries'), '_vinegar'),
-                                                                                                                                                                                                                                                      'condensed cream of celery soup_condensed cream of celery soup',
-                                                                                                                                                                                                                                                      'condensed cream of chicken soup_condensed cream of chicken soup',
-                                                                                                                                                                                                                                                      'condensed cream of mushroom soup_condensed cream of mushroom soup',
-                                                                                                                                                                                                                                                      str_detect(Ingredients, 'mushroom') & !str_detect(Ingredients, 'dried|canned|sauce') ~ fixFoodMappingError(database = reference, 'mushroom'),
-                                                                                                                                                                                                                                                      paste0(c('garlic oil', 'oil truffle'), '_olive_oil'), #Garlic/truffle oil can be made by placing garlic in olive oil
-                                                                                                                                                                                                                                                      'sauce hot_hot_pepper',
-                                                                                                                                                                                                                                                      'sesame oil_seed_oil',
-                                                                                                                                                                                                                                                      'hazelnut oil_walnut_oil',
-                                                                                                                                                                                                                                                      'sauce pasta_tomato_sauce',
-                                                                                                                                                                                                                                                      'sweet chili sauce_chili_sweet',
-                                                                                                                                                                                                                                                      str_detect(Ingredients, 'cognac|kirsch') ~ fixFoodMappingError(database = reference, 'brandy',
-                                                                                                                                                                                                                                                                                                                     str_detect(Ingredients, 'broth cube') ~ fixFoodMappingError(database = reference, 'stock_cubes',
-                                                                                                                                                                                                                                                                                                                                                                                 paste0(c('nacho', 'taco shell'), '_tortilla_corn'), #Similar ingredients just with more salt
-                                                                                                                                                                                                                                                                                                                                                                                 str_detect(Ingredients, 'broth cube') ~ fixFoodMappingError(database = reference, 'stock_cubes',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'mango chutney_mango chutney',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'soybean oil_soy_oil',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'mustard honey_mustard',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'refrigerated buttermilk biscuit dough_refrigerated buttermilk biscuit dough',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'corn meal mix_corn flour_polenta',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             paste0(c('jam blueberries', 'jam currant', 'cranberries jam'), '_jam'),
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'sweet green pickle relish_sweet green pickle relish',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'goose fat_fats',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'remulade_mayonnaise_sauce',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'tabasco_chili_sauce',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             paste0(c("aioli", "mayonnaise"), '_mayonnaise_sauce'),
-                                                                                                                                                                                                                                                                                                                                                                                                                                             paste0(c("aioli plant-based", "mayonnaise plant-based"), '_mayonnaise_vegan'),
-                                                                                                                                                                                                                                                                                                                                                                                                                                             paste0(c("chocolate semi-sweet"), '_chocolate_dark'),
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                             #Dairy
-                                                                                                                                                                                                                                                                                                                                                                                                                                             'buttermilk_buttermilk',
-                                                                                                                                                                                                                                                                                                                                                                                                                                             str_detect(Ingredients,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        'cheddar|romano|parmigiano-reggiano|parmesan|parmigiano-reggiano|parmigiano reggiano|cheese hard goat|cheese cotjia|gruyere') &
-                                                                                                                                                                                                                                                                                                                                                                                                                                               !str_detect(Ingredients, 'salad') ~ fixFoodMappingError(database = reference, 'hard cheese',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       str_detect(Ingredients,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  'cheese pizza|halloumi|manchego|havarti|swiss|monterey jack|pepperjack|asiago|mozzarella|goat brown cheese|jarlsberg|cheese semi-hard|provolone|norvegia|emmentaler|cheese garlic|cheese brown') ~ fixFoodMappingError(database = reference, 'hard to semi-hard cheese',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         str_detect(Ingredients,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'ricotta|cheese blue|camembert|chevre|neufchatel|port salut|brie|mascarpone|gorgonzola|cheese soft|cheese le crémier de chaumes') |
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           paste0(c('cheese goat'), '_soft-ripened cheese'),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         paste0(c('cheese american', 'cheese spread'), '_processed cheese and spreads'),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         paste0(c('yoghurt greek', 'kefir'), "_yoghurt"),
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         str_detect(Ingredients, 'quark|biola|yoghurt skyr|yoghurt berries flavored') ~ fixFoodMappingError(database = reference, 'yoghurt'),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         #Milk with cocoa powder
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         str_detect(Ingredients, 'milk beverage chocolate') ~ fixFoodMappingError(database = reference, 'milk'),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         paste0(c("cheese plant-based", 'cheese, plant-based'), "_dairy_imitate"),
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         #Bread and rolls
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         paste0(c(
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'bread', 'bread coarse', 'tortilla coarse', 'crisp bread coarse','bread crumb', 'bread crouton',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'bread rye', 'bread polar', 'hamburger bread coarse', 'rolls coarse baguette garlic',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'bread brown chapati', 'rolls coarse', 'rolls coarse baguette',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           "pita bread coarse"), '_wheat bread and rolls_brown'),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         paste0(c(
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'hamburger bun', 'bread white', 'tortilla', 'crisp bread', 'breadstick', 'ciabatta',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'hamburger bread', 'bread white foccacia',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'rolls white', 'cracker cream', 'bread naan', 'bread flat hard', 'pita bread white',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'bread sausage', 'bread paratha', "parata flat bread",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'pizza crust', 'pizza crust italian'), '_wheat bread and rolls_white') |
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           str_detect(Ingredients, 'rolls white') ~ fixFoodMappingError(database = reference, 'wheat bread and rolls_white'),
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         #Herbs and spices
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         str_detect(
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Ingredients,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           'vanilla extract|vanilla pod|vanilla essence|vanilla powder|saffron|fenugreek seed|mint fresh herbs|mint dried|lemon balm|turmeric|anise|marjoram|sazon seasoning|ginger\\b|caraway|lemongrass|basil|rosemary|thyme|tarragon|pepper|sage|garam masala|oregano|spice mix|nutmeg|cloves|coriander|cumin|dill|fenugreek leaf|juniper berry|cinnamon|chives|chervil|cardamom|caper|allspice|bay leaf|paprika powder|fennel seed|garlic powder') &
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           !str_detect(Ingredients, 'sauce|paste|sweet|chili|sausage') |
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           str_detect(Ingredients, 'chili') & !str_detect(Ingredients, 'pepper|paste|sauce|sausage|carne|nut|canned|glaze|marinade') |
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           paste0(c('herbs', 'different spices', 'spices', 'soup seasoning'), '_mixed_herbs'),
 
 
 
