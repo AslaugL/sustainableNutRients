@@ -190,7 +190,8 @@ fixes <- tibble(
   )
 ) %>%
   separate_wider_delim(., cols = tmp, names = c("Ingredient", "refWord1", "refWord2"),
-                       too_few = "align_start", delim = "_")
+                       too_few = "align_start", delim = "_") %>%
+  replace_na(., list(refWord2 = "//"))
 
 fakeDatabase <- fixes %>%
   dplyr::mutate(
@@ -208,25 +209,25 @@ Ingredients <- fixes %>%
   dplyr::select(Ingredient)
 
 
-fixFoodMappingError <- function(database, first_w, second_w = NA) {
+fixFoodMappingError <- function(database, first_w, second_w = "//") {
 
-  ID <- database %>% filter(first_word == first_w & second_word == second_w) %>% select(ID) %>% unique() %>% as.numeric()
+  ID <- database %>% dplyr::filter(refWord1 == first_w & refWord2 == second_w) %>% select(ID) %>% unique() %>% pull(ID)
 
 }
-
-# Look up ingredients in database
+testing <- fixFoodMappingError("syrup", "maple")
+# Find correct ID from database up ingredients in database
 testrun2 <- sapply(Ingredients$Ingredient[150:158], function(singleIngredient) {
 
   # Only look up relevant database hits
   tmp_db <- fakeDatabase %>%
     dplyr::filter(str_detect(singleIngredient, refWord1))
 
-  # Hvis det ikke er noen treff, bruk ID 0
+  # If no hits, ID is 0
   if(nrow(tmp_db) == 0) {
 
     ID <- 0
 
-    # Hvis det er treff, undersøk nærmere
+    # If there is a hit, find the best match
   } else {
 
     ID <- numeric(1)
@@ -264,23 +265,25 @@ testrun2 <- sapply(Ingredients$Ingredient[150:158], function(singleIngredient) {
   map_dfr(as_tibble, .id = "Ingredient") %>%
   rename(ID = value)
 
+testrun3 <- fixes %>%
+  dplyr::mutate(new_ID = map2(refWord1, refWord2, function(word1, word2) {
+
+    fixFoodMappingError(database = fakeDatabase, first_w = word1, second_w = word2)
+
+    } )
+  ) %>%
+  dplyr::select(-starts_with("ref")) %>%
+  distinct()
+
+pullCorrectID <- function(IngredientToCorrect) {
+
+  testrun3 %>%
+    dplyr::filter(Ingredient == IngredientToCorrect) %>% pull(new_ID) %>% as.numeric()
+
+}
+
+testrun4 <- testrun2 %>%
+  dplyr::mutate(ID = map_int(Ingredient, pullCorrectID))
 
 
 results
-# #Milk with cocoa powder
-# str_detect(Ingredients, 'butternut') ~ fixFoodMappingError(database = reference, 'winter squash_butternut',
-# str_detect(Ingredients, 'milk beverage chocolate') ~ fixFoodMappingError(database = reference, 'milk beverage_chocolate',
-# str_detect(Ingredients, 'water broth') ~ fixFoodMappingError(database = reference, 'water',
-# database_reference == 'mushroom' & !str_detect(Ingredients, 'condensed cream of mushroom soup|sauce') ~ fixFoodMappingError(database = reference, 'mushroom',
-#
-#
-# str_detect(Ingredients, 'barley cooked') ~ fixFoodMappingError(database = reference, 'barley_cooked',
-#
-#
-# str_detect(Ingredients, 'vinegar') & !str_detect(database_reference, 'vinegar') ~ fixFoodMappingError(database = reference, 'vinegar',
-#
-# str_detect(Ingredients, 'grouse') ~ fixFoodMappingError(database = reference, 'grouse',
-
-
-
-
