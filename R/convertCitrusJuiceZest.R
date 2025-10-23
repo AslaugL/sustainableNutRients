@@ -57,22 +57,22 @@ if(isTRUE(whole_fruit_to_volume_units) & isFALSE(weight_to_whole_fruits)) {
   weight_of_zest_per_dl <- list(
 
     lemon = sustainableNutRients::unit_weights %>%
-      filter(Ingredients == "lemon zest" & unit_enhet == "dl") %>% pull(grams_per_unit),
+      filter(Ingredients == "lemon zest" & unit == "dl") %>% pull(grams_per_unit),
     lime = sustainableNutRients::unit_weights %>%
-      filter(Ingredients == "lime zest" & unit_enhet == "dl") %>% pull(grams_per_unit),
+      filter(Ingredients == "lime zest" & unit == "dl") %>% pull(grams_per_unit),
     orange = sustainableNutRients::unit_weights %>%
-      filter(Ingredients == "orange zest" & unit_enhet == "dl") %>% pull(grams_per_unit)
+      filter(Ingredients == "orange zest" & unit == "dl") %>% pull(grams_per_unit)
 
   )
   #Weight of whole fruits
   weight_of_whole_fruits <- list(
 
     lemon = sustainableNutRients::unit_weights %>%
-      filter(Ingredients == "lemon" & unit_enhet == "brutto") %>% pull(grams_per_unit) %>% unique(),
+      filter(Ingredients == "lemon" & unit == "pcs") %>% pull(grams_per_unit) %>% unique(),
     lime = sustainableNutRients::unit_weights %>%
-      filter(Ingredients == "lime" & unit_enhet == "brutto") %>% pull(grams_per_unit) %>% unique(),
+      filter(Ingredients == "lime" & unit == "pcs") %>% pull(grams_per_unit) %>% unique(),
     orange = sustainableNutRients::unit_weights %>%
-      filter(Ingredients == "orange" & unit_enhet == "brutto") %>% pull(grams_per_unit) %>% unique()
+      filter(Ingredients == "orange" & unit == "pcs") %>% pull(grams_per_unit) %>% unique()
 
   )
 
