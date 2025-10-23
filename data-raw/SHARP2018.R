@@ -45,7 +45,7 @@ various$sharp_to_remove <- SHARP %>%
                                      'breadcrumbs', 'buns', 'wheat bread and rolls, brown or wholemeal', 'wheat flour', 'maize flour',
                                      'wheat wholemeal flour', 'dried pasta', 'pasta wholemeal', 'oat grain', 'bulgur', 'barley grain, pearled',
                                      'oat rolled grains', 'processed oat-based flakes', 'rye flour, light', 'rye flour, wholemeal',
-                                     'wheat semolina', 'wheat bran', 'common millet grain',
+                                     'wheat semolina', 'wheat bran', 'common millet grain', "buckwheat flour", "buckwheat",
                                      #Alcoholic beverages
                                      'beer', 'wine', 'whisky', 'fortified and liqueur wines', 'cider', 'brandy', 'vodka and vodka-like spirits',
                                      'rum', 'liqueurs', 'coffee liqueur',
@@ -307,7 +307,11 @@ SHARP <- SHARP %>%
              'liqueurs' = 'liqueur',
              'dairy imitates other than milks' = 'dairy imitate',
              'coffee beverages' = 'coffee',
-             'cola-type drinks' = 'soda'
+             'cola-type drinks' = 'soda',
+
+             # Grains
+             "oat grain" = "oat bran",
+             "lentil dry" = "lentil dried"
            ))
   ) %>%
 
@@ -343,6 +347,20 @@ various$salad <- SHARP %>%
 #Add to SHARP
 SHARP <- bind_rows(SHARP,various$salad)
 
+# Nuts
+various$nuts <- SHARP %>%
+  filter(Ingredients %in% c(
+    "almond", "cashew nuts", "nuts hazel", "pistachios", "walnuts",
+    "peanuts", "brazil nuts"
+  )) %>%
+  mutate(Ingredients = "nut",
+         FoodEx2 = NA) %>%
+  summarise(.by = c(Ingredients, L1),
+            `GHGE of 1 kg food as consumed_kgCO2eq` = mean(`GHGE of 1 kg food as consumed_kgCO2eq`),
+            `Land use of 1 kg food as consumed_m2/yr` = mean(`Land use of 1 kg food as consumed_m2/yr`))
+#Add to SHARP
+SHARP <- bind_rows(SHARP,various$nuts)
+
 #Add to SHARP
 SHARP <- full_join(SHARP, various$composite_ingredients_sharp)
 #Create a half-and-half row, half milk and half cream
@@ -361,6 +379,14 @@ SHARP <- SHARP %>%
   #Add a FoodEx2 code for the composite ingredients not in SHARP
   replace_na(list(FoodEx2 = 'Composite ingredient not in SHARP'))
 
+# # Add bananas from "Fremtiden i våre henders" environmental impact database,
+# # balsamic vinegar from https://doi.org/10.1016/j.jclepro.2016.04.090 (mean values ued)
+# SHARP <- SHARP %>%
+#   add_row(Ingredients = "banana", L1 = "Fruit and fruit products",  `GHGE of 1 kg food as consumed_kgCO2eq` = 1.3, `Land use of 1 kg food as consumed_m2/yr` = 0.6, database_ID = 300.999) %>%
+#   add_row(Ingredients = "vinegar balsamic", `GHGE of 1 kg food as consumed_kgCO2eq` = 2.24, `Land use of 1 kg food as consumed_m2/yr` = 11.53, database_ID = 301.999)
+#
+
+
 #Finalize for saving
 SHARP2018 <- SHARP %>%
   select(-c(Ingredients, L1, FoodEx2)) %>%
@@ -374,6 +400,11 @@ SHARP2018 <- SHARP %>%
     environmental_impact_indicator = environmental_impact_indicator %>%
       str_replace("GHGE of 1 kg food as consumed_kg", "kg ") %>%
       str_replace("Land use of 1 kg food as consumed_", ""))
+
+
+tmp$query_words <- tmp$query_words %>%
+  add_row(first_word = "banana", second_word = "\\", database_ID = 300.999) %>%
+  add_row(first_word = "vinegar", second_word = "balsamic", database_ID = 301.999)
 
 #Save
 saveRDS(SHARP2018, "./data-raw/SHARP2018.Rds")

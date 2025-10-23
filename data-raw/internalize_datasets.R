@@ -4,7 +4,7 @@ unit_weights <- readRDS("./data-raw/unit_weights2.Rds")
 unit_weights_query <- readRDS("./data-raw/unit_weights_query.Rds")
 
 matvaretabellen2024 <- readRDS("./data-raw/matvaretabellen2024.Rds")
-matvaretabellen20204_query <- readRDS("./data-raw/matvaretabellen2024_query.Rds")
+matvaretabellen2024_query <- readRDS("./data-raw/matvaretabellen2024_query.Rds")
 
 SHARP2018 <- readRDS("./data-raw/SHARP2018.Rds")
 SHARP2018_query <- readRDS("./data-raw/SHARP2018_query.Rds")
@@ -24,6 +24,9 @@ matvaretabellen_units <- readRDS("./data-raw/matvaretabellen_units.Rds")
 #Composite ingredients in Oda
 composite_ingredients_oda <- readRDS("./data-raw/composite_ingredients_oda.Rds")
 
+# Find food in database fixes
+source("./data-raw/fixFoodItemsLists.R")
+
 #Save for export
 usethis::use_data(unit_weights, unit_weights_query,
                   matvaretabellen2024, matvaretabellen2024_query,
@@ -32,6 +35,8 @@ usethis::use_data(unit_weights, unit_weights_query,
                   matvaretabellen2024_foodgroups, SHARP2018_foodgroups,
                   matvaretabellen_units,
                   composite_ingredients_oda,
+                  databaseHitFixes,
+                  not_in_database,
                   overwrite = TRUE,
                   internal = FALSE)
 
@@ -43,6 +48,8 @@ usethis::use_data(unit_weights, unit_weights_query,
                   matvaretabellen2024_foodgroups, SHARP2018_foodgroups,
                   matvaretabellen_units,
                   composite_ingredients_oda,
+                  databaseHitFixes,
+                  not_in_database,
                   overwrite = TRUE,
                   internal = TRUE)
 

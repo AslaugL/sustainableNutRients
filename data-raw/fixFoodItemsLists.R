@@ -1,35 +1,38 @@
 # Fixes for findFoodInDatabase function
 
-# Volume weight
-fixes <- list(
+## Volume weight ####
+databaseHitFixes <- list(
   volumeWeight = tibble(
     tmp = c(
+      "broth cube chicken_broth cube",
+      "broth cube vegetable_broth cube",
+      "bean white tomato_bean canned white tomato",
+      "vinegar apple cider_vinegar",
+      "buttermilk_milk",
       'butter clarified ghee_ghee',
       'eggplant_eggplant',
-      'sugar_sugar_white',
       'bread flat hard_flatbread_hard',
-      'caper_capers',
+      'caper_capers_canned',
       'cheese mozzarella_mozzarella',
-      'chili pepper green_chili_red',
-      'chili pepper jalapeno_chili_red', #Same in volume
-      'mackerel tomato canned_mackerel_fillet',
-      'peas green_pea_frozen',
+      'chili pepper green_chili pepper_red',
+      'chili pepper jalapeno_chili pepper_red', #Same in volume
+      'mackerel tomato canned_mackerel_tomato',
       'pork neck chop_pork_neck',
       'sweet pepper grilled_sweet pepper_grilled',
       'turkey chicken drumstick_turkey_drumstick',
       'lemongrass_lemongrass',
       'fig_fig',
-      'bean white canned_bean white_canned',
-      'bean kidney canned_bean kidney_canned',
-      'bean black canned_bean black_canned',
+      'bean white canned_bean canned_white',
+      'bean kidney canned_bean canned_kidney',
+      'bean black canned_bean canned_black',
       'chick pea canned_chick pea_canned',
       'mustard powder_mustard_powder',
       'parsley_parsley_fresh',
-      'bean canned_bean black_canned',
-      'bean black_bean black_canned',
+      'bean canned_bean canned_black',
+      'bean black_bean canned_black',
       'rice brown long grain_rice',
-      'cranberries jam_jam_marmalade',
-      'jam apricot_jam_marmalade',
+      'cranberries jam_jam',
+      'jam apricot_jam',
       'hamburger bun_hamburger_bread',
       'mustard honey_mustard',
       'bread rye_bread',
@@ -38,34 +41,34 @@ fixes <- list(
       'sausage turkey chicken_sausage turkey chicken',
       'salad rocket_ruccola',
       'lime leaf_bay leaf', #Assume similar
-      'chili peppers_chili_red',
-      'chili_chili_red',
-      'strong chili_chili_red',
+      'chili peppers_chili pepper_red',
+      'chili_chili pepper_red',
+      'strong chili_chili pepper_red',
       'corn flour_cornmeal_polenta',
       'oat quick_rolled_oat',
       'peach canned_peach canned',
-      'pimiento chili pepper_chili_red', #Small pepper
+      'pimiento chili pepper_chili pepper_red', #Small pepper
       'garlic wild_scallion',
       'agave nectar_honey',
       'graham cracker_cracker_cream',
       'marjoram fresh herbs_oregano_fresh',
-      'harissa mild_chili_paste',
-      "harissa_chili_paste",
+      'harissa mild_paste_chili',
+      "harissa_paste_chili",
       'spread speculaas_peanut_butter',
       'onion pickled_beetroot_pickled',
       'pizza sauce red_tomato_canned',
-      "rolls white baguette garlic_baguette_half",
+      "rolls white baguette garlic_baguette",
       "egg yolk boiled_egg_yolk",
       "o'boy pulver_cocoa_powder",
       "hamburger plant-based_meat_ground",
-      "cheese pizza_hard to semi-hard cheese",
-      'cheese manchego_hard to semi-hard cheese',
+      "cheese pizza_cheese semi hard",
+      'cheese manchego_cheese semi hard',
       'cheese brie_soft ripened cheese',
       'cheese mascarpone_soft ripened cheese',
       'cheese camembert_soft ripened cheese',
       'cheese le crémier de chaumes_soft ripened cheese',
       'cheese goat chevre white_soft ripened cheese',
-      'cheese goat_soft ripened cheese',
+      #'cheese goat_soft ripened cheese',
       'shortening_margarine",
       "shortening vegetable_margarine',
       'onion seed_poppy_seed',
@@ -80,29 +83,37 @@ fixes <- list(
       "quark_cottage_cheese",
       "garlic powder_onion_powder",
       "remulade_mayonnaise",
-      "cheese plant-based_hard to semi-hard cheese",
+      "cheese plant-based_cheese semi hard",
       "almond butter_peanut_butter",
       "barbecue seasoning_taco_spice",
       "syrup chocolate_syrup",
       "syrup currant_syrup",
       "syrup blackcurrant_syrup",
       'syrup glucose_syrup',
-      "erythriol_sugar_white",
-      'pearl sugar_sugar_white')
-  ),
+      "erythriol_sugar",
+      'pearl sugar_sugar',
+      "butter spice_butter",
+      "pollock_cod_fillet",
+      "rolls coarse_rolls_white",
+      "pie crust_pie_dough",
+      paste0("ice cream ", c("caramel", "chocolate", "vanilla", "plant-based"), "_ice cream")
+  )),
+  ## Nutrition----
   nutrients = tibble(
     tmp = c(
       #Fruit and veg
+      'vinegar raspberries_vinegar',
+      'lime, the zest_lemon_zest',
       'eggplant_eggplant',
       'peach_peach',
       'sweet corn kernels_sweet corn_canned',
       'sweet potato_sweet potato',
-      'jerusalem artichoke_jerusalem artichoke',
+      'jerusalem artichoke_artichoke_jerusalem',
       'chili pepper dried_chili pepper_red',
       'mangold_mangold',
 
       'watermelon_watermelon',
-      'salsa_chunky_salsa',
+      'salsa_salsa_chunky',
       'pear_pear',
       'jam blueberries_jam',
       'tomato beef_tomato',
@@ -127,13 +138,10 @@ fixes <- list(
       'cheese cottage_cheese cottage',
       'cheese goat chevre white_cheese_chevre',
       'cheese goat_cheese_chevre',
-      'cheese cream_cheese cream',
       'cheese soft_cheese cream',
       'cheese le crémier de chaumes_cheese cream',
-      'cheese cream goat sn\u00f8frisk_cheese cream',
-      'goat sn\u00f8frisk_cream cheese goat',
-      'cheese cream_goat sn\u00f8frisk',
-      'cheese semi-hard_cheese_norvegia',
+      'cheese cream goat sn\u00f8frisk_cheese cream_goat sn\u00f8frisk',
+      'cheese semi hard_cheese_norvegia',
       'cheese emmentaler_cheese_norvegia',
       'cheese garlic_cheese_norvegia',
       'cheese pizza_cheese_norvegia',
@@ -237,11 +245,10 @@ fixes <- list(
       'butter plant-based_margarine',
       'apple cider_cider',
       'currant juice_black currant_juice',
-      'cashew nut salt_cashew_nut',
-      'cashew nut roasted_cashew_nut',
+      'cashew nut salt_cashew nut',
+      'cashew nut roasted_cashew nut',
       'bread crumb_bread',
       'bread_bread',
-      'bread_naan',
       'breadstick_bread',
       'crisp bread_crisp bread_coarse',
       'crisp bread coarse_crisp bread_coarse',
@@ -266,8 +273,8 @@ fixes <- list(
       'syrup chocolate_syrup_maple',
       'syrup caramel_syrup_maple',
       'glucose_syrup_maple',
-      'salsa_chunky_salsa',
-      'salsa tomato_chunky_salsa',
+      'salsa_salsa_chunky',
+      'salsa tomato_salsa_chunky',
       'syrup apple_syrup_maple',
       'syrup pear_syrup_maple',
       'garlic oil_olive_oil',
@@ -275,11 +282,24 @@ fixes <- list(
       'frying oil_vegetable_oil',
       'oil_vegetable_oil',
       'flaxseed meal_flax_seed',
-      'seed flax_flax_seed'
+      'seed flax_flax_seed',
+      'chicken ham_turkey_ham',
+      "chips_chips_potato",
+      'cream cheese goat_cheese cream_goat snøfrisk',
+      "elk minced meat_beef_minced meat lean",
+      "pancake powder mix_pancake_mix",
+      "peanut butter unsalted" = "peanut_butter",
+      "pear marmalade" = "marmelade_pear",
+      "rib roll pork_pork belly",
+      "rice sushi_rice porridge",
+      "smoothie mix_smoothie mix_tropical",
+      "mexican salad_mexican salad"
     )
   ),
+  ## Sustainability----
   sustainability = tibble(
     tmp = c(
+      "broth cube chicken_broth_cube",
       paste0(c('espresso bean coffee ground', 'coffee beans'), '_coffee ground'),
       'hazelnut_nut_hazel',
       'lentils dried_lentil_dry',
@@ -303,9 +323,9 @@ fixes <- list(
       #Veggies and fruit
       paste0(c("chili pepper jalapeno pickled", "onion pickled", "cucumber pickled",
                "ginger pickled", "beetroot pickled", "sweet pepper pickled"), "_vegetables_pickled"),
-      paste0(c("chili canned", "sweet corn canned", "sweet corn kernels", "sweet pepper canned")),
+      paste0(c("chili canned", "sweet corn canned", "sweet corn kernels", "vegetables_canned")),
       "chicory_curly_endives",
-      'peach_peaches_other',
+      'peach_peach',
       'sorrel_lettuce_other',
       paste0(c("winter squash butternut", "winter squash pumpkin", "winter squash hokkaido"), "_pumpkin"),
       "eggplant_eggplant",
@@ -314,7 +334,7 @@ fixes <- list(
       #'mangold_chard',
       'olive black_olives_canned',
       paste0(c('olive green', 'of olives'), '_olives_fresh'),
-      'olive green_olives_canned',
+      'olive black_olives_canned',
       paste0(c('red chili', 'strong chili', 'chili peppers'), '_chili_pepper'),
       paste0(c('tomato bunch', 'tomato beef'), '_tomato'),
       paste0(c('salad', 'salad heart', 'salad lollo rosso'), '_head_lettuce'),
@@ -419,12 +439,12 @@ fixes <- list(
       paste0(c("parmesan cheese", "cheese cheddar", "cheese parmigiano reggiano",
                "cheese gruyere", "cheese cotjia", "cheese romano", "cheese hard goat"), '_hard cheese'),
       paste0("cheese ", c("pizza", "halloumi", "manchego", "havarti", "swiss", "monterey jack",
-                          "pepperjack", "asiago", "mozzarella", "jarlsberg", "semi-hard", "provolone",
+                          "pepperjack", "asiago", "mozzarella", "jarlsberg", "semi hard", "provolone",
                           "norvegia", "emmentaler", "garlic", "brown"), "_hard to semi-hard cheese"),
       "goat brown cheese_hard to semi-hard cheese",
       paste0("cheese ", c("ricotta salata", "blue", "blue selbu", "camembert", "neufchatel", "port salut",
                           "brie", "mascarpone", "gorgonzola", "soft", "le crémier de chaumes", "goat",
-                          "goat chevre white"), '_soft-ripened cheese'),
+                          "goat chevre white", "blue roquefort"), '_soft-ripened cheese'),
       paste0(c('cheese american', 'cheese spread'), '_processed cheese and spreads'),
       paste0(c('yoghurt plain greek', 'yoghurt plain', 'yoghurt plain skyr', 'kefir',
                "quark 7 %", "quark 1", "biola"), "_yoghurt"),
@@ -466,14 +486,18 @@ fixes <- list(
 )) %>% lapply(., function(fixList) {
 
   fixList %>%
-    separate_wider_delim(.,
+    tidyr::separate_wider_delim(.,
                          cols = tmp,
-                         names = c("Ingredient", "refWord1", "refWord2"),
+                         names = c("Ingredients", "database_referenceword1", "database_referenceword2"),
                          delim = "_",
-                         too_few = "align_start")
+                         too_few = "align_start") %>%
+    replace_na(., list(database_referenceword2 = "\\"))
 })
-## Ingredients ----
 
+
+
+
+## Not in database Ingredients ----
 not_in_database <- list(
   volumeWeight = tibble(
     tmp = c(
@@ -481,9 +505,9 @@ not_in_database <- list(
       paste0(c(
         'mustard powder', 'chinese five spice', 'dip mix', 'asafoetida powder', 'lemon gel',
         'sauce browning', 'trout caviar', 'whip it stabilizer', 'vanillin', 'turkey offal',
-        'sugar color'), "_IngredientsEqual"),
+        'sugar color', 'coffee beans', 'prune marinade'), "_IngredientsEqual"))#,
       # Str detect
-      paste0(c('powder mix'), "_strDetectIngredients"))
+      #paste0(c('powder mix'), "_strDetectIngredients"))
     ),
   nutrients = tibble(
     tmp = c(
@@ -502,7 +526,8 @@ not_in_database <- list(
       'sweet potato fries', 'coriander paste', 'vanilla essence', 'vanilla pod',
       'cheese schnitzel', 'cheese pancakes', 'honey crunch', 'lemon gel', 'mint jelly',
       'prune marinade', 'roe salmon', 'vanilla pod', 'vanilla powder', 'vanilla essence',
-      'quick lunch', 'prune marinade', 'orange liqueur', 'turkey offal'), "_IngredientsEqual"),
+      'quick lunch', 'prune marinade', 'orange liqueur', 'turkey offal', 'bones for broth',
+      "beer", "horn salt"), "_IngredientsEqual"),
       # Str detect
       paste0(c("spice mix(?! taco)", "powder mix", "soup instant"), "_strDetectIngredients"))
       ),
@@ -531,54 +556,25 @@ not_in_database <- list(
 )) %>% lapply(., function(fixList) {
 
   fixList %>%
-    separate_wider_delim(.,
+    tidyr::separate_wider_delim(.,
                          cols = tmp,
-                         names = c("Ingredient", "expressionHelp"),
+                         names = c("Ingredients", "expressionHelp"),
                          delim = "_",
                          too_few = "align_start")
 }) %>%
   bind_rows(.id = "database") %>%
-  nest(.by = database) %>%
-  # Build the expressions
-  dplyr::mutate(
-    data = map(data, function(dta) {
-
-      dta %>%
-        dplyr::mutate(.by = expressionHelp,
-          expression = case_when(
-            expressionHelp == "IngredientsEqual" ~ paste0('Ingredients %in% c("',
-                                                          paste0(Ingredient, collapse = '", "'),
-                                                          '")'),
-            expressionHelp == "strDetectIngredients" ~ paste0('str_detect(Ingredients, "',
-                                                              paste0(Ingredient, collapse = "|"),
-                                                              '")')
-            )
-          ) %>%
-        dplyr::mutate(expression = paste0(expression, ' & !str_detect(database_ID, ".999") ~ 0'))
-        dplyr::select(-Ingredient) %>%
-        distinct()
-    })
-  )
+  dplyr::mutate(.by = c(database, expressionHelp),
+                expression = case_when(
+                  expressionHelp == "IngredientsEqual" ~ paste0(
+                    'Ingredients %in% c("', paste0(Ingredients, collapse = '", "'), '")'),
+                  expressionHelp == "strDetectIngredients" ~ paste0(
+                    'str_detect(Ingredients, "', paste0(Ingredients, collapse = "|"),
+                                                                    '")')
+                )
+  ) %>%
+  dplyr::select(-Ingredients) %>% dplyr::distinct() %>%
+  dplyr::summarise(.by = database,
+                expression = paste0(
+                  "(", paste0(expression, collapse = " | "), ") & !str_detect(database_ID, '.999') ~ 0"))
 
 
-## Sustainability¨
-
-
-
-
-# Har lagt til dem under i unit_weights
-# str_detect(Ingredients, 'salad') & unit == 'pcs' &
-#   !str_detect(Ingredients,
-#               'potato|shellfish|beetroot|mexican|mediterranean|indian|bulgur|buckwheat|couscous' '_heart_salad',
-
-# str_detect(Ingredients, 'ice cream') & !str_detect(Ingredients, 'cake') '_ice cream',
-
-#Similar ingredients to exchange for each other
-
-
-
- #Similar
-
-
-   #If user have added these ingredients, keep
- #  !str_detect(database_ID, ".999")) ~ 0

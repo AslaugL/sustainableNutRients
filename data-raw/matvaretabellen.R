@@ -60,7 +60,7 @@ various <- list()
 #     )
 
 # Get the English food item names
-matvaretabellenJSON <- fromJSON(file =  "./inst/extdata/matvaretabellen2024.json", simplify = FALSE)
+matvaretabellenJSON <- jsonlite::fromJSON(txt =  "./inst/extdata/matvaretabellen2024.json", simplifyDataFrame = FALSE)
 # Format like the xlsx files
 tmp <- matvaretabellenJSON[[1]] %>%
   lapply(., function(x) {
@@ -247,7 +247,7 @@ clean_nutrients <- raw_data %>%
     'chocolate bar, milk', 'chocolate, white', 'chocolate, cooking, plain, minimum 35 % cocoa',
     'pizza, industrially made', 'breakfast cereal, wheat, barley, rye, oat, no sugar, 4-korn',
     'chocolate, snickers', 'ice cream, dairy', 'chocolate, dark, 70 % cocoa', 'tart shell, no filling',
-    'puffed oats', 'puffed wheat', 'puffed rice', 'corn flakes, kelloggs')) |
+    'puffed oats', 'puffed wheat', 'puffed rice', 'corn flakes, kelloggs', 'ice cream, dairy, vanilla')) |
            !str_detect(Foodgroup,
                        'dessert|other meat products, prepared|other meats, minced, offal, prepared|egg, prepared|cookies|cod liver oil|homemade|chocolate|instant|cake|breakfast cereals|porridge|pizza')) %>%
 
@@ -568,22 +568,22 @@ clean_nutrients <- raw_data %>%
   food_item == 'wakame salad' ~ 'wakame_salad',
 
   #Grains----
-  food_item == 'adzuki beans, uncooked' ~ 'bean_adzuki',
+  food_item == 'adzuki beans, uncooked' ~ 'bean dried_adzuki',
   food_item == 'almonds' ~ 'almond',
   food_item == 'broad beans, uncooked' ~ 'bean_broad',
-  food_item == 'beans, black, canned'  ~ 'bean_black canned',
-  food_item == 'beans, brown, uncooked'  ~ 'bean_brown dry',
+  food_item == 'beans, black, canned'  ~ 'bean canned_black',
+  food_item == 'beans, brown, uncooked'  ~ 'bean dried_brown',
   food_item == 'beans, brown, cooked'  ~ 'bean_brown cooked',
-  food_item == 'beans, red (kidney), canned' ~ 'bean_kidney canned',
-  food_item == 'beans, red (kidney), uncooked' ~ 'bean_kidney',
-  food_item == 'lima beans, uncooked'  ~ 'bean_lima dry',
-  food_item == 'cowpeas, blackeyes beans, uncooked'  ~ 'bean_blackeyed dry',
+  food_item == 'beans, red (kidney), canned' ~ 'bean canned_kidney',
+  food_item == 'beans, red (kidney), uncooked' ~ 'bean dried_kidney',
+  food_item == 'lima beans, uncooked'  ~ 'bean dried_lima',
+  food_item == 'cowpeas, blackeyes beans, uncooked'  ~ 'bean dried_blackeyed',
   food_item == 'millet, grain' ~ 'millet',
   food_item == 'mung beans, sprouted, raw' ~ 'bean_sprout', #Standard
-  food_item == 'beans, white, large, canned' ~ 'bean_white canned',
-  food_item == 'beans, white, uncooked' ~ 'bean_white',
-  food_item == 'beans, soya, uncooked' ~ 'bean_soya',
-  food_item == 'beans, mung, uncooked' ~ 'bean_mung',
+  food_item == 'beans, white, large, canned' ~ 'bean canned_white',
+  food_item == 'beans, white, uncooked' ~ 'bean dried_white',
+  food_item == 'beans, soya, uncooked' ~ 'bean dried_soya',
+  food_item == 'beans, mung, uncooked' ~ 'bean dried_mung',
   food_item == 'breakfast cereal, wheat, barley, rye, oat, no sugar, 4-korn' ~ 'firkorn',
   food_item == 'flatbread, hard' ~ 'bread flat hard',
   food_item == 'bulgur, uncooked' ~ 'bulgur_wheat',
@@ -612,11 +612,10 @@ clean_nutrients <- raw_data %>%
   food_item == 'rice, jasmin, uncooked' ~ 'rice_jasmin',
   food_item %in% c('lentils, green and brown, uncooked', 'lentils, green, uncooked') ~ 'lentils dried_green',
   food_item %in% c('lentils, red/pink, uncooked', 'lentils, red, uncooked') ~ 'lentils dried_red',
-  food_item %in% c('lentils, green, puy, uncooked') ~ 'lentil_puy',
-  food_item %in% c('lentils, black, beluga, uncooked') ~ 'lentil_beluga',
-  food_item == 'lentils, green, canned' ~ 'lentils canned', # default
+  food_item %in% c('lentils, green, puy, uncooked') ~ 'lentils dried_puy',
+  food_item %in% c('lentils, black, beluga, uncooked') ~ 'lentils dried_beluga',
+  food_item == 'lentils, green, canned' ~ 'lentils canned_green', # default
   food_item == 'lentils, red, canned' ~ 'lentils canned_red',
-  food_item == 'lima beans, uncooked' ~ 'bean_lima raw',
   food_item == 'squash seeds, pumpkin seeds' ~ 'pumpkin_seed',
   food_item == 'quinoa, white, uncooked' ~ 'quinoa', # Default
   food_item == 'quinoa, red, uncooked' ~ 'quinoa_red',
@@ -775,6 +774,7 @@ clean_nutrients <- raw_data %>%
   food_item == "almond based beverage" ~ "dairy imitate_almond milk",
   food_item == 'plant-based product, used as cheese' ~ 'cheese_plant-based',
   food_item == 'coconut based beverage, with calsium og vitamins (vit b12, vit d)' ~ 'dairy imitate_coconut',
+  food_item == 'ice cream, dairy, vanilla' ~ "ice cream",
 
   #Mushrooms----
   food_item == 'mushroom, chantherelle, raw' ~ 'mushroom_chanterelle',
@@ -891,7 +891,7 @@ clean_nutrients <- raw_data %>%
   mutate(Ingredients = case_when(
     #Turn seeds and nuts and some fruits into singular form
     str_detect(food_item, 'nuts') &
-      !str_detect(Ingredients, 'pecan|brazil|hazel|pistachio') ~ str_replace(food_item, 'nuts', 'nut'),
+      !str_detect(Ingredients, 'pecan|brazil|hazel|pistachio|demia') ~ str_replace(food_item, 'nuts', 'nut'),
     #str_detect(food_item, 'seeds') ~ str_replace(food_item, 'seeds', 'seed'),
 
     #Some other fruits and vegetable
@@ -936,7 +936,8 @@ fromFoodDataCentral_foods <- read_csv(
     #Meat products
     'Beef, variety meats and by-products, tongue, raw', 'Pork, fresh, variety meats and by-products, kidneys, raw',
     'Beef, New Zealand, imported, flank, separable lean and fat, raw', 'Lamb, New Zealand, imported, fore-shank, separable lean and fat, raw',
-    #'Lamb, Australian, ground,  85% lean / 15% fat, raw', "Lard",
+    #'Lamb, Australian, ground,  85% lean / 15% fat, raw',
+    "Lard",
 
     #Fruit and veg
     #'Jams and preserves, apricot',
@@ -967,7 +968,9 @@ fromFoodDataCentral_foods <- read_csv(
     'Seaweed, agar, dried', 'Soup, onion, dry, mix', 'Alcoholic beverage, rice (sake)',
     'Shortening, vegetable, household, composite', 'Pickle relish, sweet', 'Syrups, maple',
     'Sauce, ready-to-serve, pepper, TABASCO', 'Tapioca, pearl, dry', 'Molasses', 'Vital wheat gluten',
-    'Horseradish, prepared', 'Fat, goose', 'Frostings, glaze, prepared-from-recipe')) %>%
+    'Horseradish, prepared', 'Fat, goose', 'Frostings, glaze, prepared-from-recipe'#,
+    #'Nuts, macadamia nuts, raw'
+    )) %>%
 
   #Rename to fit ingredient names
   mutate(description = description %>%
@@ -1148,8 +1151,9 @@ clean_nutrients <- bind_rows(clean_nutrients, various$component_ingredients_nutr
   add_row(database_ID = 10000, Ingredients = 'shellfish', from = 'Shellfish in Matvaretabellen')
 
 #Ingredient groups consiting of more than one ingredient
+various$ingredient_groups <- list()
 #Create the nutrient content of the shellfish ingredient by taking the mean of the shellfish in the db
-various$shellfish <- raw_data %>%
+various$ingredient_groups$shellfish <- raw_data %>%
 
   #Remove columns and nutrients not needed
   select(!contains(c('ref', 'Edible', ':0', ' sum', '2n', '3n', '4n', 'Foodgroup'))) %>%
@@ -1192,7 +1196,7 @@ various$shellfish <- raw_data %>%
   mutate(Foodgroup = "shellfish, fish offal")
 
 #Dairy grouped ingredients
-various$dairy_ingredients <- raw_data %>%
+various$ingredient_groups$dairy_ingredients <- raw_data %>%
   #Remove columns and nutrients not needed
   select(!contains(c('ref', 'Edible', ':0', ' sum', '2n', '3n', '4n', 'Foodgroup'))) %>%
   #Rename to fit
@@ -1248,10 +1252,49 @@ various$dairy_ingredients <- raw_data %>%
     str_detect(Ingredients, "cheese blue") ~ "cheese, extra fat"
   ))
 
+# canned/dry beans and lentils
+various$ingredient_groups$legumes <- clean_nutrients %>%
+  dplyr::filter(str_detect(Ingredients, "bean|lentil") &
+                  str_detect(Ingredients, "dried|canned") &
+                  Ingredients != "beans, in chili sauce_canned") %>%
+  left_join(.,
+            raw_data %>%
+              #Remove columns and nutrients not needed
+              select(!contains(
+                c('ref', 'Edible', ':0', ' sum', '2n', '3n', '4n', 'Foodgroup',
+                  'from', 'Food Item'))) %>%
+              #Rename to fit
+              rename(
+                database_ID = FoodID,
+                EPA = `C20:5n-3 (EPA)`,
+                DPA = `C22:5n-3 (DPA)`,
+                DHA = `C22:6n-3 (DHA)`) %>%
+              dplyr::mutate(database_ID = as.numeric(database_ID))
+            ) %>%
+  dplyr::mutate(Ingredients = str_replace(Ingredients, "_[a-z ]+", "")) %>%
+  dplyr::mutate(.by = Ingredients, database_ID = cur_group_id()) %>%
+  mutate(database_ID = database_ID + 15000) %>%
+  dplyr::select(-c(from, food_item)) %>%
+  #Turn everything to numeric
+  pivot_longer(.,
+               cols = -c(database_ID, Ingredients, Foodgroup),
+               names_to = 'feature',
+               values_to = 'value') %>%
+  dplyr::mutate(value = as.numeric(value)) %>%
+  #Get the mean values o each nutrient
+  summarise(.by = c(Ingredients, database_ID, feature),
+            value = mean(value, na.rm = TRUE)) %>%
+  #Turn wide
+  pivot_wider(.,
+              names_from = 'feature',
+              values_from = 'value')
+
+
 #Add to the clean_nutrients
+various$ingredient_groups <- bind_rows(various$ingredient_groups)
 clean_nutrients <- bind_rows(clean_nutrients,
-                             various$dairy_ingredients %>%
-                               select(database_ID, Ingredients, Foodgroup) %>%
+                             various$ingredient_groups %>%
+                               dplyr::select(database_ID, Foodgroup, Ingredients) %>%
                                mutate(food_item = "",
                                       from = "Composite of Matvaretabellen ingredients"))
 
@@ -1289,8 +1332,7 @@ nutrients_to_use <- raw_data %>%
 nutrients_to_use <- nutrients_to_use %>%
   bind_rows(., fromFoodDataCentral_foods) %>%
   bind_rows(., various$component_ingredients_nutrients) %>%
-  bind_rows(., various$shellfish) %>%
-  bind_rows(., various$dairy_ingredients) %>%
+  bind_rows(., various$ingredient_groups ) %>%
   full_join(., clean_nutrients, by = c('database_ID')) %>%
   #Give sour cream, crème fraîche and veal liver individual database_IDs, while keeping the nutrition information rows
   mutate(database_ID = case_when(
@@ -1312,7 +1354,7 @@ matvaretabellen2024 <- nutrients_to_use %>% select(-c(food_item, Foodgroup)) %>%
 
 #Save matvaretabellen dataframe
 saveRDS(matvaretabellen2024, "./data-raw/matvaretabellen2024.Rds")
-saveRDS(matvaretabellen2024, "./data-raw/matvaretabellen2022.Rds")
+#saveRDS(matvaretabellen2024, "./data-raw/matvaretabellen2022.Rds")
 
 #Save foodgroups info
 matvaretabellen2024_foodgroups <- nutrients_to_use %>%
@@ -1320,13 +1362,78 @@ matvaretabellen2024_foodgroups <- nutrients_to_use %>%
   rename(foodgroup = Foodgroup)
 
 saveRDS(matvaretabellen2024_foodgroups, "./data-raw/matvaretabellen2024_foodgroups.Rds")
-saveRDS(matvaretabellen2024_foodgroups, "./data-raw/matvaretabellen2022_foodgroups.Rds")
+#saveRDS(matvaretabellen2024_foodgroups, "./data-raw/matvaretabellen2022_foodgroups.Rds")
 
 #Save database_ID and food_item columns to create a query dataframe
 matvaretabellen2024_query_prep <- clean_nutrients %>%
   select(Ingredients, database_ID) %>%
-  filter(!str_detect(Ingredients, ', imported|, norwegian|apple,|,'))
+  filter(!str_detect(Ingredients, ', imported|, norwegian|apple,|,')) %>%
+  # Change names of some ingredients
+  dplyr::mutate(
+    Ingredients = str_replace_all(Ingredients, c(
+      "bean_white canned" = "bean canned_white",
+      "bean_black canned" = "bean canned_black",
+      "bean_kidney canned" = "bean canned_kidney",
+      "chick pea" = "chickpea",
+      "bean_sprout" = "sprout_bean",
+      "artichoke_heart" = "artichoke",
+      "jerusalem artichoke" = "artichoke_jerusalem",
+      "beet pickled" = "beetroot pickled",
+      "fresh$" = "fresh herbs")
+    ),
+    Ingredients = str_trim(Ingredients)
+  )
+
+## Switch word order of some ingredients
+## Change order of words----
+switch_word_order <- c(
+  # "asparagus bean", "alfalfa sprouts", "bean sprouts", "break bean",
+  # "black chokeberries", "boiled ham", "cured ham", "swedish sausage",
+  # "cocktail sausage", "lamb sausage", "meat sausage", "lemon curd",
+  # "passion fruit curd", "ground meat", "lingonberry jam",
+  # #"smoke-cured ham",
+  # paste0(c("vegetable", "truffle", "sunflower", "olive", "soy", "sesame",
+  #          "salad", "rapeseed", "peanut", "hazelnut", "garlic", "corn",
+  #          "coconut", "canola"), " oil"),
+  paste0(c(
+    "bearnaise", "brown", "béchamel", "fish", "cream", "gravy",
+    "mint", "oyster", "soy", "taco", "worcestershire", "bbq",
+    "chocolate", "apple"
+  ), " sauce")#,
+  # paste0(
+  #   c("carrot", "chili", "curry", "garlic", "ginger", "shrimp", "tamarind",
+  #     "tomato", "coriander", "tikka masala"), " paste"),
+  # paste0(
+  #   c("caraway", "chia", "coriander", "fennel", "flax", "hemp", "mustard",
+  #     "poppy", "pumpkin", "sesame", "sunflower"
+  #   ), " seed"),
+  # paste0(
+  #   c("pizza", "fish soup", "cream sauce", "bolognese", "hollandaise"), "base"),
+  # paste0(
+  #   c("carrot", "chocolate", "gluten-free"), "cake mix"),
+  # paste0(c(
+  #   "bearnaise", "carbonara", "muffin", "greek moussaka", "bali stew"
+  # ), " powder mix")
+)
+
+# Do the word switching
+matvaretabellen2024_query_prep <- matvaretabellen2024_query_prep %>%
+  dplyr::mutate(Ingredients = case_when(
+    Ingredients == "gluten-free cake mix" ~ "cake mix gluten-free",
+    Ingredients %in% switch_word_order &
+      str_count(Ingredients, "\\w+") == 3 & str_detect(Ingredients, "powder mix$|cake mix$") ~ str_replace_all(Ingredients, "([a-zæøå-]+) ([a-zæøå-]+ [a-zæøå-]+)", "\\2 \\1"),
+    Ingredients %in% switch_word_order &
+      str_count(Ingredients, "\\w+") == 4 & str_detect(Ingredients, "powder mix$|cake mix$") ~ str_replace_all(Ingredients, "(([a-zæøå-]+ [a-zæøå-]+)|([a-zæøå]+-[a-zæøå]+)) ([a-zæøå-]+ [a-zæøå-]+)", "\\2 \\1"),
+    Ingredients %in% switch_word_order &
+      str_count(Ingredients, "\\w+") == 3 & !str_detect(Ingredients, "powder mix$|cake mix$") ~ str_replace_all(Ingredients, "([a-zæøå-]+ [a-zæøå-]+) ([a-zæøå-]+)", "\\2 \\1"),
+    Ingredients %in% switch_word_order &
+      str_count(Ingredients, "\\w+") == 2 ~ str_replace_all(Ingredients, "(\\w+) (\\w+)", "\\2 \\1"),
+    str_detect(Ingredients, "soup [a-zæøå-]+ instant") ~ str_replace_all(Ingredients, c(" instant" = "", "soup" = "soup instant")),
+    TRUE ~ Ingredients)
+  ) %>%
+  distinct()
+
 
 #Save the dataframe to use to create the queries
 saveRDS(matvaretabellen2024_query_prep, "./data-raw/matvaretabellen2024_query_prep.Rds")
-saveRDS(matvaretabellen2024_query_prep, "./data-raw/matvaretabellen2022_query_prep.Rds")
+#saveRDS(matvaretabellen2024_query_prep, "./data-raw/matvaretabellen2022_query_prep.Rds")

@@ -8,6 +8,13 @@ matvaretabellen2024_query <- readRDS("./data-raw/matvaretabellen2024_query_prep.
     TRUE ~ database_ID)) %>%
   drop_na(Ingredients) %>%
 
+  # Fix some search words
+  dplyr::mutate(
+    Ingredients = str_replace_all(Ingredients, c(
+      "chunky_salsa" = "salsa_chunky"
+    ))
+  ) %>%
+
   #Create search words
   separate(., col = Ingredients, into = c('first_word', 'second_word'), sep = '_', remove = FALSE) %>%
   replace_na(list(second_word = '\\')) %>%

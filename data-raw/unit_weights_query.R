@@ -1,163 +1,112 @@
 #Use store bought breads and rolls as default
 
+# Pancake dry mix = pancake powder mix
+
 #Create query words to search through a recipe list to link it to unit_weights
-unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(grams_per_unit, unit_enhet, reference)) %>% unique() %>% #Only keep names, not units
+unit_weights_query <- readRDS("./data-raw/unit_weights2.Rds") %>% select(-c(grams_per_unit, unit)) %>% unique() %>% #Only keep names, not units
   mutate(Ingredients = str_replace_all(Ingredients, ',', '')) %>%
 
   #First two words contain the most important information to identify the ingredients
-  mutate(first_word = str_extract(Ingredients, '^\\w+'),
-         temp = str_extract(Ingredients, '^\\w+\\s\\w+')) %>%
-  mutate(second_word = str_remove(temp, '^\\w+\\s')) %>%
-  select(-temp) %>% unique() %>%
-  replace_na(list(second_word = '\\')) %>%
-
-  #Clean up some of them that's not right, always have the most generic name in the first column, then a specification in second column if present
   mutate(
+
     first_word = case_when(
-      Ingredients == "fruit coctail canned" ~ "coctail",
-      Ingredients == "passion fruit" ~ "passion fruit",
-      Ingredients == 'white or yellow hard to semi-hard cheese' ~ 'hard to semi-hard cheese',
-      Ingredients == 'egg noodle cooked' ~ 'egg noodle',
-      Ingredients == 'horse-radish' ~ 'horseradish',
-      Ingredients == 'lasagne sheets uncooked' ~ 'lasagna',
-      Ingredients == 'pork neck chops' ~ 'neck',
-      Ingredients == 'sugar snap peas' ~ 'sugar snap peas',
-      Ingredients %in% c('black pepper whole','black pepper grounded') ~ 'pepper',
-      Ingredients == 'black chokeberries' ~ 'chokeberries',
-      Ingredients == "chick pea dry" ~ "chick pea",
-      Ingredients == 'chick pea flour' ~ 'chick pea',
-      Ingredients == 'chick pea canned' ~ 'chick pea',
-      Ingredients == 'sugar snap pea' ~ 'pea',
-      Ingredients == 'smoke-cured ham' ~ 'ham',
-      Ingredients == 'cured ham' ~ 'ham',
-      Ingredients == 'grilled sweet pepper' ~ 'sweet pepper',
-      Ingredients == 'ground meat' ~ 'meat',
-      Ingredients == 'bog blueberries' ~ 'bog blueberries',
-      Ingredients == 'cured leg of mutton' ~ 'mutton',
-      Ingredients == 'whole-grain pasta' ~ 'pasta',
-      Ingredients == 'grapess' ~ 'grapes',
-      Ingredients == 'soft-ripened cheese (brie camembert etc)' ~ 'soft ripened cheese',
-      Ingredients == 'bean white large canned' ~ 'bean white',
-      Ingredients == 'bean kidney canned' ~ 'bean kidney',
-      Ingredients == 'bean black canned' ~ 'bean black',
-      Ingredients == 'cream sauce base' ~ 'cream sauce base',
-      Ingredients == 'fish soup base' ~ 'fish soup base',
-      Ingredients == 'sausage turkey chicken' ~ 'sausage turkey chicken',
-      Ingredients == 'ice cream' ~ 'ice cream',
-      Ingredients == 'ice cream cake' ~ 'ice cream',
-      Ingredients == 'chicken skewer satay' ~ 'chicken skewer',
-      Ingredients == 'tomato sun dried' ~ "tomato",
-      Ingredients == 'tomato sun dried in oil' ~ "tomato",
-      Ingredients == "cloudberries" ~ "cloud",
-      Ingredients == 'lemon balm fresh' ~ 'lemon balm',
-      Ingredients == 'oatbran' ~ 'oat bran',
-      Ingredients == 'wheatbran' ~ 'wheat bran',
-      Ingredients == "potato flatbread lompe" ~ "potato flatbread",
-      Ingredients %in% c("pita bread", "pita bread coarse", "pita bread white") ~ "pita bread",
-      Ingredients == "soup instant cauliflower" ~ "soup instant",
-      Ingredients == "spring roll paper" ~ "spring roll",
-      Ingredients == "waffel sour cream" ~ "waffel",
-      Ingredients == "beef minced meat" ~ "beef",
-      Ingredients == "pork minced meat" ~ "pork",
-      Ingredients == "parata flat bread" ~ "parata",
-      Ingredients == "chili pepper dried" ~ "chili pepper",
-      Ingredients == "pork ham roast" ~ "pork",
-      Ingredients == "spice mix meat" ~ "spice mix",
-      Ingredients == "milk chocolate non-stop" ~ "milk chocolate",
-      Ingredients %in% c("tikka masala paste", "sauce tikka masala") ~ "tikka masala",
-      Ingredients == "sausage_pork belly" ~ "sausage",
-      Ingredients == "berries mixed wild" ~ "berries",
-      Ingredients == "sauce red wine" ~ "sauce",
-      Ingredients == "sauce sweet and sour" ~ "sauce",
-      Ingredients == "passion fruit curd" ~ "curd",
-      Ingredients == "taco dinner kit" ~ "dinner kit",
-      Ingredients == "dairy imitate oatmilk full fat" ~ "dairy imitate",
-      Ingredients == "fajita spice mix" ~ "spice mix",
-      TRUE ~ first_word),
+
+      # Keep first two words
+      str_detect(Ingredients,
+                 paste0(
+                   c("bean canned", "bean dry", "wheat flour", "chicken skewer", "spice mix",
+                     "(winter|summer) squash", "^chili pepper", "^ice cream", "^passion fruit",
+                     "pita bread", "egg noodle", "spice mix", "lemon balm fresh", "soup instant",
+                     "oat bran", "wheat bran", "sweet pepper grilled", "dinner kit", "bread crumb",
+                     "bok choi", "black pepper", "bread brown", "bread rye", "cheese goat",
+                     "cream sauce base", "lamb chop", "lamb leg", "soup instant", "cashew nut",
+                     "sweet pepper", "pork neck"),
+                   collapse = "|")) |
+        Ingredients %in% c("bog blueberries", "chocolate glaze mix", "cream sauce base",
+                           "lamb chop") ~ str_extract(Ingredients, "^\\w+ \\w+"),
+      str_detect(Ingredients, "dairy imitate") ~ "dairy imitate",
+      str_detect(Ingredients, "milk chocolate") ~ "milk chocolate",
+
+      # Keep first word
+      Ingredients %in% c("lard pork fat", "cabbage spring green", "pork neck chop", "pasta whole grain",
+                         "waffel sour cream", "sausage turkey chicken", "chicken hen meat",
+                         "chicken with skin", "tomato sun dried") |
+        str_detect(Ingredients, paste0(
+          c("minced meat", "^sauce", "^paste", "^nugget", "^beef"), collapse = "|")
+        ) ~ str_extract(Ingredients, "^\\w+"),
+
+      # Mixes
+      str_detect(Ingredients, "powder mix|cake mix") ~ str_replace(Ingredients, "powder mix|cake mix", ""),
+
+      # Longer words
+      Ingredients %in% c("cheese semi hard", "sugar snap pea", "soft ripened cheese", "chili sin carne") ~ Ingredients,
+      Ingredients %in% c("gluten-free flour wholemeal", "gluten-free flour white") ~ "gluten-free flour",
+      TRUE ~ str_extract(Ingredients, '^\\w+')),
+
 
     second_word = case_when(
-      Ingredients == "fruit coctail canned" ~ "fruit",
-      Ingredients == "passion fruit" ~ '\\',
-      Ingredients == 'white or yellow hard to semi-hard cheese' ~ '\\',
-      Ingredients == 'chicken with skin' ~ 'whole',
-      Ingredients == 'chili pepper red' ~ 'red',
-      Ingredients == 'cod traditional Norwegian dish Lutefisk' ~ 'lutefisk',
-      str_detect(Ingredients, 'gg noodle') & str_detect(Ingredients, 'cooked') ~ 'cooked',
-      str_detect(Ingredients, 'gg noodle') & str_detect(Ingredients, 'uncooked') ~ '\\',
-      str_detect(Ingredients, 'capers|kapers') ~ '\\',
-      Ingredients == 'lasagne sheets uncooked' ~ 'plate',
-      Ingredients == 'oil liquid margarine' ~ '\\',
-      Ingredients == 'onion yellow/red' ~ '\\',
-      Ingredients == 'pork neck chops' ~ 'chops',
-      Ingredients == 'quinoa tørr' ~ '\\',
-      Ingredients == 'sugar snap peas' ~ '\\',
-      Ingredients == 'mackerel fillet, in tomato sauce, canned' ~ 'tomato',
-      Ingredients %in% c('olives black in oil canned', 'oliven, svarte, i olje, hermetisk') ~ 'black',
-      Ingredients == 'black pepper whole' ~ 'whole',
-      Ingredients == 'black pepper grounded' ~ 'ground',
-      Ingredients == 'chick pea dry' ~ '\\',
-      Ingredients == 'chick pea flour' ~ 'flour',
-      Ingredients == 'chick pea canned' ~ 'canned',
-      Ingredients == 'mackerel fillet, in tomato sauce, canned' ~ 'tomato',
-      Ingredients == 'smoke-cured ham' ~ 'smoked',
-      Ingredients == 'cured ham' ~ 'cured',
-      Ingredients == 'grilled sweet pepper' ~ 'grilled',
-      Ingredients == 'ground meat' ~ 'ground',
-      Ingredients == 'black chokeberries' ~ 'black',
-      Ingredients == 'bog blueberries' ~ '\\',
-      Ingredients == 'cured leg of mutton' ~ 'cured leg',
-      Ingredients == 'lentils dry' ~ '\\',
-      Ingredients == 'sugar snap pea' ~ 'sugar snap',
-      Ingredients == 'hamburger bun' ~ 'bread',
-      Ingredients == 'whole-grain pasta' ~ 'whole grain',
-      Ingredients == 'ginger root' ~ '\\',
-      Ingredients == 'spinach, raw' ~ '\\',
-      Ingredients == 'mushroom common' ~ '\\',
-      Ingredients == 'olives black in oil canned' ~ 'black',
-      Ingredients == 'bean white large canned' ~ 'canned',
-      Ingredients == 'bean white in tomato sauce canned' ~ 'tomato',
-      Ingredients == 'bean kidney canned' ~ 'canned',
-      Ingredients == 'bean black canned' ~ 'canned',
-      Ingredients == 'sausage turkey chicken' ~ '\\',
-      Ingredients == 'ice cream' ~ '\\',
-      Ingredients == 'chicken skewer satay' ~ 'satay',
-      Ingredients == 'egg noodle cooked' ~ 'cooked',
-      Ingredients == 'tomato sun dried' ~ "sun dried",
-      Ingredients == 'tomato sun dried in oil' ~ "sun dried in oil",
-      Ingredients == "cloudberries" ~ "berr",
-      Ingredients == 'lemon balm fresh' ~ 'fresh',
-      Ingredients == 'oatbran' ~ '\\',
-      Ingredients == 'wheatbran' ~ '\\',
-      Ingredients == "potato flatbread lompe" ~ "lompe",
-      Ingredients == "pita bread" ~ "\\",
-      Ingredients == "soup instant cauliflower" ~ "cauliflower",
-      Ingredients == "spring roll paper" ~ "paper",
-      Ingredients == "waffel sour cream" ~ "sour cream",
-      Ingredients == "pita bread coarse" ~ "coarse",
-      Ingredients == "pita bread white" ~ "white",
-      Ingredients %in% c("beef minced meat", "pork minced meat") ~ "minced meat",
-      Ingredients == "parata flat bread" ~ "flat bread",
-      Ingredients == "chili pepper dried " ~ "dried",
-      Ingredients == "pork ham roast" ~ "ham roast",
-      Ingredients == 'ice cream cake' ~ 'cake',
-      Ingredients == "spice mix meat" ~ "meat",
-      Ingredients == "milk chocolate non-stop" ~ "non-stop",
-      Ingredients == "tikka masala paste" ~ "paste",
-      Ingredients == "sauce tikka masala" ~ "sauce",
-      Ingredients == "sausage_pork belly" ~ "pork belly",
-      Ingredients == "berries mixed wild" ~ "mixed wild",
-      Ingredients == "sauce red wine" ~ "red wine",
-      Ingredients == "sauce sweet and sour" ~ "sweet and sour",
-      Ingredients == "passion fruit curd" ~ "passion fruit",
-      Ingredients == "taco dinner kit" ~ "taco",
-      Ingredients == "dairy imitate oatmilk full fat" ~ "oatmilk full fat",
-      Ingredients == "fajita spice mix" ~ "fajita",
+
+      # Keep last word
+      str_detect(Ingredients,
+                 paste0(
+                   c("bean dry", "wheat flour", "chicken skewer", "spice mix",
+                     "(winter|summer) squash", "^chili pepper", "^îce cream", "^passion fruit",
+                     "pita bread", "egg noodle", "spice mix", "lemon balm fresh", "soup instant",
+                     "oat bran", "wheat bran", "sweet pepper grilled", "dinner kit", "bread crumb",
+                     "bread brown", "bread rye", "gluten-free flour", "lamb chop", "lamb leg",
+                     "soup instant", "sweet pepper", "pork neck"),
+                   " \\w", collapse = "|")) |
+        Ingredients %in% c("ice cream cake", "chocolate glaze mix", "cream sauce base") ~ str_extract(Ingredients, "[a-zæøå-]+$"),
+
+      # Keep last two words
+      Ingredients %in% c("lard pork fat", "pea sugar snap", "paper spring roll", "sausage pork belly",
+                         "pork ham roast", "curd passion fruit", "cabbage spring green", "pork neck chop",
+                         "pasta whole grain", "waffel sour cream", "sausage turkey chicken", "beef rib-eye",
+                         "cheese goat chevre white", "chicken hen meat", "salad lollo rosso",
+                         "tomato sun dried", "tortilla corn flour", "waffle sour cream") |
+        str_detect(Ingredients, "minced meat") ~ str_extract(Ingredients, "[a-zæøå-]+ [a-zæøå-]+$"),
+      str_detect(Ingredients, "powder mix") ~ "powder mix",
+      str_detect(Ingredients, "cake mix") ~ "cake mix",
+
+      # Variable number of words
+      str_detect(Ingredients, "dairy imitate ") ~ str_extract(Ingredients, "(?<=dairy imitate )[a-z ]+"),
+      str_detect(Ingredients, "^bean canned ") ~ str_extract(Ingredients, "(?<=bean canned )[a-zæøå ]+"),
+      str_detect(Ingredients, "^sauce ") ~ str_extract(Ingredients, "(?<=sauce )[a-zæøå ]+"),
+      str_detect(Ingredients, "^tomato sun dried ") ~ str_extract(Ingredients, "(?<=tomato )[a-zæøå ]+"),
+      str_detect(Ingredients, "^chili pepper ") ~ str_extract(Ingredients, "(?<=chili pepper )[a-z ]+"),
+      str_detect(Ingredients, "^base") ~ str_extract(Ingredients, "(?<=base )[a-z ]+"),
+      str_detect(Ingredients, "^nugget") ~ str_extract(Ingredients, "(?<=nugget )[a-z -]+"),
+      str_detect(Ingredients, "^milk chocolate") ~ str_extract(Ingredients, "(?<=milk chocolate )[a-z ]+"),
+      str_detect(Ingredients, "^cashew nut ") ~ str_extract(Ingredients, "(?<=cashew nut )[a-z ]+"),
+      str_count(Ingredients, pattern = "\\w+") == 2 & !str_count(first_word, pattern = "\\w+") == 2  ~ str_extract(Ingredients, '\\w+$')
+      ),
+    second_word = case_when(
+      first_word == second_word | str_detect(first_word, paste0(second_word, "$")) ~ NA,
       TRUE ~ second_word
     )
+    ) %>%
+  distinct() %>%
+  replace_na(list(second_word = '\\')) %>%
+  dplyr::mutate(
+    across(ends_with("word"), ~str_trim(.))
   ) %>%
-  #Set column order
-  select(first_word, second_word, database_ID, language) %>% arrange(first_word, second_word)
 
+  #Clean up some of them that's not right, always have the most generic name in the first column, then a specification in second column if present
+  # mutate(
+  #   first_word = case_when(
+  #     Ingredients == 'cured leg of mutton' ~ 'mutton',
+  #     TRUE ~ first_word),
+  #
+  #   second_word = case_when(
+  #     Ingredients == 'cured leg of mutton' ~ 'cured leg',
+  #     TRUE ~ second_word
+  #   )
+  # ) %>%
+  #Set column order
+  select(first_word, second_word, database_ID) %>% arrange(first_word, second_word)
+
+
+test <- unit_weights_query %>% summarise(.by = c("first_word", "second_word"), n = n(), ids = paste0(database_ID, collapse = ", ")) %>% dplyr::filter(n >1)
 
 
 #Save
