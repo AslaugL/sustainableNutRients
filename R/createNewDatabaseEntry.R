@@ -68,7 +68,9 @@ createNewDatabaseEntry <- function(df, database, identifier = 'recipe_name') {
           separate(col = contains(identifier), into = c("first_word", "second_word"), sep = "_", remove = FALSE) %>%
           replace_na(list(second_word = '\\')) %>%
           #GET IDs from entires already present in databases
-          left_join(., sustainableNutRients:::unit_weights_query %>% filter(language == "english") %>% unique() %>% select(-language), by = c("first_word", "second_word")) %>%
+          left_join(., sustainableNutRients:::unit_weights_query %>% #filter(language == "english") %>%
+                      unique() #%>% select(-language)
+                    , by = c("first_word", "second_word")) %>%
           group_by(first_word, second_word) %>%
           mutate(
             database_ID = case_when(
