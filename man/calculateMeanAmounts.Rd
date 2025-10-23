@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculateMeanAmounts.R
 \name{calculateMeanAmounts}
 \alias{calculateMeanAmounts}
-\title{calculateCitrusJuiceZest}
+\title{calculateMeanAmounts}
 \usage{
 calculateMeanAmounts(df)
 }
