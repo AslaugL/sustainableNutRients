@@ -50,7 +50,7 @@ calculateEnvironmentalImpactOfFoodlist <- function(df, calculate_sustainability 
     without_NAs <- drop_nas(df = df, identifier = identifier)
 
     without_NAs %>%
-      mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
+      mutate(environmental_impact = Amounts_in_hektogram*environmental_impact_per_hektogram) %>%
       select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact) %>%
       group_by(across(all_of(identifier)), environmental_impact_indicator) %>%
       summarise(environmental_impact = sum(environmental_impact, na.rm = TRUE)) %>%
@@ -62,11 +62,11 @@ calculateEnvironmentalImpactOfFoodlist <- function(df, calculate_sustainability 
     without_NAs <- drop_nas(df = df, identifier = identifier)
 
     without_NAs %>%
-      mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
-      select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact, Amounts) %>%
+      mutate(environmental_impact = Amounts_in_hektogram*environmental_impact_per_hektogram) %>%
+      select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact, Amounts_in_hektogram) %>%
       group_by(across(all_of(identifier)), environmental_impact_indicator) %>%
       summarise(environmental_impact = sum(environmental_impact, na.rm = TRUE),
-                total_recipe_weight = sum(Amounts, na.rm = TRUE)) %>%
+                total_recipe_weight = sum(Amounts_in_hektogram, na.rm = TRUE)) %>%
       ungroup() %>%
       mutate(environmental_impact_per_hektogram = environmental_impact/total_recipe_weight) %>%
       select(-c(total_recipe_weight, environmental_impact)) %>%
@@ -77,8 +77,8 @@ calculateEnvironmentalImpactOfFoodlist <- function(df, calculate_sustainability 
     without_NAs <- drop_nas(df = df, identifier = identifier)
 
     without_NAs %>%
-      mutate(environmental_impact = Amounts*environmental_impact_per_hektogram) %>%
-      select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact, Amounts, number_of_portions) %>%
+      mutate(environmental_impact = Amounts_in_hektogram*environmental_impact_per_hektogram) %>%
+      select(all_of(identifier), Ingredients, environmental_impact_indicator, environmental_impact, Amounts_in_hektogram, number_of_portions) %>%
       group_by(across(all_of(identifier)), environmental_impact_indicator, number_of_portions) %>%
       summarise(environmental_impact = sum(environmental_impact, na.rm = TRUE)) %>%
       ungroup() %>%

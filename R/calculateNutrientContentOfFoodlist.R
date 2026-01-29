@@ -50,7 +50,7 @@ calculateNutrientContentOfFoodlist <- function(df, calculate_nutrients = 'total'
     without_NAs <- drop_nas(df = df, identifier = identifier)
 
     without_NAs %>%
-      mutate(nutrient_content = Amounts*nutrient_content_per_hektogram) %>%
+      mutate(nutrient_content = Amounts_in_hektogram*nutrient_content_per_hektogram) %>%
       select(all_of(identifier), Ingredients, nutrient, nutrient_content) %>%
       group_by(across(all_of(identifier)), nutrient) %>%
       summarise(nutrient_content = sum(nutrient_content, na.rm = TRUE)) %>%
@@ -62,11 +62,11 @@ calculateNutrientContentOfFoodlist <- function(df, calculate_nutrients = 'total'
     without_NAs <- drop_nas(df = df, identifier = identifier)
 
     without_NAs %>%
-      mutate(nutrient_content = Amounts*nutrient_content_per_hektogram) %>%
+      mutate(nutrient_content = Amounts_in_hektogram*nutrient_content_per_hektogram) %>%
       select(all_of(identifier), Ingredients, nutrient, nutrient_content, Amounts) %>%
       group_by(across(all_of(identifier)), nutrient) %>%
       summarise(nutrient_content = sum(nutrient_content, na.rm = TRUE),
-                total_recipe_weight = sum(Amounts, na.rm = TRUE)) %>%
+                total_recipe_weight = sum(Amounts_in_hektogram, na.rm = TRUE)) %>%
       ungroup() %>%
       mutate(nutrient_content_per_hektogram = nutrient_content/total_recipe_weight) %>%
       select(-c(total_recipe_weight, nutrient_content)) %>%
@@ -77,8 +77,8 @@ calculateNutrientContentOfFoodlist <- function(df, calculate_nutrients = 'total'
     without_NAs <- drop_nas(df = df, identifier = identifier)
 
     without_NAs %>%
-      mutate(nutrient_content = Amounts*nutrient_content_per_hektogram) %>%
-      select(all_of(identifier), Ingredients, nutrient, nutrient_content, Amounts, number_of_portions) %>%
+      mutate(nutrient_content = Amounts_in_hektogram*nutrient_content_per_hektogram) %>%
+      select(all_of(identifier), Ingredients, nutrient, nutrient_content, Amounts_in_hektogram, number_of_portions) %>%
       group_by(across(all_of(identifier)), nutrient, number_of_portions) %>%
       summarise(nutrient_content = sum(nutrient_content, na.rm = TRUE)) %>%
       ungroup() %>%
