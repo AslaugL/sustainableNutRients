@@ -53,6 +53,10 @@ newFindFoodInDatabase <- function(df, database,
 
     }
 
+  } else {
+
+    stop("Ingredient is likely empty, check for errors.")
+
   }
 
   # Arrange search words so the most complex are looked up first
@@ -218,7 +222,7 @@ newFindFoodInDatabase <- function(df, database,
           select(-starts_with("number_of_words"))
 
         #The database
-        db <- unit_weights  %>%
+        db <- unit_weights %>%
           dplyr::select(-Ingredients) %>%
           bind_rows(additional_entries$db) %>% distinct()
 
