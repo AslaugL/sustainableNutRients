@@ -311,7 +311,8 @@ SHARP <- SHARP %>%
 
              # Grains
              "oat grain" = "oat bran",
-             "lentil dry" = "lentil dried"
+             "lentil dry" = "lentil dried",
+             "chick pea" = "chickpea"
            ))
   ) %>%
 
@@ -402,9 +403,9 @@ SHARP2018 <- SHARP %>%
       str_replace("Land use of 1 kg food as consumed_", ""))
 
 
-tmp$query_words <- tmp$query_words %>%
-  add_row(first_word = "banana", second_word = "\\", database_ID = 300.999) %>%
-  add_row(first_word = "vinegar", second_word = "balsamic", database_ID = 301.999)
+# tmp$query_words <- tmp$query_words %>%
+#   add_row(first_word = "banana", second_word = "\\", database_ID = 300.999) %>%
+#   add_row(first_word = "vinegar", second_word = "balsamic", database_ID = 301.999)
 
 #Save
 saveRDS(SHARP2018, "./data-raw/SHARP2018.Rds")
