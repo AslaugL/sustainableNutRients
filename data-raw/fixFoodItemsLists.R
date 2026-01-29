@@ -288,8 +288,8 @@ databaseHitFixes <- list(
       'cream cheese goat_cheese cream_goat snøfrisk',
       "elk minced meat_beef_minced meat lean",
       "pancake powder mix_pancake_mix",
-      "peanut butter unsalted" = "peanut_butter",
-      "pear marmalade" = "marmelade_pear",
+      "peanut butter unsalted_peanut_butter",
+      "pear marmalade_marmelade_pear",
       "rib roll pork_pork belly",
       "rice sushi_rice porridge",
       "smoothie mix_smoothie mix_tropical",
@@ -305,9 +305,9 @@ databaseHitFixes <- list(
       'lentils dried_lentil_dry',
       paste0(c('peas green', 'stew peas'), '_pea_garden'),
       paste0(c('bean green asparagus', 'bean green', 'bean broad'), '_bean with pods_with'),
-      paste0(c("bean white canned", "bean black canned", "bean kidney canned","bean canned",
+      paste0(c("bean white canned", "bean black canned", "bean canned kidney","bean canned",
                "bean pinto canned", "bean white tomato", "refried beans", "bean mixed",
-               "chick pea canned", "chili beans",
+               "chickpea canned", "chili beans",
                "lentils canned green", "lentils canned red", "lentils canned"), "_bean_canned"),
       paste0(c("rice noodle", "egg noodle", "glass noodle"), "_noodle"),
       'pistachio nut_pistachio',
@@ -316,18 +316,18 @@ databaseHitFixes <- list(
       'tahini_sesame_seed',
       paste0(c('seed flax', 'flaxseed meal'), '_linseed'),
       'corn starch_corn_flour', #Use as substitute
-      'chick pea flour_chick pea_flour',
+      # 'chickpea flour_chickpea_flour',
       'bean salad_bean salad',
       'lasagna plate pasta_pasta',
 
       #Veggies and fruit
       paste0(c("chili pepper jalapeno pickled", "onion pickled", "cucumber pickled",
                "ginger pickled", "beetroot pickled", "sweet pepper pickled"), "_vegetables_pickled"),
-      paste0(c("chili canned", "sweet corn canned", "sweet corn kernels", "vegetables_canned")),
+      paste0(c("chili canned", "sweet corn canned", "sweet corn kernels"), "_vegetables_canned"),
       "chicory_curly_endives",
       'peach_peach',
       'sorrel_lettuce_other',
-      paste0(c("winter squash butternut", "winter squash pumpkin", "winter squash hokkaido"), "_pumpkin"),
+      #paste0(c("winter squash butternut", "winter squash pumpkin", "winter squash hokkaido"), "_winter_squash"),
       "eggplant_eggplant",
       'garlic chinese_garlic',
       paste0(c('corn baby', 'corn cob'), '_sweet_corn'),
@@ -362,6 +362,7 @@ databaseHitFixes <- list(
       paste0(c('starfruit', 'dragon fruit'), '_fruit_used'),
       paste0(c('blueberries dried', 'cranberries dried'), '_fruit_dried'),
       paste0(c('horseradish'), '_horseradish_roots'),
+      "smoothie mix_smoothie mix_tropical",
 
       #Red meat
       paste0(c("reindeer", "elk tenderloin", "elk minced meat", "game beef venison shoulder"), '_mammals_meat'),
@@ -380,6 +381,7 @@ databaseHitFixes <- list(
       #Poultry
       paste0(c("sausage turkey chicken", "whole turkey", "turkey breast", "turkey offal"), "_turkey"),
       paste0(c('hen breast fillet grouse', 'hen', 'hen grouse'), '_poultry_fresh'), #All poultry meats have the same CO2 and landuse in the db
+      "water broth chicken_water",
 
       #Seafood
       'scampi_prawn',
@@ -444,7 +446,7 @@ databaseHitFixes <- list(
       "goat brown cheese_hard to semi-hard cheese",
       paste0("cheese ", c("ricotta salata", "blue", "blue selbu", "camembert", "neufchatel", "port salut",
                           "brie", "mascarpone", "gorgonzola", "soft", "le crémier de chaumes", "goat",
-                          "goat chevre white", "blue roquefort"), '_soft-ripened cheese'),
+                          "goat chevre white", "blue roquefort", "blue castello", "blue gorgonzola"), '_soft-ripened cheese'),
       paste0(c('cheese american', 'cheese spread'), '_processed cheese and spreads'),
       paste0(c('yoghurt plain greek', 'yoghurt plain', 'yoghurt plain skyr', 'kefir',
                "quark 7 %", "quark 1", "biola"), "_yoghurt"),
@@ -478,7 +480,8 @@ databaseHitFixes <- list(
                "black pepper", "cayenne pepper", "sage fresh herbs", "sage dried", "garam masala", "nutmeg",
                "cloves", "coriander fresh herbs", "coriander seed", "cumin", "dill fresh herbs", "chili powder",
                "fenugreek leaf", "juniper berry", "cinnamon", "chives", "cardamom", "caper", "allspice",
-               "bay leaf", "paprika powder", "fennel seed", "garlic powder", "chervil fresh herbs", "chili flake dried"), '_mixed_herbs'),
+               "bay leaf", "paprika powder", "fennel seed", "garlic powder", "chervil fresh herbs", "chili flake dried",
+               "chervil fresh herb", "chives fresh herb"), '_mixed_herbs'),
       paste0("spice mix ", c("taco", "provence", "raita", "tandoori", "meat", "fajita", "chicken", "guacamole"), "_mixed herbs"),
       paste0(c("piri piri", "five spice", "seafood", "pasta", "pad thai", "fish", "mexican"), " spice mix_mixed_herbs")
   )
